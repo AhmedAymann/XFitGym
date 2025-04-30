@@ -5,6 +5,6 @@ XFitGym::XFitGym(QWidget *parent)
 {
     ui.setupUi(this);
 }
-// hamdy is hereee
+// hamdy is hereeessss
 XFitGym::~XFitGym()
 {}
