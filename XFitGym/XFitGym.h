@@ -2,6 +2,7 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_XFitGym.h"
+#include "Login.h"
 
 class XFitGym : public QMainWindow
 {
@@ -10,6 +11,7 @@ class XFitGym : public QMainWindow
 public:
     XFitGym(QWidget *parent = nullptr);
     ~XFitGym();
+    Login* log;
 
 private:
     Ui::XFitGymClass ui;
