@@ -108,10 +108,14 @@
     <QtMoc Include="Login.h" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <QtMoc Include="Dashboard.h" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Homepage.h" />
+=======
+    <Text Include="user.txt" />
+>>>>>>> 72ea818b3c1cb7f218236af78fd6b61d9289a0af
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

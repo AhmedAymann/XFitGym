@@ -43,7 +43,7 @@ XFitGym::XFitGym(QWidget *parent)
     log->ui.warning->setVisible(false);
 
     connect(log->ui.Login, &QPushButton::clicked, this, [=]() {
-        // replace true with the condition
+        // replace true with the conditionn
 
         /*if (true) {
             log->ui.warning->setVisible(true);
