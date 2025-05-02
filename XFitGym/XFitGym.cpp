@@ -54,7 +54,16 @@ XFitGym::XFitGym(QWidget *parent)
         QString username = log->ui.Email->text();
         QString password = log->ui.Password->text();
         if (!log->CheckLogin(username, password)) {
+            if (username.isEmpty() || password.isEmpty()) {
+                log->ui.warning->setText("please fill in all the spaces");
+                log->ui.warning->setVisible(true);
+
+                QTimer::singleShot(2000, log->ui.warning, &QLabel::hide);
+                return;
+            }
+            log->ui.warning->setText("Email or Password is incorrect");
             log->ui.warning->setVisible(true);
+
             QTimer::singleShot(2000, log->ui.warning, &QLabel::hide);
             return;
             // QMessageBox::warning(this, "Login gamed nik", "your name is");
