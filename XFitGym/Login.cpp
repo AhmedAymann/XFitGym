@@ -20,11 +20,11 @@ void Login::StartLogin() {
     QString username = ui.Email->text();
     QString password = ui.Password->text();
     if (CheckLogin(username, password)) {
-        QMessageBox::warning(this, "Login gamed nik", "your name is");
+       // QMessageBox::warning(this, "Login gamed nik", "your name is");
     }
     else
     {
-        QMessageBox::warning(this, "Warning", "incorrect Email or Password");
+       // QMessageBox::warning(this, "Warning", "incorrect Email or Password");
 
     }
     ui.Email->clear();

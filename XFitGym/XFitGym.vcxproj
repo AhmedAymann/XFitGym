@@ -96,22 +96,27 @@
     <QtUic Include="dashboard.ui" />
     <QtUic Include="homepage.ui" />
     <QtUic Include="login.ui" />
+    <QtUic Include="userProfile.ui" />
     <QtUic Include="XFitGym.ui" />
     <QtMoc Include="XFitGym.h" />
     <ClCompile Include="Dashboard.cpp" />
     <ClCompile Include="Homepage.cpp" />
     <ClCompile Include="Login.cpp" />
+    <ClCompile Include="userProfile.cpp" />
     <ClCompile Include="XFitGym.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Login.h" />
   </ItemGroup>
-	<ItemGroup>
-		<QtMoc Include="Dashboard.h" />
-		<QtMoc Include="Homepage.h" />
-		<Text Include="user.txt" />
-	</ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Dashboard.h" />
+    <QtMoc Include="Homepage.h" />
+    <Text Include="user.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="userProfile.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />

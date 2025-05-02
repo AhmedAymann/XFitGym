@@ -9,6 +9,7 @@ XFitGym::XFitGym(QWidget *parent)
     Cgauge = new Gauge(this);
     Pgauge = new Gauge(this);
     home = new Homepage(this);
+    user_Profile = new userProfile(this);
 
     // padel gauge level
     int Pvalue = 0;
@@ -28,6 +29,7 @@ XFitGym::XFitGym(QWidget *parent)
     ui.Main->addWidget(log);
     ui.Main->addWidget(home);
     home->ui.Pages->addWidget(dash);
+    home->ui.Pages->addWidget(user_Profile);
 
     if (!dash->ui.PadelGauge->layout()) {
         dash->ui.PadelGauge->setLayout(new QVBoxLayout);
@@ -45,11 +47,11 @@ XFitGym::XFitGym(QWidget *parent)
     connect(log->ui.Login, &QPushButton::clicked, this, [=]() {
         // replace true with the conditionn
 
-        /*if (true) {
+        if (true) {
             log->ui.warning->setVisible(true);
             QTimer::singleShot(2000, log->ui.warning, &QLabel::hide);
             return;
-        }*/
+        }
         
         log->ui.Email->setText("");
         log->ui.Password->setText("");
@@ -79,6 +81,7 @@ XFitGym::XFitGym(QWidget *parent)
 
     });
     connect(home->ui.Profile, &QPushButton::clicked, this, [=]() {
+        home->ui.Pages->setCurrentIndex(2);
         qDebug() << "Profile";
         });
     connect(home->ui.Classes, &QPushButton::clicked, this, [=]() {

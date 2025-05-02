@@ -5,6 +5,7 @@
 #include "Login.h"
 #include "Dashboard.h"
 #include "Homepage.h"
+#include "userProfile.h"
 #include <QString>
 #include "qtimer.h"
 
@@ -20,6 +21,7 @@ public:
     Gauge* Pgauge;
     Gauge* Cgauge;
     Homepage* home;
+    userProfile* user_Profile;
 
 private:
     Ui::XFitGymClass ui;
