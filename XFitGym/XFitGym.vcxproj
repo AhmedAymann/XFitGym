@@ -93,15 +93,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtRcc Include="XFitGym.qrc" />
+    <QtUic Include="dashboard.ui" />
+    <QtUic Include="homepage.ui" />
     <QtUic Include="login.ui" />
     <QtUic Include="XFitGym.ui" />
     <QtMoc Include="XFitGym.h" />
+    <ClCompile Include="Dashboard.cpp" />
+    <ClCompile Include="Homepage.cpp" />
     <ClCompile Include="Login.cpp" />
     <ClCompile Include="XFitGym.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Login.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Dashboard.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Homepage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

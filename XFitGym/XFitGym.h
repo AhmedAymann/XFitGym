@@ -3,6 +3,10 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_XFitGym.h"
 #include "Login.h"
+#include "Dashboard.h"
+#include "Homepage.h"
+#include <QString>
+#include "qtimer.h"
 
 class XFitGym : public QMainWindow
 {
@@ -12,6 +16,10 @@ public:
     XFitGym(QWidget *parent = nullptr);
     ~XFitGym();
     Login* log;
+    Dashboard* dash;
+    Gauge* Pgauge;
+    Gauge* Cgauge;
+    Homepage* home;
 
 private:
     Ui::XFitGymClass ui;

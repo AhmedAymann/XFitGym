@@ -43,14 +43,32 @@
     <ClCompile Include="Login.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Dashboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Homepage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="login.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="dashboard.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="homepage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Login.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Dashboard.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Homepage.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
