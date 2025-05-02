@@ -1,6 +1,8 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_login.h"
+#include "qtimer.h"
+
 
 class Login : public QWidget
 {
@@ -12,10 +14,7 @@ public:
 
     Ui::LoginClass ui;
 
-private slots:
-    void StartLogin();
-
-private:
+public slots:
     bool CheckLogin(QString& username, QString& password);
 
 };

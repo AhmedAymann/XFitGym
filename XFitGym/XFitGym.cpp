@@ -50,6 +50,15 @@ XFitGym::XFitGym(QWidget *parent)
             QTimer::singleShot(2000, log->ui.warning, &QLabel::hide);
             return;
         }*/
+
+        QString username = log->ui.Email->text();
+        QString password = log->ui.Password->text();
+        if (!log->CheckLogin(username, password)) {
+            log->ui.warning->setVisible(true);
+            QTimer::singleShot(2000, log->ui.warning, &QLabel::hide);
+            return;
+            // QMessageBox::warning(this, "Login gamed nik", "your name is");
+        }
         
         log->ui.Email->setText("");
         log->ui.Password->setText("");

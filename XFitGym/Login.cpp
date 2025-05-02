@@ -9,28 +9,10 @@ Login::Login(QWidget* parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
-    connect(ui.Login, &QPushButton::clicked, this, &Login::StartLogin);
+    
 }
 Login::~Login()
 {}
-
-
-
-void Login::StartLogin() {
-    QString username = ui.Email->text();
-    QString password = ui.Password->text();
-    if (CheckLogin(username, password)) {
-        QMessageBox::warning(this, "Login gamed nik", "your name is");
-    }
-    else
-    {
-        QMessageBox::warning(this, "Warning", "incorrect Email or Password");
-
-    }
-    ui.Email->clear();
-    ui.Password->clear();
-}
-
 
 bool Login::CheckLogin(QString& username, QString& password)
 {
