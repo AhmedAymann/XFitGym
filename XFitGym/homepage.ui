@@ -153,7 +153,7 @@ QPushButton:pressed {
      <string>Dashboard</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="Profile">
+   <widget class="QPushButton" name="Notifications">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -188,7 +188,7 @@ QPushButton:pressed {
 }</string>
     </property>
     <property name="text">
-     <string>Profile</string>
+     <string>Notifications</string>
     </property>
    </widget>
    <widget class="QPushButton" name="Classes">
@@ -267,7 +267,7 @@ QPushButton:pressed {
      <string>Padel Courts</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="Notifications">
+   <widget class="QPushButton" name="Profile">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -302,7 +302,7 @@ QPushButton:pressed {
 }</string>
     </property>
     <property name="text">
-     <string>Notifications</string>
+     <string>Profile</string>
     </property>
    </widget>
    <widget class="QPushButton" name="Logout">

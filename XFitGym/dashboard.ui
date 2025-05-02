@@ -312,6 +312,12 @@ color: white;
        <height>179</height>
       </rect>
      </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
     </widget>
    </widget>
   </widget>

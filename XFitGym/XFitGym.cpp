@@ -47,11 +47,11 @@ XFitGym::XFitGym(QWidget *parent)
     connect(log->ui.Login, &QPushButton::clicked, this, [=]() {
         // replace true with the conditionn
 
-        if (true) {
+        /*if (true) {
             log->ui.warning->setVisible(true);
             QTimer::singleShot(2000, log->ui.warning, &QLabel::hide);
             return;
-        }
+        }*/
         
         log->ui.Email->setText("");
         log->ui.Password->setText("");

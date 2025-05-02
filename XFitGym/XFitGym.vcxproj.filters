@@ -84,4 +84,7 @@
   <ItemGroup>
     <Text Include="user.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="user.txt" />
+  </ItemGroup>
 </Project>

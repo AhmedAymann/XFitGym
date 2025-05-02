@@ -47,10 +47,11 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">	padding-left: 5px;
+    <string notr="true">	color:white;
+	padding-left: 5px;
     border-radius: 14px;
     border: 2px solid white ;
-</string>
+	background-color: #2e2f30;</string>
    </property>
    <property name="placeholderText">
     <string>Enter email</string>
@@ -71,9 +72,11 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">	padding-left: 5px;
+    <string notr="true">	color:white;
+	padding-left: 5px;
     border-radius: 14px;
-    border: 2px solid white ;</string>
+    border: 2px solid white ;
+	background-color: #2e2f30;</string>
    </property>
    <property name="echoMode">
     <enum>QLineEdit::EchoMode::Password</enum>
@@ -99,20 +102,20 @@
    </property>
    <property name="styleSheet">
     <string notr="true">QPushButton {
-    background-color: #2c2c2c;      /* Dark default */
+    background-color: #2c2c2c;  
     color: white;
     border: 2px solid #2c2c2c;
     border-radius: 6px;
 }
 
 QPushButton:hover {
-    background-color: #8B50FF ;      /* Blue on hover */
+    background-color: #8B50FF ; 
     border: 2px solid #8B50FF ;
     color: white;
 }
 
 QPushButton:pressed {
-    background-color: #6F3FCC; /* Darker shade of #3498db */
+    background-color: #6F3FCC; 
 }</string>
    </property>
    <property name="text">
@@ -175,46 +178,56 @@ QPushButton:pressed {
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLabel" name="showPassword">
+  <widget class="QPushButton" name="showPassword">
    <property name="geometry">
     <rect>
-     <x>580</x>
-     <y>250</y>
-     <width>21</width>
-     <height>21</height>
+     <x>570</x>
+     <y>240</y>
+     <width>31</width>
+     <height>31</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: transparent;</string>
    </property>
    <property name="text">
     <string/>
    </property>
-   <property name="scaledContents">
-    <bool>true</bool>
+   <property name="icon">
+    <iconset>
+     <normaloff>assets/hidePassword.png</normaloff>assets/hidePassword.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>29</width>
+     <height>71</height>
+    </size>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
+  <widget class="QLabel" name="warning">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>430</y>
-     <width>191</width>
-     <height>20</height>
+     <x>380</x>
+     <y>280</y>
+     <width>211</width>
+     <height>21</height>
     </rect>
    </property>
-   <property name="cursor">
-    <cursorShape>ArrowCursor</cursorShape>
+   <property name="font">
+    <font>
+     <family>Futura</family>
+     <pointsize>10</pointsize>
+     <bold>true</bold>
+    </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(255, 0, 0);
-</string>
+    <string notr="true">color:red;</string>
    </property>
    <property name="text">
-    <string>Incorrect Email or Password</string>
+    <string>Email or Password is Incorrect</string>
    </property>
-   <property name="textInteractionFlags">
-    <set>Qt::TextInteractionFlag::LinksAccessibleByMouse</set>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
    </property>
   </widget>
  </widget>

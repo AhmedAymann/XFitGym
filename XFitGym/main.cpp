@@ -7,5 +7,5 @@ int main(int argc, char *argv[])
     XFitGym w;
     w.show();
     return a.exec();
-    //uuiuiuiui
+    //khalx
 }
