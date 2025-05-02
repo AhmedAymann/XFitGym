@@ -98,9 +98,14 @@
     <QtUic Include="login.ui" />
     <QtUic Include="XFitGym.ui" />
     <QtMoc Include="XFitGym.h" />
+    <ClCompile Include="Coach.cpp" />
+    <ClCompile Include="Customer.cpp" />
     <ClCompile Include="Dashboard.cpp" />
     <ClCompile Include="Homepage.cpp" />
     <ClCompile Include="Login.cpp" />
+    <ClCompile Include="Manager.cpp" />
+    <ClCompile Include="Receptionist.cpp" />
+    <ClCompile Include="Staff.cpp" />
     <ClCompile Include="User.cpp" />
     <ClCompile Include="XFitGym.cpp" />
     <ClCompile Include="main.cpp" />
@@ -114,6 +119,11 @@
     <Text Include="data.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Coach.h" />
+    <ClInclude Include="Customer.h" />
+    <ClInclude Include="Manager.h" />
+    <ClInclude Include="Receptionist.h" />
+    <ClInclude Include="Staff.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
