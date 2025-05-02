@@ -16,7 +16,7 @@ Login::~Login()
 
 bool Login::CheckLogin(QString& username, QString& password)
 {
-    QFile file("user.txt");
+    QFile file("data.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Cannot open file:" << file.errorString();
         return false;
