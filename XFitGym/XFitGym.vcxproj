@@ -36,7 +36,7 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-    <QtInstall>qt</QtInstall>
+    <QtInstall>Qt</QtInstall>
     <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
@@ -113,8 +113,6 @@
     <QtMoc Include="Dashboard.h" />
     <QtMoc Include="Homepage.h" />
     <Text Include="user.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <QtMoc Include="userProfile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
