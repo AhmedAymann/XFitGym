@@ -36,11 +36,7 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-
     <QtInstall>Qt</QtInstall>
-
-    <QtInstall>qt</QtInstall>
-
     <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
@@ -108,14 +104,11 @@
     <ClCompile Include="Dashboard.cpp" />
     <ClCompile Include="Homepage.cpp" />
     <ClCompile Include="Login.cpp" />
-
     <ClCompile Include="userProfile.cpp" />
-
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Receptionist.cpp" />
     <ClCompile Include="Staff.cpp" />
     <ClCompile Include="User.cpp" />
-
     <ClCompile Include="XFitGym.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -125,10 +118,8 @@
   <ItemGroup>
     <QtMoc Include="Dashboard.h" />
     <QtMoc Include="Homepage.h" />
-
     <Text Include="user.txt" />
     <QtMoc Include="userProfile.h" />
-
     <Text Include="data.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -138,7 +129,6 @@
     <ClInclude Include="Receptionist.h" />
     <ClInclude Include="Staff.h" />
     <ClInclude Include="User.h" />
-
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
