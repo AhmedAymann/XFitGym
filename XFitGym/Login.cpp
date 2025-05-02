@@ -9,11 +9,12 @@ Login::Login(QWidget* parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
-    connect(ui.Login, &QPushButton::clicked, this, &Login::StartLogin);
+    
 }
 Login::~Login()
 {}
 
+<<<<<<< HEAD
 
 
 void Login::StartLogin() {
@@ -32,9 +33,11 @@ void Login::StartLogin() {
 }
 
 
+=======
+>>>>>>> 24eb0fb27230d4653d65f056c691f24e6f140265
 bool Login::CheckLogin(QString& username, QString& password)
 {
-    QFile file("user.txt");
+    QFile file("data.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Cannot open file:" << file.errorString();
         return false;
