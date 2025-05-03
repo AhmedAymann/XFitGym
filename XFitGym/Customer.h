@@ -17,6 +17,7 @@ public:
 	void CancelTrainingSession(int sessionId);
 	void ReschedulePaddlecourt(int courtId, string newDate, string newTime);
 	void GiveFeedback(int sessionId, string feedbackText, int rating);
+	void CancelSubscription();
 
 };
 
