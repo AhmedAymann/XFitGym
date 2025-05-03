@@ -1,5 +1,6 @@
 #pragma once
 #include "User.h"
+#include "Subscription.h"
 class Customer : public User 
 {
 private:
@@ -8,7 +9,7 @@ private:
 public: 
 	char gender;
 	int age;
-	//Subscription sub;
+	Subscription subscription;
 
 	Customer(int id, string email, string name, string password, string phone, char gender, int age);
 	void BookPaddleCourt(int courtId, string date, string time);

@@ -3,6 +3,7 @@
 #include "Customer.h"
 #include "Coach.h"
 #include "Receptionist.h"
+#include "Tournament.h"
 class Manager : public Staff
 {
 public:
@@ -21,7 +22,7 @@ public:
 	void AddReceptionist(Receptionist receptionist);
 	void RemoveReceptionist(int receptionistId);
 
-	//void AddTournament(Tournament tournament);
+	void AddTournament(Tournament tournament);
 
 };
 
