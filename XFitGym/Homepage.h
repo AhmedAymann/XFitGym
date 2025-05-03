@@ -10,4 +10,5 @@ public:
     Homepage(QWidget* parent = nullptr);
     ~Homepage();
     Ui::HomepageClass ui;
+
 };

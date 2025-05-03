@@ -49,9 +49,9 @@
     <ClCompile Include="Homepage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-	<ClCompile Include="userProfile.cpp">
-  		<Filter>Source Files</Filter>
-	</ClCompile>
+    <ClCompile Include="userProfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="User.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -70,6 +70,12 @@
     <ClCompile Include="Manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Notifications.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Feedback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="login.ui">
@@ -84,6 +90,12 @@
     <QtUic Include="userProfile.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="notifications.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="feedback.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Login.h">
@@ -96,6 +108,12 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="userProfile.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Notifications.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Feedback.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

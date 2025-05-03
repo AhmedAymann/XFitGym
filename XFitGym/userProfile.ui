@@ -32,7 +32,7 @@
 QScrollBar::handle:vertical {
     background: #8B50FF;
     border-radius: 5px;
-    min-height: 10px;  /* Smaller handle */
+    min-height: 10px;
 }
 
 QScrollBar::add-line:vertical,
@@ -54,7 +54,7 @@ QScrollBar::sub-line:vertical {
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>-488</y>
+      <y>-34</y>
       <width>756</width>
       <height>1400</height>
      </rect>
@@ -322,13 +322,13 @@ border: 2px solid #8B50FF;
 }
 
 QPushButton:hover {
-    background-color: #8B50FF ; 
+    background-color: #6F3FCC ; 
     border: 2px solid #8B50FF ;
     color: white;
 }
 
 QPushButton:pressed {
-    background-color: #6F3FCC; 
+    background-color: #4B2A99; 
 }</string>
      </property>
      <property name="text">

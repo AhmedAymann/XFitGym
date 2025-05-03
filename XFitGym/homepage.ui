@@ -83,6 +83,67 @@ background-color: transparent;
      </property>
     </widget>
    </widget>
+   <widget class="QWidget" name="viewPlans">
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>751</width>
+       <height>481</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>assets/plans.jpg</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="BacktoProf">
+     <property name="geometry">
+      <rect>
+       <x>320</x>
+       <y>440</y>
+       <width>101</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Futura</family>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: #2c2c2c;  
+    color: white;
+    border: 2px solid #2c2c2c;
+    border-radius: 6px;
+}
+
+QPushButton:hover {
+    background-color: #8B50FF ; 
+    border: 2px solid #8B50FF ;
+    color: white;
+}
+
+QPushButton:pressed {
+    background-color: #6F3FCC; 
+}</string>
+     </property>
+     <property name="text">
+      <string>Back To Profile</string>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QLabel" name="Background">
    <property name="geometry">
@@ -104,9 +165,9 @@ background-color: transparent;
    <property name="geometry">
     <rect>
      <x>-40</x>
-     <y>50</y>
+     <y>20</y>
      <width>161</width>
-     <height>471</height>
+     <height>511</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -119,7 +180,7 @@ background-color: transparent;
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>10</y>
+      <y>0</y>
       <width>111</width>
       <height>71</height>
      </rect>
@@ -157,7 +218,7 @@ QPushButton:pressed {
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>90</y>
+      <y>80</y>
       <width>111</width>
       <height>71</height>
      </rect>
@@ -195,7 +256,7 @@ QPushButton:pressed {
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>170</y>
+      <y>160</y>
       <width>111</width>
       <height>71</height>
      </rect>
@@ -233,7 +294,7 @@ QPushButton:pressed {
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>250</y>
+      <y>240</y>
       <width>111</width>
       <height>71</height>
      </rect>
@@ -271,7 +332,7 @@ QPushButton:pressed {
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>330</y>
+      <y>400</y>
       <width>111</width>
       <height>71</height>
      </rect>
@@ -309,7 +370,7 @@ QPushButton:pressed {
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>440</y>
+      <y>480</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -341,6 +402,44 @@ QPushButton:pressed {
     </property>
     <property name="text">
      <string>Logout</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Feedback">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>320</y>
+      <width>111</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Futura</family>
+      <pointsize>12</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #2c2c2c;      /* Dark default */
+    color: white;
+    border: 2px solid #2c2c2c;
+    border-radius: 6px;
+}
+
+QPushButton:hover {
+    background-color: #8B50FF ;      /* Blue on hover */
+    border: 2px solid #8B50FF ;
+    color: white;
+}
+
+QPushButton:pressed {
+    background-color: #6F3FCC; /* Darker shade of #3498db */
+}</string>
+    </property>
+    <property name="text">
+     <string>Feedback</string>
     </property>
    </widget>
   </widget>

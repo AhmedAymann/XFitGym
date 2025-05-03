@@ -1,5 +1,19 @@
 #include "XFitGym.h"
 using namespace std;
+
+// Pages Guide:
+// 
+// -- HomePage --
+// 0 -> Welcome Page
+// 1 -> View Plans
+// 2 -> Dashboard
+// 3 -> User Profile
+// 4 -> Notifications
+// 5 -> Feedback
+// 
+// 
+//
+
 XFitGym::XFitGym(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -10,26 +24,16 @@ XFitGym::XFitGym(QWidget *parent)
     Pgauge = new Gauge(this);
     home = new Homepage(this);
     user_Profile = new userProfile(this);
-
-    // padel gauge level
-    int Pvalue = 0;
-    QString Pval = QString::number(Pvalue);
-    dash->ui.PCounter->setText( Pval);
-    Pgauge->setValue(Pvalue);
-
-    /*  Attendance Marking
-    dash->setAttendance(num, true);*/
-
-    // class gauge level
-    int Cvalue = 0;
-    QString Cval = QString::number(Cvalue);
-    dash->ui.CCounter->setText(Cval);
-    Cgauge->setValue(Cvalue);
+    notifications = new Notifications(this);
+    feedback = new Feedback(this);
 
     ui.Main->addWidget(log);
     ui.Main->addWidget(home);
     home->ui.Pages->addWidget(dash);
     home->ui.Pages->addWidget(user_Profile);
+    home->ui.Pages->addWidget(notifications);
+    home->ui.Pages->addWidget(feedback);
+
 
     if (!dash->ui.PadelGauge->layout()) {
         dash->ui.PadelGauge->setLayout(new QVBoxLayout);
@@ -45,14 +49,6 @@ XFitGym::XFitGym(QWidget *parent)
     log->ui.warning->setVisible(false);
 
     connect(log->ui.Login, &QPushButton::clicked, this, [=]() {
-        // replace true with the conditionn
-
-        /*if (true) {
-            log->ui.warning->setVisible(true);
-            QTimer::singleShot(2000, log->ui.warning, &QLabel::hide);
-            return;
-        }*/
-
         QString username = log->ui.Email->text();
         QString password = log->ui.Password->text();
         if (!log->CheckLogin(username, password)) {
@@ -68,7 +64,6 @@ XFitGym::XFitGym(QWidget *parent)
 
             QTimer::singleShot(2000, log->ui.warning, &QLabel::hide);
             return;
-            // QMessageBox::warning(this, "Login gamed nik", "your name is");
         }
         
         log->ui.Email->setText("");
@@ -90,31 +85,121 @@ XFitGym::XFitGym(QWidget *parent)
             log->ui.showPassword->setIcon(hide);
             log->ui.Password->setEchoMode(QLineEdit::Password);
         }
-        });
-
+    });
 
     // user homepage control panel
     connect(home->ui.Dashboard, &QPushButton::clicked, this, [=]() {
-        home->ui.Pages->setCurrentIndex(1);
+        /*  Attendance Marking
+        dash->setAttendance(num, true);*/
 
-    });
-    connect(home->ui.Profile, &QPushButton::clicked, this, [=]() {
+
+        // padel gauge level
+        int Pvalue = 0;
+        QString Pval = QString::number(Pvalue);
+        dash->ui.PCounter->setText(Pval);
+        Pgauge->setValue(Pvalue);
+
+        // class gauge level
+        int Cvalue = 0;
+        QString Cval = QString::number(Cvalue);
+        dash->ui.CCounter->setText(Cval);
+        Cgauge->setValue(Cvalue);
+
+        setScrolltoTop();
         home->ui.Pages->setCurrentIndex(2);
-        qDebug() << "Profile";
+    });
+    connect(home->ui.Notifications, &QPushButton::clicked, this, [=]() {
+        setScrolltoTop();
+
+        // *************************************************************************
+
+        //replace true with the condition notificationsVector.isEmpty()
+
+        if (true) {
+            notifications->ui.emptyMessage->setVisible(true);
+            home->ui.Pages->setCurrentIndex(4);
+            return;
+        }
+        // *************************************************************************
+
+        QWidget* notificationWidget = new QWidget;
+        notificationWidget->setStyleSheet("background-color: #1e1e1e; color: white;");
+        notificationWidget->setMinimumWidth(notifications->ui.scrollArea->width() - 20);
+
+        QVBoxLayout* layout = new QVBoxLayout(notificationWidget);
+        layout->setAlignment(Qt::AlignTop);
+
+        for (int i = 0; i < 20; ++i) {
+            QWidget* notification = new QWidget(notificationWidget);
+            notification->setObjectName("notification");
+            notification->setStyleSheet("#notification {"
+                "background-color: #4A4A4A;"
+                "border: 2px solid #8B50FF;"
+                "border-radius: 14px;"
+                "}");
+            QLabel* label = new QLabel(notification);
+            label->setText(QString("test."));
+            label->setWordWrap(true);
+            label->setStyleSheet("color: white; font: 20pt 'DM Serif Display'; background-color:transparent;");
+            label->setFixedWidth(notificationWidget->width() - 40);
+            QVBoxLayout* itemLayout = new QVBoxLayout(notification);
+            itemLayout->setAlignment(Qt::AlignCenter);
+            itemLayout->addWidget(label);
+            label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+            layout->addWidget(notification);
+        }
+        notificationWidget->setLayout(layout);
+        notifications->ui.scrollArea->setWidget(notificationWidget);
+        notifications->ui.scrollArea->setWidgetResizable(true);
+        home->ui.Pages->setCurrentIndex(4);
         });
     connect(home->ui.Classes, &QPushButton::clicked, this, [=]() {
+        setScrolltoTop();
         qDebug() << "Classes";
-    });
+        });
     connect(home->ui.Courts, &QPushButton::clicked, this, [=]() {
+        setScrolltoTop();
         qDebug() << "Padel Courts";
         });
-    connect(home->ui.Notifications, &QPushButton::clicked, this, [=]() {
-        qDebug() << "Notifications";
+    connect(home->ui.Feedback, &QPushButton::clicked, this, [=]() {
+        setScrolltoTop();
+        home->ui.Pages->setCurrentIndex(5);
+        qDebug() << "Feedback";
+        });
+    connect(home->ui.Profile, &QPushButton::clicked, this, [=]() {
+        setScrolltoTop();
+        home->ui.Pages->setCurrentIndex(3);
+        qDebug() << "Profile";
         });
     connect(home->ui.Logout, &QPushButton::clicked, this, [=]() {
+        setScrolltoTop();
         home->ui.Pages->setCurrentIndex(0);
         ui.Main->setCurrentIndex(0);
+    });
+    
+    connect(user_Profile->ui.viewPlans, &QPushButton::clicked, this, [=]() {
+        home->ui.Pages->setCurrentIndex(1);
+    });
+    connect(home->ui.BacktoProf, &QPushButton::clicked, this, [=]() {
+        home->ui.Pages->setCurrentIndex(3);
+    });
+    connect(feedback->ui.submitFeed, &QPushButton::clicked, this, [=]() {
+        QString feed = feedback->ui.Feed->toPlainText();
+        if (feedback->ui.Feed->toPlainText().isEmpty())
+        {
+            feedback->ui.message->setText("Feedback is empty");
+            feedback->ui.message->setStyleSheet("color: red;");
+            feedback->ui.message->setVisible(true);
+            QTimer::singleShot(1250, feedback->ui.message, &QLabel::hide);
+            return;
+        }
+        feedback->ui.message->setText("Feedback submitted!");
+        feedback->ui.message->setStyleSheet("color: green;");
+        feedback->ui.message->setVisible(true);
+        QTimer::singleShot(1250, feedback->ui.message, &QLabel::hide);
 
+        qDebug() << feed;
+        feedback->ui.Feed->clear();
         });
 
 
@@ -122,3 +207,9 @@ XFitGym::XFitGym(QWidget *parent)
 
 XFitGym::~XFitGym()
 {}
+
+void XFitGym::setScrolltoTop()
+{
+    user_Profile->ui.scrollArea->verticalScrollBar()->setValue(0);
+    notifications->ui.scrollArea->verticalScrollBar()->setValue(0);
+}

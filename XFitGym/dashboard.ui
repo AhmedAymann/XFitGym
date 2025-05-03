@@ -30,7 +30,7 @@ color: blue;
    <property name="styleSheet">
     <string notr="true">QWidget#PadelCounter{
 	background-color: #4A4A4A;
-    border: 2px solid white ;
+    border: 2px solid #8B50FF ;
     border-radius: 14px;
 }</string>
    </property>
@@ -114,7 +114,7 @@ color: white;
    <property name="styleSheet">
     <string notr="true">QWidget#ClassesCounter{
 	background-color: #4A4A4A;
-    border: 2px solid white ;
+    border: 2px solid #8B50FF ;
     border-radius: 14px;
 }</string>
    </property>
@@ -201,7 +201,7 @@ color: white;
    <property name="styleSheet">
     <string notr="true">QWidget#AttendancePane{
 	background-color: #4A4A4A;
-    border: 2px solid white ;
+    border: 2px solid #8B50FF ;
     border-radius: 14px;
 }</string>
    </property>
@@ -256,7 +256,7 @@ color: white;</string>
    <property name="styleSheet">
     <string notr="true">QWidget#PastWorkouts{
 	background-color: #4A4A4A;
-    border: 2px solid white ;
+    border: 2px solid #8B50FF ;
     border-radius: 14px;
 }</string>
    </property>

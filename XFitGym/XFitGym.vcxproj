@@ -94,16 +94,20 @@
   <ItemGroup>
     <QtRcc Include="XFitGym.qrc" />
     <QtUic Include="dashboard.ui" />
+    <QtUic Include="feedback.ui" />
     <QtUic Include="homepage.ui" />
     <QtUic Include="login.ui" />
+    <QtUic Include="notifications.ui" />
     <QtUic Include="userProfile.ui" />
     <QtUic Include="XFitGym.ui" />
     <QtMoc Include="XFitGym.h" />
     <ClCompile Include="Coach.cpp" />
     <ClCompile Include="Customer.cpp" />
     <ClCompile Include="Dashboard.cpp" />
+    <ClCompile Include="Feedback.cpp" />
     <ClCompile Include="Homepage.cpp" />
     <ClCompile Include="Login.cpp" />
+    <ClCompile Include="Notifications.cpp" />
     <ClCompile Include="userProfile.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Receptionist.cpp" />
@@ -125,7 +129,9 @@
   <ItemGroup>
     <ClInclude Include="Coach.h" />
     <ClInclude Include="Customer.h" />
+    <QtMoc Include="Feedback.h" />
     <ClInclude Include="Manager.h" />
+    <QtMoc Include="Notifications.h" />
     <ClInclude Include="Receptionist.h" />
     <ClInclude Include="Staff.h" />
     <ClInclude Include="User.h" />
