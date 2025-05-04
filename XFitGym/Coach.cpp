@@ -1,7 +1,7 @@
 #include "Coach.h"
 
-Coach::Coach(int id, string email, string name, string password, string phone, string role)
-    : Staff(id, email, name, password, phone, role)
+Coach::Coach(QString id, QString email, QString name, QString DateOFBirth, string role)
+    : Staff(id, email, name,DateOFBirth,role)
 {
    
 }

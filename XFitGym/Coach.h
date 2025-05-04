@@ -1,10 +1,12 @@
 #pragma once
 #include "Staff.h"
+//#include"TrainingSession.h"
+#include<stack>
 class Coach : public Staff
 {
-	//stack<TrainingSessions> classes;
+	//stack<TrainingSession> classes;
 
-	Coach(int id, string email, string name, string password, string phone, string role);
+	Coach(QString id, QString email, QString name, QString DateOFBirth, string role);
 
 };
 

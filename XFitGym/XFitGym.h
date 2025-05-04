@@ -4,6 +4,7 @@
 #include "ui_XFitGym.h"
 #include "Login.h"
 #include "Dashboard.h"
+#include "Manager.h"
 #include "Homepage.h"
 #include "userProfile.h"
 #include "notifications.h"
@@ -32,6 +33,8 @@ Feedback* feedback;
     ~XFitGym();
 
     void setScrolltoTop();
+    void save();
+    void load();
 private:
     Ui::XFitGymClass ui;
 };

@@ -1,15 +1,16 @@
 #pragma once
 #include<iostream>
-#include<string>
+#include<QString.h>
 using namespace std;
 class User {
-private:
-	int id;
-	string email;
-	string name;
-	string password;
-	string phone;
 public:
-	User(int id,string email,string name, string password,string phone);
+
+	QString id;
+	QString email;
+	QString name;
+	QString DateOFBirth;
+	
+	User();
+	User(QString id,QString email,QString name, QString DateOFBirth);
 
 };

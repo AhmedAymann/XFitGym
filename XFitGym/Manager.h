@@ -4,11 +4,13 @@
 #include "Coach.h"
 #include "Receptionist.h"
 #include "Tournament.h"
+#include<stack>
 class Manager : public Staff
 {
 public:
+	
 
-	Manager(int id, string email, string name, string password, string phone, string role);
+	Manager(QString id, QString email, QString name, QString DateOFBirth, string role);
 
 	void AddMember(Customer customer);
 	void RemoveMember(int userID);

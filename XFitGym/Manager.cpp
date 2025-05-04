@@ -1,7 +1,10 @@
 #include "Manager.h"
 
-Manager::Manager(int id, string email, string name, string password, string phone, string role)
-    : Staff(id, email, name, password, phone, role)
+
+
+
+Manager::Manager(QString id, QString email, QString name, QString DateOFBirth, string role)
+    : Staff(id, email, name, DateOFBirth, role)
 {
 
 }

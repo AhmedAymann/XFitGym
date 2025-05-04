@@ -5,7 +5,7 @@ class Staff : public User
 public:
 	string role;
 
-	Staff(int id, string email, string name, string password, string phone, string role);
+	Staff(QString id, QString email, QString name, QString DateOFBirth, string role);
 
 };
 

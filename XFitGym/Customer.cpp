@@ -1,9 +1,21 @@
 #include "User.h"
 #include "Customer.h"
+#include "Feedback.h"
 
-Customer::Customer(int id, string email, string name, string password, string phone, char gender, int age)
-    : User(id, email, name, password, phone) 
+
+
+Customer::Customer()
 {
-    this->gender = gender;
-    this->age = age;
+}
+
+Customer::Customer(QString id, QString email, QString name, QString DateOFBirth)
+    : User(id, email, name,  DateOFBirth)
+{
+  
+}
+
+void Customer::GiveFeedback(QString feedbackText)
+{
+    Feedback::FeedBack.push(feedbackText);
+    
 }

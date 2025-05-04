@@ -1,11 +1,14 @@
 #include"User.h"
 
-User::User(int id, string email, string name, string password, string phone)
+User::User()
+{
+}
+
+User::User(QString id, QString email, QString name, QString DateOFBirth)
 {
 	this->id = id;
 	this->email = email;
 	this->name = name;
-	this->password = password;
-	this->phone = phone;
+	this->DateOFBirth = DateOFBirth;
 	
 }
