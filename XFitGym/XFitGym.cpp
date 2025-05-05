@@ -10,8 +10,8 @@ using namespace std;
 // 3 -> User Profile
 // 4 -> Notifications
 // 5 -> Feedback
-// 
-// 
+// 6 -> Classes
+// 7 -> padel
 //
 
 XFitGym::XFitGym(QWidget *parent)
@@ -26,6 +26,8 @@ XFitGym::XFitGym(QWidget *parent)
     user_Profile = new userProfile(this);
     notifications = new Notifications(this);
     feedback = new Feedback(this);
+    classes = new Classes(this);
+    padel = new Padel(this);
 
     ui.Main->addWidget(log);
     ui.Main->addWidget(home);
@@ -33,6 +35,8 @@ XFitGym::XFitGym(QWidget *parent)
     home->ui.Pages->addWidget(user_Profile);
     home->ui.Pages->addWidget(notifications);
     home->ui.Pages->addWidget(feedback);
+    home->ui.Pages->addWidget(classes);
+    home->ui.Pages->addWidget(padel);
 
 
     // just for the show password functionality 
@@ -114,6 +118,10 @@ XFitGym::XFitGym(QWidget *parent)
     }
     dash->ui.PadelGauge->layout()->addWidget(Pgauge);
     dash->ui.ClassGauge->layout()->addWidget(Cgauge);
+
+
+    user_Profile->ui.messageClass->setVisible(false);
+    user_Profile->ui.messageCourt->setVisible(false);
 
 
     // user homepage control panel
@@ -228,10 +236,120 @@ XFitGym::XFitGym(QWidget *parent)
     connect(home->ui.Classes, &QPushButton::clicked, this, [=]() {
         setScrolltoTop();
         qDebug() << "Classes";
+
+        QWidget* scrollWidget = new QWidget;
+        scrollWidget->setObjectName("scrollWidget");
+
+        scrollWidget->setStyleSheet("QWidget#scrollWidget{background-color: #1e1e1e;}");
+
+        QGridLayout* grid = new QGridLayout(scrollWidget);
+
+        int numCards = 13;
+        for (int i = 0; i < numCards; i++) {
+            QString className = "Biceps Class";
+            QString date_time = "5/5/2025    7:00 PM";
+            QString coachName = "Coach: Khalx";
+            int attend = 30;
+            int max = 40;
+
+            Cards* card = new Cards(className, date_time ,coachName ,attend,max);
+            QPushButton* waitlist = new QPushButton("Waitlist");
+            QPushButton* book = new QPushButton("Book");
+            //************************
+            //  replace true with (attendedCounter < maxSize)
+            if(i < 3)
+            {
+                book->setStyleSheet("background-color:#6F3FCC ;font-family: 'Futura'; color: white;");
+
+                waitlist->setStyleSheet("background-color: grey;font-family: 'Futura'; color: white;");
+                waitlist->setEnabled(false);
+            }
+            else
+            {
+                waitlist->setStyleSheet("background-color:#6F3FCC;font-family: 'Futura'; color: white;");
+
+                book->setStyleSheet("background-color: grey;font-family: 'Futura'; color: white;");
+                book->setEnabled(false);
+
+
+            }
+
+            card->buttonLayout->addWidget(waitlist);
+            card->buttonLayout->addWidget(book);
+
+            int row = i / 3;
+            int col = i % 3;
+            grid->addWidget(card, row, col);
+
+            QObject::connect(waitlist, &QPushButton::clicked, [=]() {
+                });
+            QObject::connect(book, &QPushButton::clicked, [=]() {
+                qDebug() << coachName;
+                });
+        }
+
+        scrollWidget->setLayout(grid);
+        classes->ui.scrollArea->setWidget(scrollWidget);
+        classes->ui.scrollArea->setWidgetResizable(true);
+
+
+        home->ui.Pages->setCurrentIndex(6);
         });
     connect(home->ui.Courts, &QPushButton::clicked, this, [=]() {
         setScrolltoTop();
         qDebug() << "Padel Courts";
+
+        QWidget courts;
+        // Create the grid layout
+        QGridLayout* grid = new QGridLayout;
+        QStringList days = { "Sat", "Sun", "Mon", "Tue", "Wed","Thu" , "Fri" }; // Full week
+        QStringList times = { "12:00", "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00" }; // Updated times from 12:00 to 8:00
+        int courtCount = 7;
+
+        // Headers for weekdays (Mon, Tue, ..., Sun)
+        for (int d = 0; d < days.size(); ++d)
+            grid->addWidget(new QLabel(days[d]), 0, d + 1);
+
+        // Time slots on the left
+        for (int t = 0; t < times.size(); ++t)
+            grid->addWidget(new QLabel(times[t]), t + 1, 0);
+
+        // Slots for court bookings
+        for (int t = 0; t < times.size(); t++) {
+            for (int c = 0; c < courtCount; c++) {
+                QPushButton* slot = new QPushButton;
+                slot->setFixedSize(60, 40);
+                slot->setStyleSheet("background-color: white; border: 1px solid gray;");
+
+                //replace this condition when isBooked
+                if (t<5 && c %2 == 0)
+                {
+                    slot->setStyleSheet("background-color: red;border: 1px solid gray;");
+                    slot->setEnabled(false);
+                }
+                
+                else
+                {
+                    slot->setStyleSheet("background-color: green;border: 1px solid gray;");
+                }
+                grid->addWidget(slot, t + 1, c + 1); // Adding slots to grid
+                QObject::connect(slot, &QPushButton::clicked, [=]() mutable {
+                    if (padel->selectedSlot) {
+                        padel->selectedSlot->setStyleSheet("background-color: green;border: 1px solid gray;");
+                    }
+
+                    padel->selectedSlot = slot;
+                    padel->selectedDay = days[c];
+                    padel->selectedTime = times[t];
+                    slot->setStyleSheet("background-color: yellow;border: 1px solid gray;"); // Highlight as selected
+                    });
+            }
+        }
+
+        // Assuming the QWidget you're working with is called ui->yourWidget
+        padel->ui.widget->setLayout(grid);  // Set the QGridLayout to the widget
+
+        home->ui.Pages->setCurrentIndex(7);
         });
     connect(home->ui.Feedback, &QPushButton::clicked, this, [=]() {
         setScrolltoTop();
@@ -241,6 +359,16 @@ XFitGym::XFitGym(QWidget *parent)
     connect(home->ui.Profile, &QPushButton::clicked, this, [=]() {
         setScrolltoTop();
     
+
+
+        //change true with (class.empty && courts.empty) .. w e3mel condition di lw7dha w di lw7dha
+        if (true) {
+            user_Profile->ui.messageClass->setVisible(true);
+            user_Profile->ui.messageCourt->setVisible(true);
+            home->ui.Pages->setCurrentIndex(3);
+            return;
+        }
+
 
         //dynamically generating the Classes
 
@@ -325,6 +453,7 @@ XFitGym::XFitGym(QWidget *parent)
 
         //dynamically generating the Courts
 
+
         QWidget* Courts = new QWidget;
         Courts->setStyleSheet("background-color: #1e1e1e; color: white;");
 
@@ -381,10 +510,36 @@ XFitGym::XFitGym(QWidget *parent)
                 "  background-color: #c0392b;"
                 "}"
             );
+
+            QPushButton* rescheduleCourt = new QPushButton("Reschedule", activeCourt);
+            rescheduleCourt->setStyleSheet(R"(
+                QPushButton {
+                    background-color: #2c2c2c;
+                    color: white;
+                    border: 2px solid #2c2c2c;
+                    border-radius: 6px;
+                    font-family: 'Futura';
+                   font-size: 11pt;
+                   padding: 6px 16px;
+                }
+
+                QPushButton:hover {
+                    background-color: #8B50FF;
+                    border: 2px solid #8B50FF;
+                    color: white;
+                }
+
+                QPushButton:pressed {
+                    background-color: #6F3FCC;
+                }
+            )");
+
+
+            rescheduleCourt->adjustSize();
             cancelCourt->adjustSize();
             QTimer::singleShot(0, [=]() {
                 int w = activeCourt->width();
-
+                rescheduleCourt->move(w - cancelCourt->width() - 30 - rescheduleCourt->width(), 20);
                 cancelCourt->move(w - cancelCourt->width() - 15, 20);
                 });
 
@@ -392,13 +547,17 @@ XFitGym::XFitGym(QWidget *parent)
             QTimer::singleShot(0, [=]() {
                 int w = activeCourt->width();
                 int h = activeCourt->height();
-                date->move((w - date->width()) / 2 + 35, coach->y());
+                date->move((w - date->width()) / 2 + 15, coach->y());
                 });
 
             layoutCourt->addWidget(activeCourt);
 
             QObject::connect(cancelCourt, &QPushButton::clicked, [=]() {
                 activeCourt->deleteLater();
+                });
+            
+            QObject::connect(rescheduleCourt, &QPushButton::clicked, [=]() {
+                qDebug() << "Rescheduled";
                 });
 
         }
@@ -453,6 +612,18 @@ XFitGym::XFitGym(QWidget *parent)
         
         feedback->ui.Feed->clear();
         });
+    connect(padel->ui.BookCourt, &QPushButton::clicked, this, [=]()  {
+        if (padel->selectedSlot) {
+            qDebug() << "Booked:" << padel->selectedDay << padel->selectedTime;
+            padel->selectedSlot->setStyleSheet("background-color: red;border: 1px solid gray;");
+            padel->selectedSlot->setEnabled(false);
+            padel->selectedSlot = nullptr; // Reset
+        }
+        else {
+            qDebug() << "No slot selected!";
+        }
+        });
+
 
 }
 
@@ -476,4 +647,107 @@ void XFitGym::load()
 {
     feedback->loadFeedBack();
     log->loaddata();
+}
+
+Cards::Cards(QString title, QString line1, QString line2, QWidget* parent)
+    : QWidget(parent)
+{
+    setFixedSize(220, 160);
+
+    // Outer layout for the entire card container
+    QVBoxLayout* outerLayout = new QVBoxLayout(this);
+    outerLayout->setContentsMargins(0, 0, 0, 0);
+
+    // Create styled QFrame (this is the actual "card")
+    QFrame* cardFrame = new QFrame;
+    cardFrame->setObjectName("cardFrame");
+    cardFrame->setFixedSize(220, 160);
+
+    // Style only the frame
+    cardFrame->setStyleSheet(R"(
+        QFrame#cardFrame {
+            background-color: #4A4A4A;
+            border: 2px solid #6F3FCC;
+            border-radius: 15px;
+        }
+    )");
+
+    // Layout inside the card
+    QVBoxLayout* cardLayout = new QVBoxLayout(cardFrame);
+    cardLayout->setContentsMargins(10, 10, 10, 10);
+
+    QLabel* titleLabel = new QLabel("<b>" + title + "</b>");
+    QLabel* line1Label = new QLabel(line1);
+    QLabel* line2Label = new QLabel(line2);
+
+    // Let labels inherit normal colors (not inside styled selector)
+    titleLabel->setStyleSheet("font-size: 18pt; font-family: 'Futura'; color: white;");
+    line1Label->setStyleSheet("font-family: 'DM Serif Display'; color: white;");
+    line2Label->setStyleSheet("font-family: 'DM Serif Display'; color: white;");
+
+    buttonLayout = new QHBoxLayout();
+
+    cardLayout->addWidget(titleLabel);
+    cardLayout->addWidget(line1Label);
+    cardLayout->addWidget(line2Label);
+    cardLayout->addStretch();
+    cardLayout->addLayout(buttonLayout);
+
+    outerLayout->addWidget(cardFrame);
+}
+
+Cards::Cards(QString title, QString line1, QString line2, int attendees, int max, QWidget* parent)
+    : QWidget(parent)
+{
+    setFixedSize(220, 160);
+
+    QVBoxLayout* outerLayout = new QVBoxLayout(this);
+    outerLayout->setContentsMargins(0, 0, 0, 0);
+
+    QFrame* cardFrame = new QFrame;
+    cardFrame->setObjectName("cardFrame");
+    cardFrame->setFixedSize(220, 160);
+    cardFrame->setStyleSheet(R"(
+        QFrame#cardFrame {
+            background-color: #4A4A4A;
+            border: 2px solid #6F3FCC;
+            border-radius: 15px;
+        }
+    )");
+
+    QVBoxLayout* cardLayout = new QVBoxLayout(cardFrame);
+    cardLayout->setContentsMargins(30, 10, 10, 10);
+
+    QLabel* titleLabel = new QLabel("<b>" + title + "</b>");
+    QLabel* line1Label = new QLabel(line1);
+    QLabel* line2Label = new QLabel(line2);
+
+    titleLabel->setStyleSheet("font-size: 18pt; font-family: 'Futura'; color: white;");
+    line1Label->setStyleSheet("font-family: 'DM Serif Display'; color: white;");
+    line2Label->setStyleSheet("font-family: 'DM Serif Display'; color: white;");
+
+    // Attendance counter layout
+    QHBoxLayout* attendanceLayout = new QHBoxLayout;
+    attendanceLayout->setContentsMargins(50, 0, 0, 0);  // Moves entire line right
+
+    QLabel* iconLabel = new QLabel;
+    iconLabel->setPixmap(QPixmap("assets/bookedMembers.png").scaled(16, 16, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+    QLabel* attendanceLabel = new QLabel(QString("%1/%2").arg(attendees).arg(max));
+    attendanceLabel->setStyleSheet("color: white; font-size: 12px;");
+
+    attendanceLayout->addWidget(iconLabel);
+    attendanceLayout->addWidget(attendanceLabel);
+    attendanceLayout->addStretch();
+
+    buttonLayout = new QHBoxLayout();
+
+    cardLayout->addWidget(titleLabel);
+    cardLayout->addWidget(line1Label);
+    cardLayout->addWidget(line2Label);
+    cardLayout->addLayout(attendanceLayout);
+    cardLayout->addStretch();
+    cardLayout->addLayout(buttonLayout);
+
+    outerLayout->addWidget(cardFrame);
 }

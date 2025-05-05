@@ -2,6 +2,9 @@
 #include <QDate>
 #include <QString>
 
+Subscription::Subscription() {
+
+}
 
 Subscription::Subscription(QString type) {
     this->type = type;
