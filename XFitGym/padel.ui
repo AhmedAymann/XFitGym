@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PadelClass</class>
+ <widget class="QWidget" name="PadelClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>770</width>
+    <height>490</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"> background-color:#1e1e1e; </string>
+  </property>
+  <widget class="QWidget" name="tournament" native="true">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>321</width>
+     <height>251</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget#tournament{
+	background-color: #4A4A4A;
+    border: 2px solid #8B50FF ;
+    border-radius: 14px;
+}</string>
+   </property>
+   <widget class="QLabel" name="tornamentsLabel">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>10</y>
+      <width>321</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Futura</family>
+      <pointsize>14</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: transparent;
+color: white;
+</string>
+    </property>
+    <property name="text">
+     <string>Tournament</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QWidget" name="firstPlace" native="true">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>70</y>
+      <width>301</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QWidget#firstPlace{
+border: 2px solid #e5d51e;
+border-radius: 12px;
+}
+QWidget{background-color:#3c3c3c;}</string>
+    </property>
+    <widget class="QLabel" name="firstLabel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>5</y>
+       <width>41</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Futura</family>
+       <pointsize>17</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #e5d51e;</string>
+     </property>
+     <property name="text">
+      <string>1st</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="firstPlayers">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>10</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Futura</family>
+       <pointsize>15</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color:white</string>
+     </property>
+     <property name="text">
+      <string>Hamdy &amp; Khalx</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="firstScore">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>5</y>
+       <width>61</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Futura</family>
+       <pointsize>25</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #e5d51e;</string>
+     </property>
+     <property name="text">
+      <string>200</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="secondPlace" native="true">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>130</y>
+      <width>301</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QWidget#secondPlace{
+border: 2px solid #C0C0C0;;
+border-radius: 12px;
+}
+QWidget{background-color:#3c3c3c;}</string>
+    </property>
+    <widget class="QLabel" name="secondLabel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>41</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Futura</family>
+       <pointsize>17</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #C0C0C0;</string>
+     </property>
+     <property name="text">
+      <string>2nd</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="secondPlayers">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>10</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Futura</family>
+       <pointsize>15</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color:white;</string>
+     </property>
+     <property name="text">
+      <string>Hamdy &amp; Khalx</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="secondScore">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>10</y>
+       <width>61</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Futura</family>
+       <pointsize>25</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #C0C0C0;</string>
+     </property>
+     <property name="text">
+      <string>150</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="thirdPlace" native="true">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>190</y>
+      <width>301</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QWidget#thirdPlace{
+border: 2px solid #CD7F32;
+border-radius: 12px;
+}
+QWidget{background-color:#3c3c3c;};</string>
+    </property>
+    <widget class="QLabel" name="thirdLabel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>41</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Futura</family>
+       <pointsize>17</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #CD7F32;</string>
+     </property>
+     <property name="text">
+      <string>3rd</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="thirdPlayers">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>10</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Futura</family>
+       <pointsize>15</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color:white;</string>
+     </property>
+     <property name="text">
+      <string>Hamdy &amp; Khalx</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="thirdScore">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>10</y>
+       <width>61</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Futura</family>
+       <pointsize>25</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #CD7F32;</string>
+     </property>
+     <property name="text">
+      <string>100</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="courts" native="true">
+   <property name="geometry">
+    <rect>
+     <x>360</x>
+     <y>10</y>
+     <width>381</width>
+     <height>251</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget#courts{
+	background-color: #4A4A4A;
+    border: 2px solid #8B50FF ;
+    border-radius: 14px;
+}</string>
+   </property>
+   <widget class="QLabel" name="courtsLabel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>361</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Futura</family>
+      <pointsize>14</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: transparent;
+color: white;
+</string>
+    </property>
+    <property name="text">
+     <string>Courts</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QWidget" name="widget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>361</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">	background-color: #4A4A4A;
+	color: white;
+	font-family: 'Futura';
+</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="BookCourt">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>230</y>
+      <width>80</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Futura</family>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #2c2c2c;  
+    color: white;
+    border: 2px solid #2c2c2c;
+    border-radius: 6px;
+}
+
+QPushButton:hover {
+    background-color: #8B50FF ; 
+    border: 2px solid #8B50FF ;
+    color: white;
+}
+
+QPushButton:pressed {
+    background-color: #6F3FCC; 
+}</string>
+    </property>
+    <property name="text">
+     <string>Book</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="news" native="true">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>280</y>
+     <width>721</width>
+     <height>191</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget#news{
+	background-color: #4A4A4A;
+    border: 2px solid #8B50FF ;
+    border-radius: 14px;
+}</string>
+   </property>
+   <widget class="QLabel" name="newsLabel">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>10</y>
+      <width>721</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Futura</family>
+      <pointsize>14</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: transparent;
+color: white;
+</string>
+    </property>
+    <property name="text">
+     <string>News</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QWidget" name="topNews" native="true">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>50</y>
+      <width>681</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QWidget#topNews{
+background-color:transparent;
+background-color:transparent;
+border: 3px solid rgba(0, 0, 0, 80);
+border-radius: 10px;
+
+}</string>
+    </property>
+    <widget class="QLabel" name="firstNew">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>531</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>DM Serif Display</family>
+       <pointsize>14</pointsize>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color:white;
+background-color:transparent;
+</string>
+     </property>
+     <property name="text">
+      <string>Khalx is dead!</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="firstImage">
+     <property name="geometry">
+      <rect>
+       <x>550</x>
+       <y>10</y>
+       <width>121</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>assets/deadImage.jpg</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="secNews" native="true">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>120</y>
+      <width>681</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QWidget#secNews{
+background-color:transparent;
+border: 3px solid rgba(0, 0, 0, 80);
+border-radius: 10px;
+
+}</string>
+    </property>
+    <widget class="QLabel" name="secondNew">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>531</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>DM Serif Display</family>
+       <pointsize>14</pointsize>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color:white;
+background-color:transparent;
+</string>
+     </property>
+     <property name="text">
+      <string>New coach has joined our family.</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="secondImage">
+     <property name="geometry">
+      <rect>
+       <x>550</x>
+       <y>10</y>
+       <width>121</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>assets/dealImage.jpg</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

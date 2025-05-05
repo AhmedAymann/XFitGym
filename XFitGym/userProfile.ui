@@ -54,7 +54,7 @@ QScrollBar::sub-line:vertical {
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>-855</y>
+      <y>-886</y>
       <width>756</width>
       <height>1400</height>
      </rect>
@@ -636,6 +636,58 @@ QScrollBar::sub-line:vertical {
       </property>
      </widget>
     </widget>
+    <widget class="QLabel" name="messageClass">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>950</y>
+       <width>561</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Futura</family>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color:white;
+background-color:transparent;</string>
+     </property>
+     <property name="text">
+      <string>No booked classes at the moment</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="messageCourt">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>1190</y>
+       <width>561</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Futura</family>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color:white;
+background-color:transparent;</string>
+     </property>
+     <property name="text">
+      <string>No booked padel courts at the moment</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
     <zorder>frameSub</zorder>
     <zorder>frameInfo</zorder>
     <zorder>profilePicture</zorder>
@@ -658,6 +710,8 @@ QScrollBar::sub-line:vertical {
     <zorder>Plan</zorder>
     <zorder>scrollAreaClass</zorder>
     <zorder>scrollAreaCourt</zorder>
+    <zorder>messageClass</zorder>
+    <zorder>messageCourt</zorder>
    </widget>
   </widget>
  </widget>

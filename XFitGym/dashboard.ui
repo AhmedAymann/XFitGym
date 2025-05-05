@@ -298,7 +298,9 @@ color: white;
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">
+     <string notr="true">QScrollBar{
+	border: none;
+}
 QScrollBar:vertical {
     background: white;
     width: 10px;
