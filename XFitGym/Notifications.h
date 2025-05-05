@@ -1,4 +1,3 @@
-#pragma once
 #include <QtWidgets/QMainWindow>
 #include "ui_notifications.h"
 #include "Subscription.h"

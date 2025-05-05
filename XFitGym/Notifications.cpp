@@ -28,6 +28,3 @@ void Notifications::CheckSubscriptionDeadline(const Subscription& subscription, 
             << "will end in" << daysRemaining << "days!";
     }
 }
-
-
-
