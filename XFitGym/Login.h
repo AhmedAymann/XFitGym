@@ -13,7 +13,8 @@ public:
     Login(QWidget* parent = nullptr);
     ~Login();
     static map<int, Customer> membersData;
-
+    void loaddata();
+    void savedata();
 
     Ui::LoginClass ui;
 
