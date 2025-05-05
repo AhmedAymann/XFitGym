@@ -2,6 +2,7 @@
 #include "Subscription.h"
 #include "Notifications.h"
 #include "ProgramClock.h"
+#include "Login.h"
 #include <QtWidgets/QApplication>
 
 int main(int argc, char *argv[])
@@ -12,13 +13,11 @@ int main(int argc, char *argv[])
     w.show();
 
 
-    // SUBSCRIPTION HATEKHLAS ORAYEB
-    Subscription sub("Premium");
-    sub.startDate = "2025-05-01";
-    sub.endDate = "2025-05-15";
+    QVector<Customer> customers = loaddata("customers.txt");
+
 
     ProgramClock clock;
-    //Notifications notifier;
+    Notifications notifier;
 
 
 
@@ -33,7 +32,7 @@ int main(int argc, char *argv[])
         qDebug() << "\n📅 Current Program Date:" << clock.GetCurrentDate().toString("yyyy-MM-dd");
 
         // Check subscription deadline based on program time
-        //notifier.CheckSubscriptionDeadline(sub, clock.GetCurrentDate());
+        notifier.CheckSubscriptionDeadline(sub, clock.GetCurrentDate());
 
         // Advance to next day
         clock.Tick();
