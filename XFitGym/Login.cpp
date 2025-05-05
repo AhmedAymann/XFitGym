@@ -29,7 +29,7 @@ void Login::loaddata()
         QString line = in.readLine();
         QStringList parts = line.split(",");
         Customer c(parts[0], parts[1], parts[2], parts[3]);
-        c.sub.name = parts[4];
+        c.sub.type = parts[4];
         membersData[parts[0].toInt()] = c;
 
     }
@@ -57,7 +57,7 @@ void Login::savedata()
 
     for (auto& a : membersData)
     {
-        out << a.first << ',' << a.second.email << ',' << a.second.name << ',' << a.second.DateOFBirth << ',' << a.second.sub.name << "\n";
+        out << a.first << ',' << a.second.email << ',' << a.second.name << ',' << a.second.DateOFBirth << ',' << a.second.sub.type << "\n";
     }
 
     file.close();

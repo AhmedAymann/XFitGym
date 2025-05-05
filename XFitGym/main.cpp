@@ -12,8 +12,10 @@ int main(int argc, char *argv[])
     w.load();
     w.show();
 
-
-    QVector<Customer> customers = loaddata("customers.txt");
+    // SUBSCRIPTION HATEKHLAS ORAYEB
+    Subscription sub("Premium");
+    sub.startDate = "2025-05-01";
+    sub.endDate = "2025-05-15";
 
 
     ProgramClock clock;
