@@ -126,7 +126,7 @@
     <QtMoc Include="Dashboard.h" />
     <QtMoc Include="Homepage.h" />
     <QtMoc Include="userProfile.h" />
-    <Text Include="data.txt" />
+    <Text Include="CustomerData.txt" />
     <Text Include="feedbacks.txt" />
   </ItemGroup>
   <ItemGroup>

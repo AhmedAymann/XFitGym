@@ -61,7 +61,14 @@ XFitGym::XFitGym(QWidget *parent)
         user_Profile->ui.ID->setText(Login::membersData[id.toInt()].id);
         user_Profile->ui.Name->setText(Login::membersData[id.toInt()].name);
         user_Profile->ui.DOB->setText(Login::membersData[id.toInt()].DateOFBirth);
-        user_Profile->ui.Plan->setText(Login::membersData[id.toInt()].sub.name);
+        if (Login::membersData[id.toInt()].sub.name.isEmpty()) {
+            user_Profile->ui.Plan->setText("No Subscriotion");
+        }
+        else
+        {
+            user_Profile->ui.Plan->setText(Login::membersData[id.toInt()].sub.name);
+        }
+
         
         
         qDebug() << "LogIn";
@@ -420,7 +427,7 @@ XFitGym::XFitGym(QWidget *parent)
     });
     connect(user_Profile->ui.Cancel, &QPushButton::clicked, this, [=]() {
         user_Profile->ui.Plan->setText("No Subscription");
-        Login::membersData[log->ui.Password->text().toInt()].sub.name.clear();
+        Login::membersData[log->ui.Password->text().toInt()].sub.name= "No Subscription";
     });
     connect(home->ui.BacktoProf, &QPushButton::clicked, this, [=]() {
         home->ui.Pages->setCurrentIndex(3);
@@ -461,9 +468,11 @@ void XFitGym::setScrolltoTop()
 void XFitGym::save()
 {
     feedback->saveFeedBack();
+    log->savedata();
 }
 
 void XFitGym::load()
 {
     feedback->loadFeedBack();
+    log->loaddata();
 }

@@ -1,3 +1,0 @@
-ahmed,88,khalx,11/8/1999,yearly
-khalx,99,hoss,25/10/1978,
-a,a
