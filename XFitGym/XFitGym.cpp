@@ -74,7 +74,7 @@ XFitGym::XFitGym(QWidget *parent)
     {
             save();
         QApplication::quit();
-    });
+    });//
     connect(log->ui.showPassword, &QPushButton::clicked, this, [=]() {
         if (log->ui.showPassword->icon().pixmap(100,100).toImage() == hide.pixmap(100, 100).toImage())
         {
