@@ -1,8 +1,9 @@
-
 #include <QtWidgets/QMainWindow>
 #include "ui_login.h"
 #include "qtimer.h"
-
+#include "Customer.h"
+#include"Subscription.h"
+#include<map>
 
 class Login : public QWidget
 {
@@ -11,10 +12,12 @@ class Login : public QWidget
 public:
     Login(QWidget* parent = nullptr);
     ~Login();
+    static map<int, Customer> membersData;
+
 
     Ui::LoginClass ui;
 
 public slots:
-    bool CheckLogin(QString& username, QString& password);
+    bool CheckLogin(QString& username, QString& id);
 
 };

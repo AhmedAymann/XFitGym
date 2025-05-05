@@ -10,7 +10,7 @@ public:
 	string newsText;
 	Customer customer;
 
-	Receptionist(int id, string email, string name, string password, string phone,string role, int desknumber, int newsId, string newsText, Customer customer);
+	Receptionist(QString id, QString email, QString name, QString DateOFBirth,string role, int desknumber, int newsId, string newsText, Customer customer);
 
 
 	void AddMember(Customer customer);

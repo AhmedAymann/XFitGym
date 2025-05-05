@@ -40,12 +40,12 @@ XFitGym::XFitGym(QWidget *parent)
     QIcon hide = QIcon("assets/hidePassword.png");
     log->ui.Password->setMaxLength(30);
     log->ui.warning->setVisible(false);
-
+    
     connect(log->ui.Login, &QPushButton::clicked, this, [=]() {
         QString username = log->ui.Email->text();
-        QString password = log->ui.Password->text();
-        if (!log->CheckLogin(username, password)) {
-            if (username.isEmpty() || password.isEmpty()) {
+        QString id = log->ui.Password->text();
+        if (!log->CheckLogin(username, id)) {
+            if (username.isEmpty() || id.isEmpty()) {
                 log->ui.warning->setText("please fill in all the spaces");
                 log->ui.warning->setVisible(true);
 
@@ -58,16 +58,23 @@ XFitGym::XFitGym(QWidget *parent)
             QTimer::singleShot(2000, log->ui.warning, &QLabel::hide);
             return;
         }
+        user_Profile->ui.ID->setText(Login::membersData[id.toInt()].id);
+        user_Profile->ui.Name->setText(Login::membersData[id.toInt()].name);
+        user_Profile->ui.DOB->setText(Login::membersData[id.toInt()].DateOFBirth);
+        user_Profile->ui.Plan->setText(Login::membersData[id.toInt()].sub.name);
         
-        log->ui.Email->setText("");
-        log->ui.Password->setText("");
+        
         qDebug() << "LogIn";
         log->ui.showPassword->setIcon(hide);
         log->ui.Password->setEchoMode(QLineEdit::Password);
         ui.Main->setCurrentIndex(1);
         
     });
-    connect(log->ui.Exit, &QPushButton::clicked, this, QApplication::quit);
+    connect(log->ui.Exit, &QPushButton::clicked, this, [=]()
+    {
+            save();
+        QApplication::quit();
+    });
     connect(log->ui.showPassword, &QPushButton::clicked, this, [=]() {
         if (log->ui.showPassword->icon().pixmap(100,100).toImage() == hide.pixmap(100, 100).toImage())
         {
@@ -399,13 +406,21 @@ XFitGym::XFitGym(QWidget *parent)
         qDebug() << "Profile";
         });
     connect(home->ui.Logout, &QPushButton::clicked, this, [=]() {
+        log->ui.Email->setText("");
+        log->ui.Password->setText("");
         setScrolltoTop();
         home->ui.Pages->setCurrentIndex(0);
         ui.Main->setCurrentIndex(0);
+       
+
     });
     
     connect(user_Profile->ui.viewPlans, &QPushButton::clicked, this, [=]() {
         home->ui.Pages->setCurrentIndex(1);
+    });
+    connect(user_Profile->ui.Cancel, &QPushButton::clicked, this, [=]() {
+        user_Profile->ui.Plan->setText("No Subscription");
+        Login::membersData[log->ui.Password->text().toInt()].sub.name.clear();
     });
     connect(home->ui.BacktoProf, &QPushButton::clicked, this, [=]() {
         home->ui.Pages->setCurrentIndex(3);
@@ -420,12 +435,14 @@ XFitGym::XFitGym(QWidget *parent)
             QTimer::singleShot(1250, feedback->ui.message, &QLabel::hide);
             return;
         }
+        Customer c;
+        c.GiveFeedback(feed);
         feedback->ui.message->setText("Feedback submitted!");
         feedback->ui.message->setStyleSheet("color: green;");
         feedback->ui.message->setVisible(true);
         QTimer::singleShot(1250, feedback->ui.message, &QLabel::hide);
 
-        qDebug() << feed;
+        
         feedback->ui.Feed->clear();
         });
 
@@ -439,4 +456,14 @@ void XFitGym::setScrolltoTop()
     user_Profile->ui.scrollArea->verticalScrollBar()->setValue(0);
     notifications->ui.scrollArea->verticalScrollBar()->setValue(0);
     dash->ui.scrollArea->verticalScrollBar()->setValue(0);
+}
+
+void XFitGym::save()
+{
+    feedback->saveFeedBack();
+}
+
+void XFitGym::load()
+{
+    feedback->loadFeedBack();
 }

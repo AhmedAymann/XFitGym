@@ -108,6 +108,9 @@
     <ClCompile Include="Homepage.cpp" />
     <ClCompile Include="Login.cpp" />
     <ClCompile Include="Notifications.cpp" />
+    <ClCompile Include="Subscription.cpp" />
+    <ClCompile Include="Tournament.cpp" />
+    <ClCompile Include="TrainingSession.cpp" />
     <ClCompile Include="userProfile.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Receptionist.cpp" />
@@ -122,9 +125,9 @@
   <ItemGroup>
     <QtMoc Include="Dashboard.h" />
     <QtMoc Include="Homepage.h" />
-    <Text Include="user.txt" />
     <QtMoc Include="userProfile.h" />
     <Text Include="data.txt" />
+    <Text Include="feedbacks.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coach.h" />
@@ -134,6 +137,9 @@
     <QtMoc Include="Notifications.h" />
     <ClInclude Include="Receptionist.h" />
     <ClInclude Include="Staff.h" />
+    <ClInclude Include="Subscription.h" />
+    <ClInclude Include="Tournament.h" />
+    <ClInclude Include="TrainingSession.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

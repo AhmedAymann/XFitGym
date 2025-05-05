@@ -15,7 +15,7 @@ void userProfile::on_chooseButton_clicked() {
         QPixmap newPic(fileName);
         ui.profilePicture->setPixmap(newPic.scaled(ui.profilePicture->size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
     }
-    //
+    
     QString relativePath = fileName.mid(fileName.indexOf("assets"));
     qDebug() << relativePath;
 }

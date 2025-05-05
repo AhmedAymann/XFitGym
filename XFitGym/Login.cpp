@@ -13,9 +13,9 @@ Login::Login(QWidget* parent)
 }
 Login::~Login()
 {}
+map<int, Customer> Login::membersData;
 
-
-bool Login::CheckLogin(QString& username, QString& password)
+bool Login::CheckLogin(QString& username, QString& id)
 {
     QFile file("data.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -26,11 +26,16 @@ bool Login::CheckLogin(QString& username, QString& password)
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList parts = line.split(",");
-        if (parts[0] == username && parts[1] == password) {
-
+        if (parts[0] == username && parts[1] == id) {
+            Customer c(parts[1],parts[0],parts[2],parts[3]);
+            if (parts[4].isEmpty()) {
+                parts[4] = "No Subscription";
+            }
+            c.sub.name = parts[4];
+            membersData[id.toInt()] = c;
             return true;
         }
     }
-
+    file.close();
     return false;
 }
