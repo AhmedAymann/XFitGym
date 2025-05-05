@@ -61,12 +61,12 @@ XFitGym::XFitGym(QWidget *parent)
         user_Profile->ui.ID->setText(Login::membersData[id.toInt()].id);
         user_Profile->ui.Name->setText(Login::membersData[id.toInt()].name);
         user_Profile->ui.DOB->setText(Login::membersData[id.toInt()].DateOFBirth);
-        if (Login::membersData[id.toInt()].sub.name.isEmpty()) {
+        if (Login::membersData[id.toInt()].sub.type.isEmpty()) {
             user_Profile->ui.Plan->setText("No Subscriotion");
         }
         else
         {
-            user_Profile->ui.Plan->setText(Login::membersData[id.toInt()].sub.name);
+            user_Profile->ui.Plan->setText(Login::membersData[id.toInt()].sub.type);
         }
         home->ui.welcome->setText("Welcome Back, " + Login::membersData[id.toInt()].name);
 
@@ -428,7 +428,7 @@ XFitGym::XFitGym(QWidget *parent)
     });
     connect(user_Profile->ui.Cancel, &QPushButton::clicked, this, [=]() {
         user_Profile->ui.Plan->setText("No Subscription");
-        Login::membersData[log->ui.Password->text().toInt()].sub.name= "No Subscription";
+        Login::membersData[log->ui.Password->text().toInt()].sub.type= "No Subscription";
     });
     connect(home->ui.BacktoProf, &QPushButton::clicked, this, [=]() {
         home->ui.Pages->setCurrentIndex(3);

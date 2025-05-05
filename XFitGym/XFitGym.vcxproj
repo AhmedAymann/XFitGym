@@ -108,6 +108,7 @@
     <ClCompile Include="Homepage.cpp" />
     <ClCompile Include="Login.cpp" />
     <ClCompile Include="Notifications.cpp" />
+    <ClCompile Include="ProgramClock.cpp" />
     <ClCompile Include="Subscription.cpp" />
     <ClCompile Include="Tournament.cpp" />
     <ClCompile Include="TrainingSession.cpp" />
@@ -135,6 +136,7 @@
     <QtMoc Include="Feedback.h" />
     <ClInclude Include="Manager.h" />
     <QtMoc Include="Notifications.h" />
+    <ClInclude Include="ProgramClock.h" />
     <ClInclude Include="Receptionist.h" />
     <ClInclude Include="Staff.h" />
     <ClInclude Include="Subscription.h" />

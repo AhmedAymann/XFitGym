@@ -7,8 +7,8 @@
 class Customer : public User 
 {
 private:
-	//queue<TrainingSession> bookedsessions;
-	//queue<Court> bookedcourt;
+	queue<TrainingSession> bookedsessions;
+	
 public: 
 	
 	Subscription sub;

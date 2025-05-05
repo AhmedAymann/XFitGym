@@ -3,7 +3,6 @@
 #include <QString>
 
 
-
 Subscription::Subscription(QString type) {
     this->type = type;
 }
