@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     sub.endDate = "2025-05-15";
 
     ProgramClock clock;
-    Notifications notifier;
+    //Notifications notifier;
 
 
 
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
         qDebug() << "\n📅 Current Program Date:" << clock.GetCurrentDate().toString("yyyy-MM-dd");
 
         // Check subscription deadline based on program time
-        notifier.CheckSubscriptionDeadline(sub, clock.GetCurrentDate());
+        //notifier.CheckSubscriptionDeadline(sub, clock.GetCurrentDate());
 
         // Advance to next day
         clock.Tick();
