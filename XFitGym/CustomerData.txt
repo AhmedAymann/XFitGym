@@ -1,3 +1,3 @@
-88,ahmed,khalx,11/8/1999,yearly
+77,bas,bassam,15/5/2005,No Subscription
+88,ahmed,khalx,11/8/1999,No Subscription
 99,khalx,hoss,25/10/1978,No Subscription
-77,bas,bassam,15/5/2005,month

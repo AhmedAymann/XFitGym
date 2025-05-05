@@ -68,7 +68,7 @@ XFitGym::XFitGym(QWidget *parent)
         {
             user_Profile->ui.Plan->setText(Login::membersData[id.toInt()].sub.name);
         }
-
+        home->ui.welcome->setText("Welcome Back, " + Login::membersData[id.toInt()].name);
         
         
         qDebug() << "LogIn";

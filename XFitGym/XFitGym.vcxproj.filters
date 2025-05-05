@@ -129,6 +129,7 @@
   <ItemGroup>
     <Text Include="CustomerData.txt" />
     <Text Include="feedbacks.txt" />
+    <Text Include="sessions.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="User.h">
