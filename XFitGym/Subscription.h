@@ -11,7 +11,8 @@ public:
     QString endDate;
     int priceAfterDiscount;
 
-   
+    Subscription();
+
     Subscription(QString type);
     int CalculatePrice(int priceBeforeDiscount, const QString& currentDate);
     void SetStartDate();  
