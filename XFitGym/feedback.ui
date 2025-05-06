@@ -121,6 +121,10 @@ QPushButton:pressed {
      <pointsize>9</pointsize>
     </font>
    </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid #6F3FCC;
+border-radius: 12px</string>
+   </property>
    <property name="placeholderText">
     <string>Enter feedback</string>
    </property>

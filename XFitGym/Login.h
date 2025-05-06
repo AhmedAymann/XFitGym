@@ -1,3 +1,4 @@
+#pragma once
 #include <QtWidgets/QMainWindow>
 #include "ui_login.h"
 #include "qtimer.h"

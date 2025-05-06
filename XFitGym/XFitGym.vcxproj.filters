@@ -85,6 +85,15 @@
     <ClCompile Include="TrainingSession.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Classes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Padel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgramClock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="login.ui">
@@ -105,6 +114,12 @@
     <QtUic Include="feedback.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="classes.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="padel.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Login.h">
@@ -123,6 +138,12 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="Feedback.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Classes.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Padel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -157,6 +178,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TrainingSession.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgramClock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
