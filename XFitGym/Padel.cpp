@@ -1,4 +1,6 @@
 #include "Padel.h"
+#include <QFile>
+#include <QTextStream>
 Padel::Padel(QWidget* parent)
     : QWidget(parent)
 {
@@ -6,3 +8,56 @@ Padel::Padel(QWidget* parent)
 }
 Padel::~Padel()
 {}
+stack<pair<QString, QString>> Padel::news;
+void Padel::loadnews()
+{
+    QFile file("News.txt");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qDebug() << "Cannot open file:" << file.errorString();
+
+    }
+    QTextStream in(&file);
+    while (!in.atEnd())
+    {
+        QString line = in.readLine();
+        QStringList parts = line.split(",");
+        news.push({parts[0],parts[1]});
+        qDebug() << line;
+
+    }
+   
+}
+
+void Padel::savenews()
+{
+    QFile file("News.txt");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    {
+        qDebug() << "Failed to clear file:" << file.errorString();
+
+    }
+    if (!file.open(QIODevice::Append | QIODevice::Text))
+    {
+        qDebug() << "Cannot open file:" << file.errorString();
+
+    }
+
+    QTextStream out(&file);
+    stack<pair<QString,QString>>tosave;
+    for (int i = 0; i < 2; i++) {
+        tosave.push({ news.top().first,news.top().second });
+        news.pop();
+        if (news.empty())
+        {
+            break;
+        }
+    }
+    while (!tosave.empty())
+    {
+        out << tosave.top().first << "," << tosave.top().second << '\n';
+        tosave.pop();
+    }
+
+    file.close();
+}

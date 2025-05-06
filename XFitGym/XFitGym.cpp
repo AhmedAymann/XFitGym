@@ -122,13 +122,20 @@ XFitGym::XFitGym(QWidget *parent)
 
     user_Profile->ui.messageClass->setVisible(false);
     user_Profile->ui.messageCourt->setVisible(false);
+    dash->ui.message->setVisible(false);
 
 
     // user homepage control panel
     connect(home->ui.Dashboard, &QPushButton::clicked, this, [=]() {
         /*  Attendance Marking
         dash->setAttendance(num, true);*/
-       
+        if (true)
+        {
+            setScrolltoTop();
+            dash->ui.message->setVisible(true);
+            home->ui.Pages->setCurrentIndex(2);
+            return;
+        }
         //dynamically generating the past workouts
 
         QWidget* pastWorkouts = new QWidget;
@@ -346,9 +353,34 @@ XFitGym::XFitGym(QWidget *parent)
             }
         }
 
+
         // Assuming the QWidget you're working with is called ui->yourWidget
         padel->ui.widget->setLayout(grid);  // Set the QGridLayout to the widget
+        stack<pair<QString, QString>>newsCopy = Padel::news;
+        if (newsCopy.empty()) {
+            padel->ui.firstNew->setText("No news");
+            padel->ui.secondNew->setText("No news");
+            padel->ui.firstImage->setVisible(false);
+            padel->ui.secondImage->setVisible(false);
+        }
+        else if (newsCopy.size() == 1) {
+            padel->ui.firstNew->setText(newsCopy.top().first);
+            padel->ui.firstImage->setPixmap(newsCopy.top().second);
+            newsCopy.pop();
 
+            padel->ui.secondNew->setText("No news");
+            padel->ui.secondImage->setVisible(false);
+        }
+        else {
+            padel->ui.firstNew->setText(newsCopy.top().first);
+            padel->ui.firstImage->setPixmap(newsCopy.top().second);
+            newsCopy.pop();
+
+            padel->ui.secondNew->setText(newsCopy.top().first);
+            padel->ui.secondImage->setPixmap(newsCopy.top().second);
+            newsCopy.pop();
+        }
+        
         home->ui.Pages->setCurrentIndex(7);
         });
     connect(home->ui.Feedback, &QPushButton::clicked, this, [=]() {
@@ -641,12 +673,14 @@ void XFitGym::save()
 {
     feedback->saveFeedBack();
     log->savedata();
+    padel->savenews();
 }
 
 void XFitGym::load()
 {
     feedback->loadFeedBack();
     log->loaddata();
+    padel->loadnews();
 }
 
 Cards::Cards(QString title, QString line1, QString line2, QWidget* parent)

@@ -41,7 +41,7 @@ void Login::loaddata()
 void Login::savedata()
 {
 
-    QFile file("CustomerData.txt"); // 
+    QFile file("CustomerData.txt"); 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
     {
         qDebug() << "Failed to clear file:" << file.errorString();
