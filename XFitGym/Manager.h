@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Staff.h"
 #include "Customer.h"
 #include "Coach.h"
@@ -25,6 +26,5 @@ public:
 	void RemoveReceptionist(int receptionistId);
 
 	void AddTournament(Tournament tournament);
-
 };
 

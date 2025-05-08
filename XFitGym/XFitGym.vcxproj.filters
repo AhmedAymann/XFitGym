@@ -94,6 +94,18 @@
     <ClCompile Include="ProgramClock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Manager_homepage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager_dashboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager_members.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager_staff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="login.ui">
@@ -118,6 +130,18 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="padel.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="manager_homepage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="manager_dashboard.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="manager_members.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="manager_staff.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -146,6 +170,18 @@
     <QtMoc Include="Padel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="Manager_homepage.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Manager_dashboard.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Manager_members.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Manager_staff.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CustomerData.txt" />
@@ -167,9 +203,6 @@
     <ClInclude Include="Receptionist.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Manager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Subscription.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -180,6 +213,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ProgramClock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

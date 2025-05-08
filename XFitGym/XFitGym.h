@@ -14,6 +14,10 @@
 #include "notifications.h"
 #include "feedback.h"
 #include "Padel.h"
+#include "Manager_homepage.h"
+#include "Manager_dashboard.h"
+#include "Manager_members.h"
+#include "Manager_staff.h"
 
 
 class XFitGym : public QMainWindow
@@ -32,6 +36,10 @@ Notifications* notifications;
 Feedback* feedback;
 Classes* classes;
 Padel* padel;
+Manager_homepage* man_home;
+Manager_dashboard* man_dash;
+Manager_members* man_members;
+Manager_staff* man_staff;
 
     XFitGym(QWidget *parent = nullptr);
     ~XFitGym();
@@ -48,9 +56,11 @@ private:
 class Cards : public QWidget {
     Q_OBJECT
 public:
+    //for staff and members
     Cards(QString title, QString line1, QString line2, QWidget* parent = nullptr);
     //for classes
     Cards(QString title, QString line1, QString line2, int attendees, int max, QWidget* parent = nullptr);
+
     QHBoxLayout* buttonLayout;
 
 private:

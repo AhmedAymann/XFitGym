@@ -5,3 +5,4 @@ Manager::Manager(QString id, QString email, QString name, QString DateOFBirth, s
 {
 
 }
+

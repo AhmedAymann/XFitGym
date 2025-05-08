@@ -3,20 +3,57 @@ using namespace std;
 
 // Pages Guide:
 // 
-// -- HomePage --
-// 0 -> Welcome Page
-// 1 -> View Plans
-// 2 -> Dashboard
-// 3 -> User Profile
-// 4 -> Notifications
-// 5 -> Feedback
-// 6 -> Classes
-// 7 -> padel
+// -- ALL PAGES --
+// 0 -> Login
+// 1 -> User Homepage
+// 2 -> Manager Homepage
+// ************************************
+// -- User HomePage --                *
+// 0 -> Welcome Page                  *
+// 1 -> View Plans                    *
+// 2 -> Dashboard                     *
+// 3 -> User Profile                  *
+// 4 -> Notifications                 *
+// 5 -> Feedback                      *
+// 6 -> Classes                       *
+// 7 -> Padel                         *
+// ************************************
+// -- Manager HomePage --             *
+// 0 -> Welcome Page                  *
+// 1 -> Dashboard                     *
+// 2 -> Member                        *
+// 3 -> Staff                         *
+// 
+// ************************************
 //
+
+void reorganizeGrid(QGridLayout* grid, QPushButton* addCard) {
+    grid->removeWidget(addCard);
+    QList<QWidget*> cards;
+    for (int i = 0; i < grid->count(); i++) {
+        QWidget* widget = grid->itemAt(i)->widget();
+        if (widget && widget != addCard) {
+            cards.append(widget);
+        }
+    }
+    while (grid->count() > 0) {
+        grid->takeAt(0);
+    }
+    for (int i = 0; i < cards.size(); ++i) {
+        int row = i / 3;
+        int col = i % 3;
+        grid->addWidget(cards[i], row, col);
+    }
+    int addRow = cards.size() / 3;
+    int addCol = cards.size() % 3;
+    grid->addWidget(addCard, addRow, addCol);
+}
 
 XFitGym::XFitGym(QWidget *parent)
     : QMainWindow(parent)
 {
+    QVector<Cards*>* memberCardsList = nullptr;
+
     ui.setupUi(this);
     log = new Login(this);
     dash = new Dashboard(this);
@@ -28,9 +65,15 @@ XFitGym::XFitGym(QWidget *parent)
     feedback = new Feedback(this);
     classes = new Classes(this);
     padel = new Padel(this);
+    man_home = new Manager_homepage(this);
+    man_dash = new Manager_dashboard(this);
+    man_members = new Manager_members(this);
+    man_staff = new Manager_staff(this);
 
     ui.Main->addWidget(log);
     ui.Main->addWidget(home);
+    ui.Main->addWidget(man_home);
+
     home->ui.Pages->addWidget(dash);
     home->ui.Pages->addWidget(user_Profile);
     home->ui.Pages->addWidget(notifications);
@@ -38,6 +81,9 @@ XFitGym::XFitGym(QWidget *parent)
     home->ui.Pages->addWidget(classes);
     home->ui.Pages->addWidget(padel);
 
+    man_home->ui.Pages->addWidget(man_dash);
+    man_home->ui.Pages->addWidget(man_members);
+    man_home->ui.Pages->addWidget(man_staff);
 
     // just for the show password functionality 
     QIcon show = QIcon("assets/showPassword.png");
@@ -48,6 +94,14 @@ XFitGym::XFitGym(QWidget *parent)
     connect(log->ui.Login, &QPushButton::clicked, this, [=]() {
         QString username = log->ui.Email->text();
         QString id = log->ui.Password->text();
+
+        if (username == "manager" && id == "1") {
+            ui.Main->setCurrentIndex(2);
+            man_home->ui.welcome->setText("Welcome Back,Manager");
+
+            return;
+        }
+
         if (!log->CheckLogin(username, id)) {
             if (username.isEmpty() || id.isEmpty()) {
                 log->ui.warning->setText("please fill in all the spaces");
@@ -86,7 +140,7 @@ XFitGym::XFitGym(QWidget *parent)
     {
             save();
         QApplication::quit();
-    });//
+    });
     connect(log->ui.showPassword, &QPushButton::clicked, this, [=]() {
         if (log->ui.showPassword->icon().pixmap(100,100).toImage() == hide.pixmap(100, 100).toImage())
         {
@@ -582,6 +636,195 @@ XFitGym::XFitGym(QWidget *parent)
 
     });
     
+    connect(man_home->ui.Dashboard, &QPushButton::clicked, this, [=](){
+        man_home->ui.Pages->setCurrentIndex(1);
+        });
+    connect(man_home->ui.Staff, &QPushButton::clicked, this, [=]() {
+        QWidget* scrollWidget = new QWidget();
+        scrollWidget->setObjectName("scrollWidget");
+        scrollWidget->setStyleSheet("QWidget#scrollWidget{background-color: #1e1e1e;}");
+
+        QGridLayout* grid = new QGridLayout(scrollWidget);
+        grid->setSpacing(20);
+        grid->setContentsMargins(20, 20, 20, 20);
+
+        QPushButton* addCard = new QPushButton("+", scrollWidget);
+        addCard->setFixedSize(220, 160);
+        addCard->setStyleSheet(R"(
+        QPushButton {
+            background-color: #2e2e2e;
+            border: 2px dashed #6F3FCC;
+            border-radius: 15px;
+            color: #6F3FCC;
+            font-size: 48pt;
+        }
+        QPushButton:hover {
+            background-color: #3a3a3a;
+        }
+    )");
+        addCard->setCursor(Qt::PointingHandCursor);
+
+        int numStaff = 5; 
+        for (int i = 0; i < numStaff; ++i) {
+            QString name = "Staff Member " + QString::number(i + 1);
+            QString position = i % 2 ? "Trainer" : "Receptionist";
+            QString joinDate = QDate::currentDate().addDays(-i * 30).toString("dd/MM/yyyy");
+
+            Cards* staffCard = new Cards(name, position, joinDate, scrollWidget);
+
+            QPushButton* removeBtn = new QPushButton("Remove", staffCard);
+            removeBtn->setStyleSheet(R"(
+            QPushButton {
+                background-color: #E53935; 
+                color: white; 
+                font-family: 'Futura';
+                padding: 5px;
+                border-radius: 5px;
+                min-width: 80px;
+            }
+            QPushButton:hover {
+                background-color: #EF5350;
+            }
+        )");
+
+            staffCard->buttonLayout->addWidget(removeBtn);
+
+            int row = i / 3;
+            int col = i % 3;
+            grid->addWidget(staffCard, row, col);
+
+            connect(removeBtn, &QPushButton::clicked, this, [=]() {
+                grid->removeWidget(staffCard);
+
+                staffCard->deleteLater();
+
+                reorganizeGrid(grid, addCard);
+                });
+        }
+
+        int addRow = numStaff / 3;
+        int addCol = numStaff % 3;
+        grid->addWidget(addCard, addRow, addCol);
+
+        connect(addCard, &QPushButton::clicked, this, [=]() {
+            qDebug() << "Add Staff Clicked";
+            });
+
+        if (man_staff->ui.scrollArea->widget()) {
+            man_staff->ui.scrollArea->widget()->deleteLater();
+        }
+        man_staff->ui.scrollArea->setWidget(scrollWidget);
+        man_staff->ui.scrollArea->setWidgetResizable(true);
+
+        man_home->ui.Pages->setCurrentIndex(3);
+        });
+    connect(man_home->ui.Feedback, &QPushButton::clicked, this, [=]() {});
+    connect(man_home->ui.Profile, &QPushButton::clicked, this, [=]() {});
+    connect(man_home->ui.Logout, &QPushButton::clicked, this, [=]() {
+        log->ui.Email->setText("");
+        log->ui.Password->setText("");
+        setScrolltoTop();
+        man_home->ui.Pages->setCurrentIndex(0);
+        ui.Main->setCurrentIndex(0);
+        });
+    connect(man_home->ui.Members, &QPushButton::clicked, this, [=]() {
+        QWidget* scrollWidget = new QWidget();
+        scrollWidget->setObjectName("scrollWidget");
+        scrollWidget->setStyleSheet("QWidget#scrollWidget{background-color: #1e1e1e;}");
+
+        QGridLayout* grid = new QGridLayout(scrollWidget);
+        grid->setSpacing(20);
+        grid->setContentsMargins(20, 20, 20, 20);
+
+        QPushButton* addCard = new QPushButton("+", scrollWidget);
+        addCard->setFixedSize(220, 160);
+        addCard->setStyleSheet(R"(
+        QPushButton {
+            background-color: #2e2e2e;
+            border: 2px dashed #6F3FCC;
+            border-radius: 15px;
+            color: #6F3FCC;
+            font-size: 48pt;
+        }
+        QPushButton:hover {
+            background-color: #3a3a3a;
+        }
+    )");
+        addCard->setCursor(Qt::PointingHandCursor);
+
+        connect(addCard, &QPushButton::clicked, this, []() {
+            qDebug() << "Add Member Clicked";
+            });
+
+        int numMembers = 7;
+        for (int i = 0; i < numMembers; ++i) {
+            QString name = "Ahmed Salah " + QString::number(i + 1);
+            QString phone = "012345678" + QString::number(i);
+            QString subscription = "Ends: " + QDate::currentDate().addDays(i * 30).toString("dd/MM/yyyy");
+
+            Cards* card = new Cards(name, phone, subscription, scrollWidget);
+
+            QPushButton* renewBtn = new QPushButton("Renew", card);
+            QPushButton* removeBtn = new QPushButton("Remove", card);
+
+            renewBtn->setStyleSheet(R"(
+            QPushButton {
+                background-color: #6F3FCC; 
+                color: white; 
+                font-family: 'Futura';
+                padding: 5px;
+                border-radius: 5px;
+            }
+            QPushButton:hover {
+                background-color: #8F5FEC;
+            }
+        )");
+
+            removeBtn->setStyleSheet(R"(
+            QPushButton {
+                background-color: #E53935; 
+                color: white; 
+                font-family: 'Futura';
+                padding: 5px;
+                border-radius: 5px;
+            }
+            QPushButton:hover {
+                background-color: #EF5350;
+            }
+        )");
+
+            card->buttonLayout->addWidget(renewBtn);
+            card->buttonLayout->addWidget(removeBtn);
+
+            int row = i / 3;
+            int col = i % 3;
+            grid->addWidget(card, row, col);
+
+            connect(removeBtn, &QPushButton::clicked, this, [grid, card, addCard]() {
+                grid->removeWidget(card);
+
+                card->deleteLater();
+
+                reorganizeGrid(grid, addCard);
+                });
+
+            connect(renewBtn, &QPushButton::clicked, this, [name]() {
+                qDebug() << "Renew clicked for" << name;
+                });
+        }
+
+        int addRow = numMembers / 3;
+        int addCol = numMembers % 3;
+        grid->addWidget(addCard, addRow, addCol);
+
+        if (man_members->ui.scrollArea->widget()) {
+            man_members->ui.scrollArea->widget()->deleteLater();
+        }
+        man_members->ui.scrollArea->setWidget(scrollWidget);
+        man_members->ui.scrollArea->setWidgetResizable(true);
+        man_home->ui.Pages->setCurrentIndex(2);
+        });
+
     connect(user_Profile->ui.viewPlans, &QPushButton::clicked, this, [=]() {
         home->ui.Pages->setCurrentIndex(1);
     });
@@ -617,7 +860,7 @@ XFitGym::XFitGym(QWidget *parent)
             qDebug() << "Booked:" << padel->selectedDay << padel->selectedTime;
             padel->selectedSlot->setStyleSheet("background-color: red;border: 1px solid gray;");
             padel->selectedSlot->setEnabled(false);
-            padel->selectedSlot = nullptr; // Reset
+            padel->selectedSlot = nullptr; 
         }
         else {
             qDebug() << "No slot selected!";
@@ -654,16 +897,13 @@ Cards::Cards(QString title, QString line1, QString line2, QWidget* parent)
 {
     setFixedSize(220, 160);
 
-    // Outer layout for the entire card container
     QVBoxLayout* outerLayout = new QVBoxLayout(this);
     outerLayout->setContentsMargins(0, 0, 0, 0);
 
-    // Create styled QFrame (this is the actual "card")
     QFrame* cardFrame = new QFrame;
     cardFrame->setObjectName("cardFrame");
     cardFrame->setFixedSize(220, 160);
 
-    // Style only the frame
     cardFrame->setStyleSheet(R"(
         QFrame#cardFrame {
             background-color: #4A4A4A;
@@ -672,7 +912,6 @@ Cards::Cards(QString title, QString line1, QString line2, QWidget* parent)
         }
     )");
 
-    // Layout inside the card
     QVBoxLayout* cardLayout = new QVBoxLayout(cardFrame);
     cardLayout->setContentsMargins(10, 10, 10, 10);
 
@@ -680,7 +919,6 @@ Cards::Cards(QString title, QString line1, QString line2, QWidget* parent)
     QLabel* line1Label = new QLabel(line1);
     QLabel* line2Label = new QLabel(line2);
 
-    // Let labels inherit normal colors (not inside styled selector)
     titleLabel->setStyleSheet("font-size: 18pt; font-family: 'Futura'; color: white;");
     line1Label->setStyleSheet("font-family: 'DM Serif Display'; color: white;");
     line2Label->setStyleSheet("font-family: 'DM Serif Display'; color: white;");
@@ -726,9 +964,8 @@ Cards::Cards(QString title, QString line1, QString line2, int attendees, int max
     line1Label->setStyleSheet("font-family: 'DM Serif Display'; color: white;");
     line2Label->setStyleSheet("font-family: 'DM Serif Display'; color: white;");
 
-    // Attendance counter layout
     QHBoxLayout* attendanceLayout = new QHBoxLayout;
-    attendanceLayout->setContentsMargins(50, 0, 0, 0);  // Moves entire line right
+    attendanceLayout->setContentsMargins(50, 0, 0, 0);
 
     QLabel* iconLabel = new QLabel;
     iconLabel->setPixmap(QPixmap("assets/bookedMembers.png").scaled(16, 16, Qt::KeepAspectRatio, Qt::SmoothTransformation));
