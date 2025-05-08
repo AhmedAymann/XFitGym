@@ -141,6 +141,8 @@
     <QtMoc Include="userProfile.h" />
     <Text Include="CustomerData.txt" />
     <Text Include="feedbacks.txt" />
+    <Text Include="News.txt" />
+    <Text Include="sessions.txt" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Classes.h" />
