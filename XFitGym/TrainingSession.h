@@ -1,5 +1,6 @@
 #pragma once
 #include"Coach.h"
+#include "qdatetime.h"
 
 
 class TrainingSession
@@ -8,9 +9,11 @@ public:
 	string name;
 	int capacity;
 	int id;
-	Coach coach;
+	QString coachname;
+	QDate date;
+	QString time;
 
-	vector<int> customerId;
+	vector<int> WaitlistIds;
 
 
 

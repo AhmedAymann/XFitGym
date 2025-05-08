@@ -2,6 +2,7 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_notifications.h"
 #include "Subscription.h"
+#include "Customer.h"
 #include <QDate>
 
 class Notifications : public QWidget
@@ -16,7 +17,5 @@ public:
 
 
     void CheckSubscriptionDeadline(const Subscription& subscription, const QDate& currentDate);
-
-
 
 };

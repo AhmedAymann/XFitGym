@@ -2,7 +2,7 @@
 
 ProgramClock::ProgramClock()
 {
-    currentDate = QDate::currentDate(); // start from a fixed date for testing
+    currentDate = QDate::currentDate(); // You can start from a fixed date for testing
 }
 
 void ProgramClock::Tick()

@@ -921,6 +921,7 @@ void XFitGym::save()
 
 void XFitGym::load()
 {
+    
     feedback->loadFeedBack();
     log->loaddata();
     padel->loadnews();

@@ -3,6 +3,9 @@
 #include "Notifications.h"
 #include "ProgramClock.h"
 #include "Login.h"
+#include "CustomerLoader.h"
+#include <QCoreApplication>
+#include <QTextStream>
 #include <QtWidgets/QApplication>
 
 int main(int argc, char *argv[])
@@ -12,40 +15,28 @@ int main(int argc, char *argv[])
     w.load();
     w.show();
 
-    // SUBSCRIPTION HATEKHLAS ORAYEB
-    Subscription sub("Premium");
-    sub.startDate = "2025-05-01";
-    sub.endDate = "2025-05-15";
+    QVector<Customer> customers = CustomerLoader::LoadCustomersFromFile("customers.txt");
 
 
     ProgramClock clock;
     Notifications notifier;
 
 
-
-
-    //CHECKING FOR ONLY ONE PERSON'S SUBSCRIPTION
-
-
-
     // Simulate 20 days passing
     for (int day = 0; day < 20; day++)
     {
-        qDebug() << "\n📅 Current Program Date:" << clock.GetCurrentDate().toString("yyyy-MM-dd");
+        QDate currentDate = clock.GetCurrentDate();
+        qDebug() << "\n📅 Simulated Date:" << currentDate.toString("yyyy-MM-dd");
 
-        // Check subscription deadline based on program time
-        notifier.CheckSubscriptionDeadline(sub, clock.GetCurrentDate());
+
+        for (const Customer& c : customers)
+        {
+            notifier.CheckSubscriptionDeadline(c.sub, currentDate);
+        }
 
         // Advance to next day
         clock.Tick();
     }
-
-
-
-
-
-
-
 
     return a.exec();
     //khalx

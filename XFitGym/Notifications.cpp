@@ -1,4 +1,4 @@
-#include "Notifications.h"
+﻿#include "Notifications.h"
 
 
 Notifications::Notifications(QWidget* parent)
@@ -10,21 +10,31 @@ Notifications::Notifications(QWidget* parent)
 Notifications::~Notifications()
 {}
 
-
-void Notifications::CheckSubscriptionDeadline(const Subscription& subscription, const QDate& currentDate)
+void Notifications::CheckSubscriptionDeadline(const Subscription& sub, const QDate& currentDate)
 {
-    QDate end = QDate::fromString(subscription.endDate, "yyyy-MM-dd");
-
-    if (!end.isValid()) {
-        qDebug() << "Invalid end date!";
+    // If there's no subscription -> skip check
+    if (sub.type == "No Subscription") {
         return;
     }
 
-    int daysRemaining = currentDate.daysTo(end);
+    // Parse endDate from QString to QDate
+    QDate endDate = QDate::fromString(sub.endDate, "dd/MM/yyyy");
+    if (!endDate.isValid()) {
+        qWarning() << "❌ Invalid subscription end date format for customer.";
+        return;
+    }
 
-    if (daysRemaining <= 10 && daysRemaining >= 0) {
-        //add the notification to the proper user using Gui
-        qDebug() << " Subscription for type:" << subscription.type
-            << "will end in" << daysRemaining << "days!";
+    //SATR EL MINUS
+    int daysLeft = currentDate.daysTo(endDate);
+
+    if (daysLeft < 0) {
+        //SEND A NOTIFICATION SAYING THAT THE SUBSCRIPTION HAD ENDED
+        qDebug() << "⚠️ Subscription has already expired on" << endDate.toString("yyyy-MM-dd");
+    }
+    else if (daysLeft <= 3) {
+        //SEND A NOTIFICATION SAYING THAT YOUR SUBSCRIPTION IS EXPIRING IN N DAYS
+        qDebug() << "⏳ Subscription is expiring in" << daysLeft << "day(s) on" << endDate.toString("yyyy-MM-dd");
     }
 }
+
+
