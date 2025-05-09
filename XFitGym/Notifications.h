@@ -4,6 +4,8 @@
 #include "Subscription.h"
 #include "Customer.h"
 #include <QDate>
+#include <Stack>
+
 
 class Notifications : public QWidget
 {
@@ -14,8 +16,10 @@ public:
     ~Notifications();
     Ui::NotificationsClass ui;
 
+    static map<int, vector<QString>> notifications;
+    void saveNotifications();
+    void loadNotifications();
 
-
-    void CheckSubscriptionDeadline(const Subscription& subscription, const QDate& currentDate);
+    int CheckSubscriptionDeadline(const Subscription& subscription, const QDate& currentDate);
 
 };

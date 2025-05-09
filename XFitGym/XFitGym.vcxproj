@@ -143,6 +143,7 @@
     <Text Include="CustomerData.txt" />
     <Text Include="feedbacks.txt" />
     <Text Include="News.txt" />
+    <Text Include="Notifications.txt" />
     <Text Include="sessions.txt" />
   </ItemGroup>
   <ItemGroup>

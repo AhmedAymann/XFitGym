@@ -90,11 +90,12 @@ XFitGym::XFitGym(QWidget *parent)
     QIcon hide = QIcon("assets/hidePassword.png");
     log->ui.Password->setMaxLength(30);
     log->ui.warning->setVisible(false);
-    
+
+
     connect(log->ui.Login, &QPushButton::clicked, this, [=]() {
         QString username = log->ui.Email->text();
         QString id = log->ui.Password->text();
-
+       
         if (username == "manager" && id == "1") {
             ui.Main->setCurrentIndex(2);
             man_home->ui.welcome->setText("Welcome Back,Manager");
@@ -253,7 +254,7 @@ XFitGym::XFitGym(QWidget *parent)
 
         //replace true with the condition notificationsVector.isEmpty()
 
-        if (true) {
+        if (Notifications::notifications.empty()) {
             notifications->ui.emptyMessage->setVisible(true);
             home->ui.Pages->setCurrentIndex(4);
             return;
@@ -267,26 +268,34 @@ XFitGym::XFitGym(QWidget *parent)
         QVBoxLayout* layout = new QVBoxLayout(notificationWidget);
         layout->setAlignment(Qt::AlignTop);
 
-        //dynamically generating the notifications
-        for (int i = 0; i < 20; i++) {
-            QWidget* notification = new QWidget(notificationWidget);
-            notification->setObjectName("notification");
-            notification->setStyleSheet("#notification {"
-                "background-color: #4A4A4A;"
-                "border: 2px solid #8B50FF;"
-                "border-radius: 14px;"
-                "}");
-            QLabel* label = new QLabel(notification);
-            label->setText(QString("test."));
-            label->setWordWrap(true);
-            label->setStyleSheet("color: white; font: 20pt 'DM Serif Display'; background-color:transparent;");
-            label->setFixedWidth(notificationWidget->width() - 40);
-            QVBoxLayout* itemLayout = new QVBoxLayout(notification);
-            itemLayout->setAlignment(Qt::AlignCenter);
-            itemLayout->addWidget(label);
-            label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-            layout->addWidget(notification);
+
+
+        for (auto i : Notifications::notifications) {
+            if (QString::number(i.first) == user_Profile->ui.ID->text()) {
+                for (auto j : i.second) {
+                    QWidget* notification = new QWidget(notificationWidget);
+                    notification->setObjectName("notification");
+                    notification->setStyleSheet("#notification {"
+                        "background-color: #4A4A4A;"
+                        "border: 2px solid #8B50FF;"
+                        "border-radius: 14px;"
+                        "}");
+                    QLabel* label = new QLabel(notification);
+                    label->setText(j);
+                    label->setWordWrap(true);
+                    label->setStyleSheet("color: white; font: 20pt 'DM Serif Display'; background-color:transparent;");
+                    label->setFixedWidth(notificationWidget->width() - 40);
+                    QVBoxLayout* itemLayout = new QVBoxLayout(notification);
+                    itemLayout->setAlignment(Qt::AlignCenter);
+                    itemLayout->addWidget(label);
+                    label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+                    layout->addWidget(notification);
+
+                }
+                break;
+            }
         }
+        
 
         notificationWidget->setLayout(layout);
         notifications->ui.scrollArea->setWidget(notificationWidget);
@@ -914,6 +923,7 @@ void XFitGym::setScrolltoTop()
 
 void XFitGym::save()
 {
+    notifications->saveNotifications();
     feedback->saveFeedBack();
     log->savedata();
     padel->savenews();
@@ -921,7 +931,7 @@ void XFitGym::save()
 
 void XFitGym::load()
 {
-    
+    notifications->loadNotifications();
     feedback->loadFeedBack();
     log->loaddata();
     padel->loadnews();

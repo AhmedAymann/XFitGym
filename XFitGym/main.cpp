@@ -29,9 +29,21 @@ int main(int argc, char *argv[])
         qDebug() << "\n📅 Simulated Date:" << currentDate.toString("yyyy-MM-dd");
 
 
+        // Checks for the subscriptions of all of the customers
+
+        int notificationFlag = -1;
         for (const Customer& c : customers)
         {
-            notifier.CheckSubscriptionDeadline(c.sub, currentDate);
+             int daysLeft = notifier.CheckSubscriptionDeadline(c.sub, currentDate);
+             
+             if (daysLeft < 0) {
+                 notificationFlag = 1;
+                 Notifications::notifications[c.id.toInt()].push_back("Your Gym Membership Has Expired");
+             }
+             else if (daysLeft <= 10) {
+                 notificationFlag = 2;
+                 Notifications::notifications[c.id.toInt()].push_back("You Have " + QString::number(daysLeft) + " Days Left in Your Subscription");
+             }
         }
 
         // Advance to next day
