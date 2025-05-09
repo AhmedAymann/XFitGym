@@ -12,7 +12,9 @@ Login::Login(QWidget* parent)
 }
 Login::~Login()
 {}
+
 map<int, Customer> Login::membersData;
+
 void Login::loaddata()
 {
 
@@ -38,30 +40,49 @@ void Login::loaddata()
 
 }
 //asdac
-void Login::savedata()
+
+void Login::saveData()
 {
-
-    QFile file("CustomerData.txt"); 
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
-    {
+    QFile file("CustomerData.txt");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         qDebug() << "Failed to clear file:" << file.errorString();
-
-    }
-    if (!file.open(QIODevice::Append | QIODevice::Text))
-    {
-        qDebug() << "Cannot open file:" << file.errorString();
-
+        return;
     }
 
     QTextStream out(&file);
 
-    for (auto& a : membersData)
-    {
-        out << a.first << ',' << a.second.email << ',' << a.second.name << ',' << a.second.DateOFBirth << ',' << a.second.sub.type << "\n";
+    // Iterate through each entry in the map using an iterator
+    for (auto it = Login::membersData.begin(); it != Login::membersData.end(); ++it) {
+        const int userID = it->first;          // Get the user ID
+        const Customer& member = it->second;   // Get the member's data
+
+        // Start constructing the line
+        QString line = QString::number(userID) + ",";  // User ID
+        line += member.email + ",";                    // Email
+        line += member.name + ",";                     // Name
+        line += member.DateOFBirth + ",";              // Date of Birth (QString already formatted)
+
+        // Subscription Type
+        line += member.sub.type + ",";  // Subscription type (e.g., "yearly", "monthly", etc.)
+
+        // If the subscription is not "NoSubscription", include the start and end dates
+        if (member.sub.type != "NoSubscription") {
+            line += member.sub.startDate + ",";  // Subscription start date
+            line += member.sub.endDate + ",";    // Subscription end date
+        }
+        else {
+            // For NoSubscription, we leave the dates empty
+            line += ",,";
+        }
+
+        // Add the price after discount
+        line += QString::number(member.sub.priceAfterDiscount) + ",";
+
+        // Write the constructed line to the file
+        out << line << "\n";
     }
 
     file.close();
-
 }
 
 

@@ -12,21 +12,25 @@ Notifications::Notifications(QWidget* parent)
 Notifications::~Notifications()
 {}
 
-map<int, vector<QString>> Notifications::notifications;
+QMap<int, QVector<QString>> Notifications::notifications;
 
 int Notifications::CheckSubscriptionDeadline(const Subscription& sub, const QDate& currentDate)
 {
     // If there's no subscription -> skip check
-    if (sub.type == "No Subscription") {
-        return -1;
+    if (sub.type == "NoSubscription") {
+        return -3;
     }
+    
 
     // Parse endDate from QString to QDate
-    QDate endDate = QDate::fromString(sub.endDate, "dd/MM/yyyy");
-    if (!endDate.isValid()) {
-        qWarning() << "❌ Invalid subscription end date format for customer.";
-        return -1;
+    QDate endDate = QDate::fromString(sub.endDate, "yyyy-MM-dd");
+
+    
+     if (!endDate.isValid()) {
+        qWarning() << "❌ Invalid subscription end date format for customer:" << sub.endDate;
+        return -2;  // Return early in case of an invalid date format
     }
+
 
     //SATR EL MINUS
     int daysLeft = currentDate.daysTo(endDate);
@@ -61,14 +65,12 @@ void Notifications::saveNotifications()
 
     QTextStream out(&file);
     
-    for (auto a : notifications) 
-    {
-
-        for (auto b : a.second)
-        {
-            out << a.first << "," << b << "\n";
+    for (auto it = notifications.begin(); it != notifications.end(); ++it) {
+        int id = it.key();
+        const QVector<QString>& messages = it.value();
+        for (const QString& msg : messages) {
+            out << id << "," << msg << "\n";
         }
-
     }
 
 

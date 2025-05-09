@@ -270,9 +270,9 @@ XFitGym::XFitGym(QWidget *parent)
 
 
 
-        for (auto i : Notifications::notifications) {
-            if (QString::number(i.first) == user_Profile->ui.ID->text()) {
-                for (auto j : i.second) {
+        for (auto it = Notifications::notifications.begin(); it != Notifications::notifications.end(); ++it) {
+            if (QString::number(it.key()) == user_Profile->ui.ID->text()) {
+                for (const QString& msg : it.value()) {
                     QWidget* notification = new QWidget(notificationWidget);
                     notification->setObjectName("notification");
                     notification->setStyleSheet("#notification {"
@@ -280,22 +280,23 @@ XFitGym::XFitGym(QWidget *parent)
                         "border: 2px solid #8B50FF;"
                         "border-radius: 14px;"
                         "}");
+
                     QLabel* label = new QLabel(notification);
-                    label->setText(j);
+                    label->setText(msg);
                     label->setWordWrap(true);
                     label->setStyleSheet("color: white; font: 20pt 'DM Serif Display'; background-color:transparent;");
                     label->setFixedWidth(notificationWidget->width() - 40);
+
                     QVBoxLayout* itemLayout = new QVBoxLayout(notification);
                     itemLayout->setAlignment(Qt::AlignCenter);
                     itemLayout->addWidget(label);
                     label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-                    layout->addWidget(notification);
 
+                    layout->addWidget(notification);
                 }
                 break;
             }
         }
-        
 
         notificationWidget->setLayout(layout);
         notifications->ui.scrollArea->setWidget(notificationWidget);
@@ -925,7 +926,7 @@ void XFitGym::save()
 {
     notifications->saveNotifications();
     feedback->saveFeedBack();
-    log->savedata();
+    log->saveData();
     padel->savenews();
 }
 

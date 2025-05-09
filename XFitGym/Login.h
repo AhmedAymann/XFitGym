@@ -15,7 +15,7 @@ public:
     ~Login();
     static map<int, Customer> membersData;
     void loaddata();
-    void savedata();
+    void saveData();
 
     Ui::LoginClass ui;
 

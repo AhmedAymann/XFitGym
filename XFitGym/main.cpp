@@ -7,49 +7,53 @@
 #include <QCoreApplication>
 #include <QTextStream>
 #include <QtWidgets/QApplication>
+#include <QTimer>
+#include <QVector>
 
-int main(int argc, char *argv[])
+QVector<Customer> customers;
+ProgramClock* programClock = nullptr;
+Notifications* notifier = nullptr;
+int daysSimulated = 0;
+
+void simulateDay() {
+    QDate currentDate = programClock->GetCurrentDate();
+    qDebug() << "\n📅 Simulated Date:" << currentDate.toString("yyyy-MM-dd");
+
+    for (Customer& c : customers) {
+        int daysLeft = notifier->CheckSubscriptionDeadline(c.sub, currentDate);
+        qDebug() << "\n DAYS LEFT: " << daysLeft;
+        if (daysLeft < 0) {
+            if (!Notifications::notifications[c.id.toInt()].contains("Your Gym Membership Has Expired")) {
+                Notifications::notifications[c.id.toInt()].push_back("Your Gym Membership Has Expired");
+                qDebug() << "Notification for" << c.name << ": Your Gym Membership Has Expired";
+            }
+        }
+        else if (daysLeft <= 10) {
+            QString message = "You Have " + QString::number(daysLeft) + " Days Left in Your Subscription";
+            Notifications::notifications[c.id.toInt()].push_back(message);
+            qDebug() << "Notification for" << c.name << ":" << message;
+        }
+    }
+
+    programClock->Tick();
+    daysSimulated++;
+}
+
+int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
     XFitGym w;
     w.load();
     w.show();
 
-    QVector<Customer> customers = CustomerLoader::LoadCustomersFromFile("customers.txt");
+    customers = CustomerLoader::LoadCustomersFromFile("CustomerData.txt");
 
+    programClock = new ProgramClock(); // starts from system date
+    notifier = new Notifications();
 
-    ProgramClock clock;
-    Notifications notifier;
-
-
-    // Simulate 20 days passing
-    for (int day = 0; day < 20; day++)
-    {
-        QDate currentDate = clock.GetCurrentDate();
-        qDebug() << "\n📅 Simulated Date:" << currentDate.toString("yyyy-MM-dd");
-
-
-        // Checks for the subscriptions of all of the customers
-
-        int notificationFlag = -1;
-        for (const Customer& c : customers)
-        {
-             int daysLeft = notifier.CheckSubscriptionDeadline(c.sub, currentDate);
-             
-             if (daysLeft < 0) {
-                 notificationFlag = 1;
-                 Notifications::notifications[c.id.toInt()].push_back("Your Gym Membership Has Expired");
-             }
-             else if (daysLeft <= 10) {
-                 notificationFlag = 2;
-                 Notifications::notifications[c.id.toInt()].push_back("You Have " + QString::number(daysLeft) + " Days Left in Your Subscription");
-             }
-        }
-
-        // Advance to next day
-        clock.Tick();
-    }
+    QTimer* timer = new QTimer();
+    QObject::connect(timer, &QTimer::timeout, simulateDay);
+    timer->start(2000); // 5 seconds per simulated day
 
     return a.exec();
-    //khalx
 }

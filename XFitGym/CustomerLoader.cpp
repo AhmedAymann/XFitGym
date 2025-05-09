@@ -18,28 +18,31 @@ QVector<Customer> CustomerLoader::LoadCustomersFromFile(const QString& filename)
         QString line = in.readLine().trimmed();
         if (line.isEmpty()) continue;
 
-        QStringList parts = line.split(',');
+        QStringList mainParts = line.split('|');
+        if (mainParts.size() < 1) continue;
 
-        if (parts.size() < 4) {
+        QStringList baseFields = mainParts[0].split(',');
+
+        if (baseFields.size() < 4) {
             qWarning() << "⚠️ Invalid customer record:" << line;
             continue;
         }
 
-        QString id = parts[0];
-        QString email = parts[1];
-        QString name = parts[2];
-        QString dob = parts[3];
+        QString id = baseFields[0];
+        QString email = baseFields[1];
+        QString name = baseFields[2];
+        QString dob = baseFields[3];
 
         Customer c(id, email, name, dob);
 
         int index = 4;
 
-        // Subscription
-        if (index < parts.size() && parts[index] != "NoSubscription") {
-            QString type = parts[index++];
-            QString startDate = (index < parts.size()) ? parts[index++] : "";
-            QString endDate = (index < parts.size()) ? parts[index++] : "";
-            int price = (index < parts.size()) ? parts[index++].toInt() : 0;
+        // Handle Subscription
+        if (baseFields.size() > index && baseFields[index] != "NoSubscription") {
+            QString type = baseFields[index++];
+            QString startDate = baseFields[index++];
+            QString endDate = baseFields[index++];
+            int price = baseFields[index++].toInt();
 
             c.sub.type = type;
             c.sub.startDate = startDate;
@@ -47,36 +50,35 @@ QVector<Customer> CustomerLoader::LoadCustomersFromFile(const QString& filename)
             c.sub.priceAfterDiscount = price;
         }
         else {
-            ++index; // Skip "NoSubscription"
+            ++index;
         }
 
-        // Paddle Court Bookings
-        if (index < parts.size() && parts[index] != "NoCourtBookings") {
-            while (index + 1 < parts.size() && parts[index] != "NoTrainingSessions") {
-                QDate date = QDate::fromString(parts[index++], "yyyy-MM-dd");
-                QString time = parts[index++];
-                c.AddCourtBooking(date, time);
+        // Handle Court Bookings
+        if (mainParts.size() >= 2 && mainParts[1] != "NoCourtBookings") {
+            QStringList courtEntries = mainParts[1].split(';');
+            for (const QString& entry : courtEntries) {
+                QStringList fields = entry.split(',');
+                if (fields.size() == 2) {
+                    QDate date = QDate::fromString(fields[0], "yyyy-MM-dd");
+                    QString time = fields[1];
+                    c.AddCourtBooking(date, time);
+                }
             }
         }
-        else {
-            ++index; // Skip "NoCourtBookings"
-        }
 
-        // Training Sessions
-        if (index < parts.size()) {
-            while (index + 3 < parts.size()) {
-                QString sessionName = parts[index++];
-                QString coachName = parts[index++];
-                QDate date = QDate::fromString(parts[index++], "yyyy-MM-dd");
-                QString time = parts[index++];
-
-                TrainingSession session;
-                session.name = sessionName.toStdString();
-                session.coachname = coachName;
-                session.date = date;
-                session.time = time;
-
-                //c.AddTrainingSession(session);
+        // Handle Training Sessions
+        if (mainParts.size() >= 3 && mainParts[2] != "NoTrainingSessions") {
+            QStringList sessionEntries = mainParts[2].split(';');
+            for (const QString& entry : sessionEntries) {
+                QStringList fields = entry.split(',');
+                if (fields.size() == 4) {
+                    TrainingSession ts;
+                    ts.name = fields[0].toStdString();
+                    ts.coachname = fields[1];
+                    ts.date = QDate::fromString(fields[2], "yyyy-MM-dd");
+                    ts.time = fields[3];
+                    c.AddTrainingSession(ts);
+                }
             }
         }
 
