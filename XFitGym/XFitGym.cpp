@@ -102,7 +102,7 @@ XFitGym::XFitGym(QWidget *parent)
 
             return;
         }
-
+        qDebug() << username<<" "<<id;
         if (!log->CheckLogin(username, id)) {
             if (username.isEmpty() || id.isEmpty()) {
                 log->ui.warning->setText("please fill in all the spaces");
@@ -117,17 +117,17 @@ XFitGym::XFitGym(QWidget *parent)
             QTimer::singleShot(2000, log->ui.warning, &QLabel::hide);
             return;
         }
-        user_Profile->ui.ID->setText(Login::membersData[id.toInt()].id);
-        user_Profile->ui.Name->setText(Login::membersData[id.toInt()].name);
-        user_Profile->ui.DOB->setText(Login::membersData[id.toInt()].DateOFBirth);
-        if (Login::membersData[id.toInt()].sub.type.isEmpty()) {
-            user_Profile->ui.Plan->setText("No Subscriotion");
+        user_Profile->ui.ID->setText(Login::membersData[id].id);
+        user_Profile->ui.Name->setText(Login::membersData[id].name);
+        user_Profile->ui.DOB->setText(Login::membersData[id].DateOFBirth);
+        if (Login::membersData[id].sub.type.isEmpty()) {
+            user_Profile->ui.Plan->setText("No Subscription");
         }
         else
         {
-            user_Profile->ui.Plan->setText(Login::membersData[id.toInt()].sub.type);
+            user_Profile->ui.Plan->setText(Login::membersData[id].sub.type);
         }
-        home->ui.welcome->setText("Welcome Back, " + Login::membersData[id.toInt()].name);
+        home->ui.welcome->setText("Welcome Back, " + Login::membersData[id].name);
 
         
         
@@ -154,16 +154,7 @@ XFitGym::XFitGym(QWidget *parent)
         }
     });
 
-    int Pvalue = 100;
-    QString Pval = QString::number(Pvalue);
-    dash->ui.PCounter->setText(Pval);
-    Pgauge->setValue(Pvalue);
-
-    // class gauge level
-    int Cvalue = 10;
-    QString Cval = QString::number(Cvalue);
-    dash->ui.CCounter->setText(Cval);
-    Cgauge->setValue(Cvalue);
+   
 
     // padel gauge level
 
@@ -182,6 +173,17 @@ XFitGym::XFitGym(QWidget *parent)
 
     // user homepage control panel
     connect(home->ui.Dashboard, &QPushButton::clicked, this, [=]() {
+
+        int Pvalue = Login::membersData[user_Profile->ui.ID->text()].bookedCourt.size();
+        QString Pval = QString::number(Pvalue);
+        dash->ui.PCounter->setText(Pval);
+        Pgauge->setValue(Pvalue);
+
+        // class gauge level
+        int Cvalue = Login::membersData[user_Profile->ui.ID->text()].bookedsessions.size();
+        QString Cval = QString::number(Cvalue);
+        dash->ui.CCounter->setText(Cval);
+        Cgauge->setValue(Cvalue);
         /*  Attendance Marking
         dash->setAttendance(num, true);*/
         if (true)
@@ -452,20 +454,23 @@ XFitGym::XFitGym(QWidget *parent)
         home->ui.Pages->setCurrentIndex(5);
         qDebug() << "Feedback";
         });
+    
+
     connect(home->ui.Profile, &QPushButton::clicked, this, [=]() {
         setScrolltoTop();
+        queue<TrainingSession>bookedsession = Login::membersData[user_Profile->ui.ID->text()].bookedsessions;
     
 
 
         //change true with (class.empty && courts.empty) .. w e3mel condition di lw7dha w di lw7dha
-        if (true) {
+        if (bookedsession.empty()) {
             user_Profile->ui.messageClass->setVisible(true);
-            user_Profile->ui.messageCourt->setVisible(true);
+           // user_Profile->ui.messageCourt->setVisible(true);
             home->ui.Pages->setCurrentIndex(3);
             return;
         }
 
-
+        
         //dynamically generating the Classes
 
         QWidget* Classes = new QWidget;
@@ -476,7 +481,9 @@ XFitGym::XFitGym(QWidget *parent)
         layoutClass->setContentsMargins(10, 10, 10, 10);
         layoutClass->setSpacing(10);
 
-        for (int i = 0; i < 20; i++) {
+
+        
+        while (!bookedsession.empty()) {
             QWidget* activeClass = new QWidget(Classes);
             activeClass->setObjectName("workout");
             activeClass->setFixedHeight(70);
@@ -489,17 +496,17 @@ XFitGym::XFitGym(QWidget *parent)
                 "}"
             );
 
-            QLabel* className = new QLabel("Zumba Class", activeClass);
+            QLabel* className = new QLabel(QString::fromStdString (bookedsession.front().name), activeClass);
             className->setStyleSheet("color: white;font-family: 'Futura'; font-weight: bold; font-size: 14pt; background: transparent;");
             className->adjustSize();
             className->move(15, 10);
 
-            QLabel* coach = new QLabel("Coach Ahmed", activeClass);
+            QLabel* coach = new QLabel(bookedsession.front().coachname, activeClass);
             coach->setStyleSheet("color: white;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
             coach->adjustSize();
             coach->move(15, className->y() + className->height() + 5);  // just below class name
 
-            QLabel* date = new QLabel("2025-05-04", activeClass);
+            QLabel* date = new QLabel(bookedsession.front().date.toString("yyyy-MM-dd"), activeClass);
             date->setStyleSheet("color: #CCCCCC;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
             date->adjustSize();
 
@@ -540,6 +547,7 @@ XFitGym::XFitGym(QWidget *parent)
             QObject::connect(cancelClass, &QPushButton::clicked, [=]() {
                 activeClass->deleteLater();
                 });
+            bookedsession.pop();
         }
 
         Classes->setLayout(layoutClass);
@@ -866,13 +874,13 @@ XFitGym::XFitGym(QWidget *parent)
         man_members->ui.scrollArea->setWidgetResizable(true);
         man_home->ui.Pages->setCurrentIndex(2);
         });
-
+    //kk
     connect(user_Profile->ui.viewPlans, &QPushButton::clicked, this, [=]() {
         home->ui.Pages->setCurrentIndex(1);
     });
     connect(user_Profile->ui.Cancel, &QPushButton::clicked, this, [=]() {
-        user_Profile->ui.Plan->setText("No Subscription");
-        Login::membersData[log->ui.Password->text().toInt()].sub.type= "No Subscription";
+        user_Profile->ui.Plan->setText("NoSubscription");
+        Login::membersData[log->ui.Password->text()].sub.type= "NoSubscription";
     });
     connect(home->ui.BacktoProf, &QPushButton::clicked, this, [=]() {
         home->ui.Pages->setCurrentIndex(3);
@@ -934,7 +942,6 @@ void XFitGym::load()
 {
     notifications->loadNotifications();
     feedback->loadFeedBack();
-    log->loaddata();
     padel->loadnews();
 }
 

@@ -10,7 +10,7 @@
 #include <QTimer>
 #include <QVector>
 
-QVector<Customer> customers;
+map<QString, Customer> customers;
 ProgramClock* programClock = nullptr;
 Notifications* notifier = nullptr;
 int daysSimulated = 0;
@@ -19,19 +19,19 @@ void simulateDay() {
     QDate currentDate = programClock->GetCurrentDate();
     qDebug() << "\n📅 Simulated Date:" << currentDate.toString("yyyy-MM-dd");
 
-    for (Customer& c : customers) {
-        int daysLeft = notifier->CheckSubscriptionDeadline(c.sub, currentDate);
+    for (auto& c : customers) {
+        int daysLeft = notifier->CheckSubscriptionDeadline(c.second.sub, currentDate);
         qDebug() << "\n DAYS LEFT: " << daysLeft;
         if (daysLeft < 0) {
-            if (!Notifications::notifications[c.id.toInt()].contains("Your Gym Membership Has Expired")) {
-                Notifications::notifications[c.id.toInt()].push_back("Your Gym Membership Has Expired");
-                qDebug() << "Notification for" << c.name << ": Your Gym Membership Has Expired";
+            if (!Notifications::notifications[c.first.toInt()].contains("Your Gym Membership Has Expired")) {
+                Notifications::notifications[c.first.toInt()].push_back("Your Gym Membership Has Expired");
+                qDebug() << "Notification for" << c.second.name << ": Your Gym Membership Has Expired";
             }
         }
         else if (daysLeft <= 10) {
             QString message = "You Have " + QString::number(daysLeft) + " Days Left in Your Subscription";
-            Notifications::notifications[c.id.toInt()].push_back(message);
-            qDebug() << "Notification for" << c.name << ":" << message;
+            Notifications::notifications[c.first.toInt()].push_back(message);
+            qDebug() << "Notification for" << c.second.name << ":" << message;
         }
     }
 
@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
     XFitGym w;
     w.load();
     w.show();
-
+    
     customers = CustomerLoader::LoadCustomersFromFile("CustomerData.txt");
 
     programClock = new ProgramClock(); // starts from system date

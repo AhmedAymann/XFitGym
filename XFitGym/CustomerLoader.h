@@ -6,5 +6,5 @@
 
 class CustomerLoader {
 public:
-    static QVector<Customer> LoadCustomersFromFile(const QString& filename = "CustomerData.txt");
+    static map<QString, Customer> LoadCustomersFromFile(const QString& filename = "CustomerData.txt");
 };

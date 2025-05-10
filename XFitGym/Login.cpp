@@ -3,6 +3,9 @@
 #include<iostream>
 #include <QFile>
 #include <QTextStream>
+#include"CustomerLoader.h"
+
+
 
 Login::Login(QWidget* parent)
     : QWidget(parent)
@@ -13,83 +16,84 @@ Login::Login(QWidget* parent)
 Login::~Login()
 {}
 
-map<int, Customer> Login::membersData;
-
-void Login::loaddata()
-{
-
-    QFile file("CustomerData.txt");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug() << "Cannot open file:" << file.errorString();
-
-    }
-    QTextStream in(&file);
-    while (!in.atEnd())
-    {
-
-        QString line = in.readLine();
-        QStringList parts = line.split(",");
-        Customer c(parts[0], parts[1], parts[2], parts[3]);
-        c.sub.type = parts[4];
-        membersData[parts[0].toInt()] = c;
-
-    }
-
-    file.close();
-
-}
-//asdac
+map<QString, Customer> Login::membersData= CustomerLoader::LoadCustomersFromFile("CustomerData.txt");
 
 void Login::saveData()
 {
     QFile file("CustomerData.txt");
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        qDebug() << "Failed to clear file:" << file.errorString();
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
+        qDebug() << "Failed to open file for writing:" << file.errorString();
         return;
-    }
+    } 
 
     QTextStream out(&file);
 
-    // Iterate through each entry in the map using an iterator
-    for (auto it = Login::membersData.begin(); it != Login::membersData.end(); ++it) {
-        const int userID = it->first;          // Get the user ID
-        const Customer& member = it->second;   // Get the member's data
+    for (const auto& pair : Login::membersData) {
+        const QString& id = pair.first;
+        const Customer& c = pair.second;
 
-        // Start constructing the line
-        QString line = QString::number(userID) + ",";  // User ID
-        line += member.email + ",";                    // Email
-        line += member.name + ",";                     // Name
-        line += member.DateOFBirth + ",";              // Date of Birth (QString already formatted)
+        QStringList baseFields;
+        baseFields << id << c.email << c.name << c.DateOFBirth;
 
-        // Subscription Type
-        line += member.sub.type + ",";  // Subscription type (e.g., "yearly", "monthly", etc.)
-
-        // If the subscription is not "NoSubscription", include the start and end dates
-        if (member.sub.type != "NoSubscription") {
-            line += member.sub.startDate + ",";  // Subscription start date
-            line += member.sub.endDate + ",";    // Subscription end date
+        // Subscription
+        if (c.sub.type != "NoSubscription") {
+            baseFields << c.sub.type << c.sub.startDate << c.sub.endDate << QString::number(c.sub.priceAfterDiscount);
         }
         else {
-            // For NoSubscription, we leave the dates empty
-            line += ",,";
+            baseFields << "NoSubscription";
         }
 
-        // Add the price after discount
-        line += QString::number(member.sub.priceAfterDiscount) + ",";
+        QString basePart = baseFields.join(',');
 
-        // Write the constructed line to the file
-        out << line << "\n";
+        // Court Bookings
+        QString courtPart;
+        if (c.bookedCourt.empty()) {
+            courtPart = "NoCourtBookings";
+        }
+        else {
+            QStringList courtEntries;
+            for (const auto& booking : c.bookedCourt) {
+                QString dateStr = booking.first.toString("yyyy-MM-dd");
+                courtEntries << dateStr + "," + booking.second;
+            }
+            courtPart = courtEntries.join(';');
+        }
+
+        // Training Sessions
+        QString trainingPart;
+        if (c.bookedsessions.empty()) {
+            trainingPart = "NoTrainingSessions";
+        }
+        else {
+            // Copy the queue to safely iterate
+            std::queue<TrainingSession> tempQueue = c.bookedsessions;
+            QStringList trainingEntries;
+
+            while (!tempQueue.empty()) {
+                const TrainingSession& session = tempQueue.front();
+                QString dateStr = session.date.toString("yyyy-MM-dd");
+                trainingEntries << QString::fromStdString(session.name) + "," + session.coachname + "," + dateStr + "," + session.time;
+                tempQueue.pop();
+            }
+
+            trainingPart = trainingEntries.join(';');
+        }
+
+        // Final line
+        QString fullLine = basePart + "|" + courtPart + "|" + trainingPart;
+        out << fullLine << "\n";
     }
 
     file.close();
 }
 
 
-bool Login::CheckLogin(QString& username, QString& id)
-{
 
-    if (membersData[id.toInt()].email == username)
+ 
+bool Login::CheckLogin (QString& username, QString& id)
+{
+    qDebug() << membersData.size();
+    if (membersData[id].email == username)
         return true;
 
     return false;

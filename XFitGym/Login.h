@@ -13,13 +13,12 @@ class Login : public QWidget
 public:
     Login(QWidget* parent = nullptr);
     ~Login();
-    static map<int, Customer> membersData;
-    void loaddata();
+    static map<QString, Customer> membersData;
     void saveData();
 
     Ui::LoginClass ui;
 
 public slots:
-    bool CheckLogin(QString& username, QString& id);
+    bool CheckLogin(QString& username,QString& id);
 
 };

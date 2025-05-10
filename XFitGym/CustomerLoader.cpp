@@ -3,9 +3,9 @@
 #include <QTextStream>
 #include <QDebug>
 
-QVector<Customer> CustomerLoader::LoadCustomersFromFile(const QString& filename)
+map<QString,Customer> CustomerLoader::LoadCustomersFromFile(const QString& filename)
 {
-    QVector<Customer> customers;
+    map<QString, Customer> customers;
 
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -82,7 +82,7 @@ QVector<Customer> CustomerLoader::LoadCustomersFromFile(const QString& filename)
             }
         }
 
-        customers.append(c);
+        customers[id]=c;
     }
 
     return customers;
