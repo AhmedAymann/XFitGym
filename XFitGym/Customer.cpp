@@ -19,3 +19,11 @@ void Customer::GiveFeedback(QString feedbackText)
     Feedback::FeedBack.push(feedbackText);
     
 }
+
+void Customer::AddCourtBooking(const QDate& date, const QString& time) {
+    bookedCourt.push_back(make_pair(date, time));
+}
+
+void Customer::AddTrainingSession(const TrainingSession& session) {
+    bookedsessions.push(session);
+}

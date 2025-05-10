@@ -112,6 +112,7 @@
     <ClCompile Include="Classes.cpp" />
     <ClCompile Include="Coach.cpp" />
     <ClCompile Include="Customer.cpp" />
+    <ClCompile Include="CustomerLoader.cpp" />
     <ClCompile Include="Dashboard.cpp" />
     <ClCompile Include="Feedback.cpp" />
     <ClCompile Include="Homepage.cpp" />
@@ -146,6 +147,7 @@
     <Text Include="CustomerData.txt" />
     <Text Include="feedbacks.txt" />
     <Text Include="News.txt" />
+    <Text Include="Notifications.txt" />
     <Text Include="sessions.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +155,7 @@
     <ClInclude Include="Coach.h" />
     <ClInclude Include="Customer.h" />
     <QtMoc Include="Feedback.h" />
+    <ClInclude Include="CustomerLoader.h" />
     <ClInclude Include="Manager.h" />
     <QtMoc Include="Notifications.h" />
     <QtMoc Include="Manager_homepage.h" />

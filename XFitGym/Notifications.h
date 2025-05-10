@@ -2,7 +2,10 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_notifications.h"
 #include "Subscription.h"
+#include "Customer.h"
 #include <QDate>
+#include <Stack>
+
 
 class Notifications : public QWidget
 {
@@ -13,10 +16,10 @@ public:
     ~Notifications();
     Ui::NotificationsClass ui;
 
+    static QMap<int, QVector<QString>> notifications;
+    void saveNotifications();
+    void loadNotifications();
 
-
-    void CheckSubscriptionDeadline(const Subscription& subscription, const QDate& currentDate);
-
-
+    int CheckSubscriptionDeadline(const Subscription& subscription, const QDate& currentDate);
 
 };

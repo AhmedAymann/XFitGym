@@ -3,50 +3,57 @@
 #include "Notifications.h"
 #include "ProgramClock.h"
 #include "Login.h"
+#include "CustomerLoader.h"
+#include <QCoreApplication>
+#include <QTextStream>
 #include <QtWidgets/QApplication>
+#include <QTimer>
+#include <QVector>
 
-int main(int argc, char *argv[])
+map<QString, Customer> customers;
+ProgramClock* programClock = nullptr;
+Notifications* notifier = nullptr;
+int daysSimulated = 0;
+
+void simulateDay() {
+    QDate currentDate = programClock->GetCurrentDate();
+    qDebug() << "\n📅 Simulated Date:" << currentDate.toString("yyyy-MM-dd");
+
+    for (auto& c : customers) {
+        int daysLeft = notifier->CheckSubscriptionDeadline(c.second.sub, currentDate);
+        qDebug() << "\n DAYS LEFT: " << daysLeft;
+        if (daysLeft < 0) {
+            if (!Notifications::notifications[c.first.toInt()].contains("Your Gym Membership Has Expired")) {
+                Notifications::notifications[c.first.toInt()].push_back("Your Gym Membership Has Expired");
+                qDebug() << "Notification for" << c.second.name << ": Your Gym Membership Has Expired";
+            }
+        }
+        else if (daysLeft <= 10) {
+            QString message = "You Have " + QString::number(daysLeft) + " Days Left in Your Subscription";
+            Notifications::notifications[c.first.toInt()].push_back(message);
+            qDebug() << "Notification for" << c.second.name << ":" << message;
+        }
+    }
+
+    programClock->Tick();
+    daysSimulated++;
+}
+
+int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
     XFitGym w;
     w.load();
     w.show();
+    
+    customers = CustomerLoader::LoadCustomersFromFile("CustomerData.txt");
 
-    // SUBSCRIPTION HATEKHLAS ORAYEB
-    Subscription sub("Premium");
-    sub.startDate = "2025-05-01";
-    sub.endDate = "2025-05-15";
+    programClock = new ProgramClock(); // starts from system date
+    notifier = new Notifications();
 
-
-    ProgramClock clock;
-    Notifications notifier;
-
-
-
-
-    //CHECKING FOR ONLY ONE PERSON'S SUBSCRIPTION
-
-
-
-    // Simulate 20 days passing
-    for (int day = 0; day < 20; day++)
-    {
-        qDebug() << "\n📅 Current Program Date:" << clock.GetCurrentDate().toString("yyyy-MM-dd");
-
-        // Check subscription deadline based on program time
-        notifier.CheckSubscriptionDeadline(sub, clock.GetCurrentDate());
-
-        // Advance to next day
-        clock.Tick();
-    }
-
-
-
-
-
-
-
+    QTimer* timer = new QTimer();
+    QObject::connect(timer, &QTimer::timeout, simulateDay);
+    timer->start(2000); // 5 seconds per simulated day
 
     return a.exec();
-    //khalx
 }

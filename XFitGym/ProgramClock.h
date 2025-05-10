@@ -1,12 +1,19 @@
 #pragma once
 #include <QDate>
+#ifndef PROGRAMCLOCK_H
+#define PROGRAMCLOCK_H
+
+#include <QDate>
 
 class ProgramClock
 {
-public:
+private:
     QDate currentDate;
 
+public:
     ProgramClock();
-    void Tick(); // Simulate one day passing
+    void Tick();
     QDate GetCurrentDate() const;
 };
+
+#endif // PROGRAMCLOCK_H

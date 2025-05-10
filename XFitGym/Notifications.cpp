@@ -1,4 +1,6 @@
-#include "Notifications.h"
+﻿#include "Notifications.h"
+#include <QFile>
+#include <QTextStream>
 
 
 Notifications::Notifications(QWidget* parent)
@@ -10,21 +12,93 @@ Notifications::Notifications(QWidget* parent)
 Notifications::~Notifications()
 {}
 
+QMap<int, QVector<QString>> Notifications::notifications;
 
-void Notifications::CheckSubscriptionDeadline(const Subscription& subscription, const QDate& currentDate)
+int Notifications::CheckSubscriptionDeadline(const Subscription& sub, const QDate& currentDate)
 {
-    QDate end = QDate::fromString(subscription.endDate, "yyyy-MM-dd");
+    // If there's no subscription -> skip check
+    if (sub.type == "NoSubscription") {
+        return -3;
+    }
+    
 
-    if (!end.isValid()) {
-        qDebug() << "Invalid end date!";
-        return;
+    // Parse endDate from QString to QDate
+    QDate endDate = QDate::fromString(sub.endDate, "yyyy-MM-dd");
+
+    
+     if (!endDate.isValid()) {
+        qWarning() << "❌ Invalid subscription end date format for customer:" << sub.endDate;
+        return -2;  // Return early in case of an invalid date format
     }
 
-    int daysRemaining = currentDate.daysTo(end);
 
-    if (daysRemaining <= 10 && daysRemaining >= 0) {
-        //add the notification to the proper user using Gui
-        qDebug() << " Subscription for type:" << subscription.type
-            << "will end in" << daysRemaining << "days!";
+    //SATR EL MINUS
+    int daysLeft = currentDate.daysTo(endDate);
+    return daysLeft;
+
+
+    if (daysLeft < 0) {
+        //SEND A NOTIFICATION SAYING THAT THE SUBSCRIPTION HAD ENDED
+        qDebug() << "⚠️ Subscription has already expired on" << endDate.toString("yyyy-MM-dd");
     }
+    else if (daysLeft <= 10) {
+        //SEND A NOTIFICATION SAYING THAT YOUR SUBSCRIPTION IS EXPIRING IN N DAYS
+        qDebug() << "⏳ Subscription is expiring in" << daysLeft << "day(s) on" << endDate.toString("yyyy-MM-dd");
+    }
+}
+
+void Notifications::saveNotifications()
+{
+
+
+    QFile file("Notifications.txt");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    {
+        qDebug() << "Failed to clear file:" << file.errorString();
+
+    }
+    if (!file.open(QIODevice::Append | QIODevice::Text))
+    {
+        qDebug() << "Cannot open file:" << file.errorString();
+
+    }
+
+    QTextStream out(&file);
+    
+    for (auto it = notifications.begin(); it != notifications.end(); ++it) {
+        int id = it.key();
+        const QVector<QString>& messages = it.value();
+        for (const QString& msg : messages) {
+            out << id << "," << msg << "\n";
+        }
+    }
+
+
+
+    file.close();
+
+}
+
+void Notifications::loadNotifications()
+{
+    QFile file("Notifications.txt");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qDebug() << "Cannot open file:" << file.errorString();
+
+    }
+    QTextStream in(&file);
+  
+
+    while (!in.atEnd())
+    {
+        QString line = in.readLine();
+        QStringList parts = line.split(",");
+        notifications[parts[0].toInt()].push_back(parts[1]);
+    }
+
+
+    file.close();
+
+
 }
