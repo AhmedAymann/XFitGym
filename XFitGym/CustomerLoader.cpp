@@ -50,6 +50,7 @@ map<QString,Customer> CustomerLoader::LoadCustomersFromFile(const QString& filen
             c.sub.priceAfterDiscount = price;
         }
         else {
+            c.sub.type = "NoSubscription";
             ++index;
         }
 

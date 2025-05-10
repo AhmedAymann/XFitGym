@@ -40,7 +40,7 @@ void Login::saveData()
             baseFields << c.sub.type << c.sub.startDate << c.sub.endDate << QString::number(c.sub.priceAfterDiscount);
         }
         else {
-            baseFields << "NoSubscription";
+            baseFields << "NoSubscription"<<""<<""<<"0";
         }
 
         QString basePart = baseFields.join(',');

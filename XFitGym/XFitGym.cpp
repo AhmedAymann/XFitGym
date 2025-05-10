@@ -127,9 +127,7 @@ XFitGym::XFitGym(QWidget* parent)
         user_Profile->ui.Name->setText(Login::membersData[id].name);
         user_Profile->ui.DOB->setText(Login::membersData[id].DateOFBirth);
         if (Login::membersData[id].sub.type.isEmpty()) {
-            user_Profile->ui.ID->setText(Login::membersData[id].id);
-            user_Profile->ui.Name->setText(Login::membersData[id].name);
-            user_Profile->ui.DOB->setText(Login::membersData[id].DateOFBirth);
+            Login::membersData[id].sub.type = "NoSubscription";
             user_Profile->ui.Plan->setText("No Subscription");
 
         }
