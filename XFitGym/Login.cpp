@@ -40,7 +40,7 @@ void Login::saveData()
             baseFields << c.sub.type << c.sub.startDate << c.sub.endDate << QString::number(c.sub.priceAfterDiscount);
         }
         else {
-            baseFields << "NoSubscription"<<""<<""<<"0";
+            baseFields << "NoSubscription";
         }
 
         QString basePart = baseFields.join(',');
@@ -72,7 +72,7 @@ void Login::saveData()
             while (!tempQueue.empty()) {
                 const TrainingSession& session = tempQueue.front();
                 QString dateStr = session.date.toString("yyyy-MM-dd");
-                trainingEntries << QString::fromStdString(session.name) + "," + session.coachname + "," + dateStr + "," + session.time;
+                trainingEntries << QString::fromStdString(session.name) + "," + session.coachname + "," + dateStr + "," + session.time + "," + QString::number(session.id);
                 tempQueue.pop();
             }
 

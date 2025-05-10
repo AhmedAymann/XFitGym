@@ -7,4 +7,6 @@
 103,Your Gym Membership Has Expired
 103,You Have 0 Days Left in Your Subscription
 103,You Have 0 Days Left in Your Subscription
+103,You Have 0 Days Left in Your Subscription
+103,You Have 0 Days Left in Your Subscription
 104,Your Gym Membership Has Expired
