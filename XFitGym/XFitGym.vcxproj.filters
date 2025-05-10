@@ -106,14 +106,13 @@
     <ClCompile Include="Manager_staff.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="Manager_tournaments.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Manager_feedback.cpp">
-=======
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="CustomerLoader.cpp">
->>>>>>> 4c3cbeda22a17240cc46eaa1a1fb6f3d8e851c0d
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -210,10 +209,9 @@
     <Text Include="feedbacks.txt" />
     <Text Include="sessions.txt" />
     <Text Include="News.txt" />
-<<<<<<< HEAD
-=======
+
     <Text Include="Notifications.txt" />
->>>>>>> 4c3cbeda22a17240cc46eaa1a1fb6f3d8e851c0d
+
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="User.h">
