@@ -32,7 +32,7 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>30</y>
+      <y>0</y>
       <width>111</width>
       <height>71</height>
      </rect>
@@ -70,7 +70,7 @@ QPushButton:pressed {
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>120</y>
+      <y>80</y>
       <width>111</width>
       <height>71</height>
      </rect>
@@ -108,7 +108,7 @@ QPushButton:pressed {
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>210</y>
+      <y>160</y>
       <width>111</width>
       <height>71</height>
      </rect>
@@ -146,7 +146,7 @@ QPushButton:pressed {
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>390</y>
+      <y>400</y>
       <width>111</width>
       <height>71</height>
      </rect>
@@ -222,7 +222,7 @@ QPushButton:pressed {
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>300</y>
+      <y>320</y>
       <width>111</width>
       <height>71</height>
      </rect>
@@ -254,6 +254,44 @@ QPushButton:pressed {
     </property>
     <property name="text">
      <string>Feedback</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Tournament">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>240</y>
+      <width>111</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Futura</family>
+      <pointsize>12</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #2c2c2c;      /* Dark default */
+    color: white;
+    border: 2px solid #2c2c2c;
+    border-radius: 6px;
+}
+
+QPushButton:hover {
+    background-color: #8B50FF ;      /* Blue on hover */
+    border: 2px solid #8B50FF ;
+    color: white;
+}
+
+QPushButton:pressed {
+    background-color: #6F3FCC; /* Darker shade of #3498db */
+}</string>
+    </property>
+    <property name="text">
+     <string>Tournament</string>
     </property>
    </widget>
   </widget>

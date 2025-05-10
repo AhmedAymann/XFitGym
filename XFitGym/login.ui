@@ -54,10 +54,10 @@
 	background-color: #2e2f30;</string>
    </property>
    <property name="placeholderText">
-    <string>Enter email</string>
+    <string>Enter uername</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="Password">
+  <widget class="QLineEdit" name="ID">
    <property name="geometry">
     <rect>
      <x>340</x>
@@ -82,7 +82,7 @@
     <enum>QLineEdit::EchoMode::Password</enum>
    </property>
    <property name="placeholderText">
-    <string>Enter password</string>
+    <string>Enter ID</string>
    </property>
   </widget>
   <widget class="QPushButton" name="Login">
@@ -224,7 +224,7 @@ QPushButton:pressed {
     <string notr="true">color:red;</string>
    </property>
    <property name="text">
-    <string>Email or Password is Incorrect</string>
+    <string>Username or ID is Incorrect</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignmentFlag::AlignCenter</set>

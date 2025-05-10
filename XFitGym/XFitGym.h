@@ -18,6 +18,8 @@
 #include "Manager_dashboard.h"
 #include "Manager_members.h"
 #include "Manager_staff.h"
+#include "Manager_tournaments.h"
+#include "Manager_feedback.h"
 
 
 class XFitGym : public QMainWindow
@@ -40,6 +42,8 @@ Manager_homepage* man_home;
 Manager_dashboard* man_dash;
 Manager_members* man_members;
 Manager_staff* man_staff;
+Manager_tournaments* man_tournaments;
+Manager_feedback* man_feedback;
 
     XFitGym(QWidget *parent = nullptr);
     ~XFitGym();

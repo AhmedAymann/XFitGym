@@ -99,9 +99,11 @@
     <QtUic Include="homepage.ui" />
     <QtUic Include="login.ui" />
     <QtUic Include="manager_dashboard.ui" />
+    <QtUic Include="manager_feedback.ui" />
     <QtUic Include="manager_homepage.ui" />
     <QtUic Include="manager_members.ui" />
     <QtUic Include="manager_staff.ui" />
+    <QtUic Include="manager_tournaments.ui" />
     <QtUic Include="notifications.ui" />
     <QtUic Include="padel.ui" />
     <QtUic Include="userProfile.ui" />
@@ -115,9 +117,11 @@
     <ClCompile Include="Homepage.cpp" />
     <ClCompile Include="Login.cpp" />
     <ClCompile Include="Manager_dashboard.cpp" />
+    <ClCompile Include="Manager_feedback.cpp" />
     <ClCompile Include="Manager_homepage.cpp" />
     <ClCompile Include="Manager_members.cpp" />
     <ClCompile Include="Manager_staff.cpp" />
+    <ClCompile Include="Manager_tournaments.cpp" />
     <ClCompile Include="Notifications.cpp" />
     <ClCompile Include="ProgramClock.cpp" />
     <ClCompile Include="Padel.cpp" />
@@ -155,6 +159,8 @@
     <QtMoc Include="Manager_dashboard.h" />
     <QtMoc Include="Manager_members.h" />
     <QtMoc Include="Manager_staff.h" />
+    <QtMoc Include="Manager_tournaments.h" />
+    <QtMoc Include="Manager_feedback.h" />
     <ClInclude Include="ProgramClock.h" />
     <QtMoc Include="Padel.h" />
     <ClInclude Include="Receptionist.h" />

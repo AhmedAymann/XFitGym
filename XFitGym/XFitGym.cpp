@@ -23,6 +23,8 @@ using namespace std;
 // 1 -> Dashboard                     *
 // 2 -> Member                        *
 // 3 -> Staff                         *
+// 4 -> Tournaments                   *
+// 5 -> Feedback                      *
 // 
 // ************************************
 //
@@ -69,6 +71,8 @@ XFitGym::XFitGym(QWidget *parent)
     man_dash = new Manager_dashboard(this);
     man_members = new Manager_members(this);
     man_staff = new Manager_staff(this);
+    man_tournaments = new Manager_tournaments(this);
+    man_feedback = new Manager_feedback(this);
 
     ui.Main->addWidget(log);
     ui.Main->addWidget(home);
@@ -84,16 +88,18 @@ XFitGym::XFitGym(QWidget *parent)
     man_home->ui.Pages->addWidget(man_dash);
     man_home->ui.Pages->addWidget(man_members);
     man_home->ui.Pages->addWidget(man_staff);
+    man_home->ui.Pages->addWidget(man_tournaments);
+    man_home->ui.Pages->addWidget(man_feedback);
 
     // just for the show password functionality 
     QIcon show = QIcon("assets/showPassword.png");
     QIcon hide = QIcon("assets/hidePassword.png");
-    log->ui.Password->setMaxLength(30);
+    log->ui.ID->setMaxLength(30);
     log->ui.warning->setVisible(false);
     
     connect(log->ui.Login, &QPushButton::clicked, this, [=]() {
         QString username = log->ui.Email->text();
-        QString id = log->ui.Password->text();
+        QString id = log->ui.ID->text();
 
         if (username == "manager" && id == "1") {
             ui.Main->setCurrentIndex(2);
@@ -110,7 +116,7 @@ XFitGym::XFitGym(QWidget *parent)
                 QTimer::singleShot(2000, log->ui.warning, &QLabel::hide);
                 return;
             }
-            log->ui.warning->setText("Email or Password is incorrect");
+            log->ui.warning->setText("Username or ID is incorrect");
             log->ui.warning->setVisible(true);
 
             QTimer::singleShot(2000, log->ui.warning, &QLabel::hide);
@@ -120,7 +126,7 @@ XFitGym::XFitGym(QWidget *parent)
         user_Profile->ui.Name->setText(Login::membersData[id.toInt()].name);
         user_Profile->ui.DOB->setText(Login::membersData[id.toInt()].DateOFBirth);
         if (Login::membersData[id.toInt()].sub.type.isEmpty()) {
-            user_Profile->ui.Plan->setText("No Subscriotion");
+            user_Profile->ui.Plan->setText("No Subscription");
         }
         else
         {
@@ -132,7 +138,7 @@ XFitGym::XFitGym(QWidget *parent)
         
         qDebug() << "LogIn";
         log->ui.showPassword->setIcon(hide);
-        log->ui.Password->setEchoMode(QLineEdit::Password);
+        log->ui.ID->setEchoMode(QLineEdit::Password);
         ui.Main->setCurrentIndex(1);
         
     });
@@ -145,11 +151,11 @@ XFitGym::XFitGym(QWidget *parent)
         if (log->ui.showPassword->icon().pixmap(100,100).toImage() == hide.pixmap(100, 100).toImage())
         {
             log->ui.showPassword->setIcon(show);
-            log->ui.Password->setEchoMode(QLineEdit::Normal);
+            log->ui.ID->setEchoMode(QLineEdit::Normal);
         }
         else if (log->ui.showPassword->icon().pixmap(100, 100).toImage() == show.pixmap(100, 100).toImage()) {
             log->ui.showPassword->setIcon(hide);
-            log->ui.Password->setEchoMode(QLineEdit::Password);
+            log->ui.ID->setEchoMode(QLineEdit::Password);
         }
     });
 
@@ -660,7 +666,7 @@ XFitGym::XFitGym(QWidget *parent)
         });
     connect(home->ui.Logout, &QPushButton::clicked, this, [=]() {
         log->ui.Email->setText("");
-        log->ui.Password->setText("");
+        log->ui.ID->setText("");
         setScrolltoTop();
         home->ui.Pages->setCurrentIndex(0);
         ui.Main->setCurrentIndex(0);
@@ -750,11 +756,58 @@ XFitGym::XFitGym(QWidget *parent)
 
         man_home->ui.Pages->setCurrentIndex(3);
         });
-    connect(man_home->ui.Feedback, &QPushButton::clicked, this, [=]() {});
+    connect(man_home->ui.Feedback, &QPushButton::clicked, this, [=]() {
+        setScrolltoTop();
+        //replace true with the condition man_feedbackVector.isEmpty()
+
+        if (false) {
+            man_feedback->ui.emptyMessage->setVisible(true);
+            home->ui.Pages->setCurrentIndex(4);
+            return;
+        }
+
+        QWidget* feedbackWidget = new QWidget;
+        feedbackWidget->setStyleSheet("background-color: #1e1e1e; color: white;");
+        feedbackWidget->setMinimumWidth(man_feedback->ui.scrollArea->width() - 20);
+
+        QVBoxLayout* layout = new QVBoxLayout(feedbackWidget);
+        layout->setAlignment(Qt::AlignTop);
+
+        //dynamically generating the feedbacks
+        for (int i = 0; i < 5; i++) {
+            QWidget* feedback = new QWidget(feedbackWidget);
+            feedback->setObjectName("feedback");
+            feedback->setStyleSheet("#feedback {"
+                "background-color: #4A4A4A;"
+                "border: 2px solid #8B50FF;"
+                "border-radius: 14px;"
+                "}");
+            QLabel* label = new QLabel(feedback);
+            label->setText(QString("test."));
+            label->setWordWrap(true);
+            label->setStyleSheet("color: white; font: 20pt 'DM Serif Display'; background-color:transparent;");
+            label->setFixedWidth(feedbackWidget->width() - 40);
+            QVBoxLayout* itemLayout = new QVBoxLayout(feedback);
+            itemLayout->setAlignment(Qt::AlignCenter);
+            itemLayout->addWidget(label);
+            label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+            layout->addWidget(feedback);
+        }
+
+        feedbackWidget->setLayout(layout);
+        man_feedback->ui.scrollArea->setWidget(feedbackWidget);
+        man_feedback->ui.scrollArea->setWidgetResizable(true);
+
+        man_home->ui.Pages->setCurrentIndex(5);
+        
+        });
+    connect(man_home->ui.Tournament, &QPushButton::clicked, this, [=]() {
+        man_home->ui.Pages->setCurrentIndex(4);
+        });
     connect(man_home->ui.Profile, &QPushButton::clicked, this, [=]() {});
     connect(man_home->ui.Logout, &QPushButton::clicked, this, [=]() {
         log->ui.Email->setText("");
-        log->ui.Password->setText("");
+        log->ui.ID->setText("");
         setScrolltoTop();
         man_home->ui.Pages->setCurrentIndex(0);
         ui.Main->setCurrentIndex(0);
@@ -862,7 +915,7 @@ XFitGym::XFitGym(QWidget *parent)
     });
     connect(user_Profile->ui.Cancel, &QPushButton::clicked, this, [=]() {
         user_Profile->ui.Plan->setText("No Subscription");
-        Login::membersData[log->ui.Password->text().toInt()].sub.type= "No Subscription";
+        Login::membersData[log->ui.ID->text().toInt()].sub.type= "No Subscription";
     });
     connect(home->ui.BacktoProf, &QPushButton::clicked, this, [=]() {
         home->ui.Pages->setCurrentIndex(3);
@@ -897,6 +950,44 @@ XFitGym::XFitGym(QWidget *parent)
         else {
             qDebug() << "No slot selected!";
         }
+        });
+    connect(man_tournaments->ui.submit, &QPushButton::clicked, this, [=]() {
+
+        QString firstTeam_firstName = man_tournaments->ui.FFname->text();
+        QString firstTeam_secondName = man_tournaments->ui.FSname->text();
+        QString firstScore = man_tournaments->ui.Fscore->text();
+        QString secondTeam_firstName = man_tournaments->ui.SFname->text();
+        QString secondTeam_secondName = man_tournaments->ui.SSname->text();
+        QString secondScore = man_tournaments->ui.Sscore->text();
+        QString thirdTeam_firstName = man_tournaments->ui.SSname->text();
+        QString thirdTeam_secondName = man_tournaments->ui.SSname->text();
+        QString thirdScore = man_tournaments->ui.Tscore->text();
+        
+        bool empty = (firstTeam_firstName.isEmpty() || firstTeam_secondName.isEmpty() || firstScore.isEmpty() || secondTeam_firstName.isEmpty() || secondTeam_secondName.isEmpty()
+            || secondScore.isEmpty() || thirdTeam_firstName.isEmpty() || thirdTeam_secondName.isEmpty() || thirdScore.isEmpty());
+
+        if (empty) {
+            man_tournaments->ui.message->setText("Fill all the boxes");
+        man_tournaments->ui.message->setStyleSheet("color:red;");
+            man_tournaments->ui.message->setVisible(true);
+            QTimer::singleShot(1250, man_tournaments->ui.message, &QLabel::hide);
+            return;
+        }
+        man_tournaments->ui.message->setText("Submitted successfully!");
+        man_tournaments->ui.message->setStyleSheet("color:green;");
+        man_tournaments->ui.message->setVisible(true);
+        QTimer::singleShot(1250, man_tournaments->ui.message, &QLabel::hide);
+        man_tournaments->ui.FFname->clear();
+        man_tournaments->ui.FSname->clear();
+        man_tournaments->ui.SFname->clear();
+        man_tournaments->ui.SSname->clear();
+        man_tournaments->ui.TFname->clear();
+        man_tournaments->ui.TSname->clear();
+        man_tournaments->ui.Fscore->clear();
+        man_tournaments->ui.Sscore->clear();
+        man_tournaments->ui.Tscore->clear();
+
+
         });
 
 

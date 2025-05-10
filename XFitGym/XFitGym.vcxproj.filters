@@ -106,6 +106,12 @@
     <ClCompile Include="Manager_staff.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Manager_tournaments.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager_feedback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="login.ui">
@@ -142,6 +148,12 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="manager_staff.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="manager_tournaments.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="manager_feedback.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -182,11 +194,18 @@
     <QtMoc Include="Manager_staff.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="Manager_tournaments.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Manager_feedback.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CustomerData.txt" />
     <Text Include="feedbacks.txt" />
     <Text Include="sessions.txt" />
+    <Text Include="News.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="User.h">
