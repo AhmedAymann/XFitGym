@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Coach_homepageClass</class>
+ <widget class="QWidget" name="Coach_homepageClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>960</width>
+    <height>540</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>15</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QStackedWidget" name="Pages">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>40</y>
+     <width>770</width>
+     <height>490</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QStackedWidget#Pages{
+border: 2px solid white;
+border-radius: 12px;
+}</string>
+   </property>
+   <widget class="QWidget" name="page">
+    <property name="styleSheet">
+     <string notr="true">background-color: transparent;</string>
+    </property>
+    <widget class="QLabel" name="welcome">
+     <property name="geometry">
+      <rect>
+       <x>8</x>
+       <y>15</y>
+       <width>751</width>
+       <height>461</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Futura</family>
+       <pointsize>37</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: white;
+background-color: transparent;
+</string>
+     </property>
+     <property name="text">
+      <string>Welcome Back, Ahmed</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="logo">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>60</y>
+       <width>131</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>assets/XFitLogo.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="Background">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>960</width>
+     <height>540</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:#1e1e1e;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QWidget" name="Panel" native="true">
+   <property name="geometry">
+    <rect>
+     <x>-40</x>
+     <y>20</y>
+     <width>161</width>
+     <height>511</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget#widget{
+    border-radius: 14px;
+    border: 2px solid white ;
+}</string>
+   </property>
+   <widget class="QPushButton" name="MyClasses">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>0</y>
+      <width>111</width>
+      <height>211</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Futura</family>
+      <pointsize>12</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #2c2c2c;      /* Dark default */
+    color: white;
+    border: 2px solid #2c2c2c;
+    border-radius: 6px;
+}
+
+QPushButton:hover {
+    background-color: #8B50FF ;      /* Blue on hover */
+    border: 2px solid #8B50FF ;
+    color: white;
+}
+
+QPushButton:pressed {
+    background-color: #6F3FCC; /* Darker shade of #3498db */
+}</string>
+    </property>
+    <property name="text">
+     <string>My Classes</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Profile">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>240</y>
+      <width>111</width>
+      <height>211</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Futura</family>
+      <pointsize>12</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #2c2c2c;      /* Dark default */
+    color: white;
+    border: 2px solid #2c2c2c;
+    border-radius: 6px;
+}
+
+QPushButton:hover {
+    background-color: #8B50FF ;      /* Blue on hover */
+    border: 2px solid #8B50FF ;
+    color: white;
+}
+
+QPushButton:pressed {
+    background-color: #6F3FCC; /* Darker shade of #3498db */
+}</string>
+    </property>
+    <property name="text">
+     <string>Profile</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Logout">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>480</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Futura</family>
+      <pointsize>11</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #2c2c2c;      /* Dark default */
+    color: white;
+    border: 2px solid #2c2c2c;
+    border-radius: 6px;
+}
+
+QPushButton:hover {
+    background-color: #FF0000;      /* Blue on hover */
+    border: 2px solid #FF0000;
+    color: white;
+}
+
+QPushButton:pressed {
+    background-color: #c0392b; /* Darker red */
+}</string>
+    </property>
+    <property name="text">
+     <string>Logout</string>
+    </property>
+   </widget>
+  </widget>
+  <zorder>Background</zorder>
+  <zorder>Panel</zorder>
+  <zorder>Pages</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
