@@ -38,16 +38,14 @@ void Customer::CancelTrainingSession(int sessionId)
     queue<TrainingSession> bookedsessions2;
     bool found = true;
     while (!bookedsessions1.empty()) {
-        //qDebug() << bookedsessions1.front().id;
+        
         TrainingSession tr;
         tr = bookedsessions1.front();
-        //qDebug() << tr.id;
+        
 
         if (tr.id == sessionId && found) {
            
-            //qDebug() << bookedsessions1.front().WaitlistIds.size();
-            //qDebug() << bookedsessions.front().WaitlistIds.size();
-            //qDebug() << tr.WaitlistIds.size();
+           
             if (!Classes::allsessions[sessionId].WaitlistIds.empty()) {
                 Login::membersData[QString::number( Classes::allsessions[sessionId].WaitlistIds.front())].AddTrainingSession(tr);
                 Notifications::notifications[Classes::allsessions[sessionId].WaitlistIds.front()].push_back("you have been added to " + tr.name + " on " + tr.date.toString("yyyy-MM-dd") + " at " + tr.time);
