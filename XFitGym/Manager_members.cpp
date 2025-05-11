@@ -7,3 +7,11 @@ Manager_members::Manager_members(QWidget* parent)
 }
 Manager_members::~Manager_members()
 {}
+
+renewMembers::renewMembers(QWidget* parent)
+    : QMainWindow(parent)
+{
+    ui.setupUi(this);
+}
+renewMembers::~renewMembers()
+{}

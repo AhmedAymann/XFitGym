@@ -3,6 +3,8 @@
 #include <QtWidgets/QMainWindow>
 #include <QString>
 #include <QScrollBar>
+#include <QButtonGroup>
+#include <QIntValidator>
 #include "qtimer.h"
 #include "ui_XFitGym.h"
 #include "Login.h"
@@ -20,6 +22,13 @@
 #include "Manager_staff.h"
 #include "Manager_tournaments.h"
 #include "Manager_feedback.h"
+#include "Staff_profile.h"
+#include "Coach_homepage.h"
+#include "Receptionist_homepage.h"
+#include "Receptionist_members.h"
+#include "Receptionist_classes.h"
+#include "Receptionist_news.h"
+
 
 
 class XFitGym : public QMainWindow
@@ -44,6 +53,16 @@ Manager_members* man_members;
 Manager_staff* man_staff;
 Manager_tournaments* man_tournaments;
 Manager_feedback* man_feedback;
+renewMembers* renewPage;
+Staff_profile* manprofile;
+Staff_profile* coachprofile;
+Staff_profile* recepprofile;
+Coach_homepage* coach_home;
+Coach_classes* coach_classes;
+Receptionist_homepage* recep_home;
+Receptionist_members* recep_members;
+Receptionist_classes* recep_classes;
+Receptionist_news* recep_news;
 
     XFitGym(QWidget *parent = nullptr);
     ~XFitGym();

@@ -115,6 +115,24 @@
     <ClCompile Include="CustomerLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Staff_profile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coach_homepage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Receptionist_homepage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Receptionist_members.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Receptionist_classes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Receptionist_news.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="login.ui">
@@ -157,6 +175,30 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="manager_feedback.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="renewPage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="staff_profile.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="coach_homepage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="coach_classes.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="receptionist_homepage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="receptionist_members.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="receptionist_classes.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="receptionist_news.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -203,15 +245,31 @@
     <QtMoc Include="Manager_feedback.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="Staff_profile.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Coach_homepage.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Receptionist_homepage.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Receptionist_members.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Receptionist_classes.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Receptionist_news.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CustomerData.txt" />
     <Text Include="feedbacks.txt" />
     <Text Include="sessions.txt" />
     <Text Include="News.txt" />
-
     <Text Include="Notifications.txt" />
-
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="User.h">

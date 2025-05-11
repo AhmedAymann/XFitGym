@@ -2,17 +2,19 @@
 using namespace std;
 
 // Pages Guide:
-// 
-// -- ALL PAGES --
-// 0 -> Login
-// 1 -> User Homepage
-// 2 -> Manager Homepage
+// ************************************
+// -- ALL PAGES --                    *
+// 0 -> Login                         *
+// 1 -> User Homepage                 *
+// 2 -> Manager Homepage              *
+// 3 -> Coach Homepage                *
+// 4 -> Receptionist Homepage         *
 // ************************************
 // -- User HomePage --                *
 // 0 -> Welcome Page                  *
 // 1 -> View Plans                    *
 // 2 -> Dashboard                     *
-// 3 -> User Profile                  *
+// 3 -> Profile                       *
 // 4 -> Notifications                 *
 // 5 -> Feedback                      *
 // 6 -> Classes                       *
@@ -25,9 +27,20 @@ using namespace std;
 // 3 -> Staff                         *
 // 4 -> Tournaments                   *
 // 5 -> Feedback                      *
-// 
+// 6 -> Profile                       *
 // ************************************
-//
+// -- Coach HomePage --               *
+// 0 -> Welcome Page                  *
+// 1 -> Profile                       *
+// 2 -> Classes                       *
+// ************************************
+// -- Receptionist HomePage --        *
+// 0 -> Welcome Page                  *
+// 1 -> Profile                       *
+// 2 -> Members                       *
+// 3 -> Classes                       *
+// 4 -> News                          *
+//*************************************
 
 void reorganizeGrid(QGridLayout* grid, QPushButton* addCard) {
     grid->removeWidget(addCard);
@@ -54,8 +67,6 @@ void reorganizeGrid(QGridLayout* grid, QPushButton* addCard) {
 XFitGym::XFitGym(QWidget* parent)
     : QMainWindow(parent)
 {
-    QVector<Cards*>* memberCardsList = nullptr;
-
     ui.setupUi(this);
     log = new Login(this);
     dash = new Dashboard(this);
@@ -73,10 +84,21 @@ XFitGym::XFitGym(QWidget* parent)
     man_staff = new Manager_staff(this);
     man_tournaments = new Manager_tournaments(this);
     man_feedback = new Manager_feedback(this);
+    manprofile = new Staff_profile(this);
+    coach_home = new Coach_homepage(this);
+    coach_classes = new Coach_classes(this);
+    coachprofile = new Staff_profile(this);
+    recep_home = new Receptionist_homepage(this);
+    recepprofile = new Staff_profile(this);
+    recep_members = new Receptionist_members(this);
+    recep_classes = new Receptionist_classes(this);
+    recep_news = new Receptionist_news(this);
 
     ui.Main->addWidget(log);
     ui.Main->addWidget(home);
     ui.Main->addWidget(man_home);
+    ui.Main->addWidget(coach_home);
+    ui.Main->addWidget(recep_home);
 
     home->ui.Pages->addWidget(dash);
     home->ui.Pages->addWidget(user_Profile);
@@ -90,6 +112,15 @@ XFitGym::XFitGym(QWidget* parent)
     man_home->ui.Pages->addWidget(man_staff);
     man_home->ui.Pages->addWidget(man_tournaments);
     man_home->ui.Pages->addWidget(man_feedback);
+    man_home->ui.Pages->addWidget(manprofile);
+
+    coach_home->ui.Pages->addWidget(coachprofile);
+    coach_home->ui.Pages->addWidget(coach_classes);
+
+    recep_home->ui.Pages->addWidget(recepprofile);
+    recep_home->ui.Pages->addWidget(recep_members);
+    recep_home->ui.Pages->addWidget(recep_classes);
+    recep_home->ui.Pages->addWidget(recep_news);
 
     // just for the show password functionality 
     QIcon show = QIcon("assets/showPassword.png");
@@ -103,8 +134,20 @@ XFitGym::XFitGym(QWidget* parent)
         QString id = log->ui.ID->text();
 
         if (username == "manager" && id == "1") {
-            ui.Main->setCurrentIndex(2);
-            man_home->ui.welcome->setText("Welcome Back,Manager");
+            ui.Main->setCurrentIndex(2); 
+            man_home->ui.welcome->setText("Welcome Back, Manager");
+
+            return;
+        }
+        else if (username == "coach" && id == "2") {
+            ui.Main->setCurrentIndex(3);
+            coach_home->ui.welcome->setText("Welcome Back, Coach");
+
+            return;
+        }
+        else if (username == "recep" && id == "3") {
+            ui.Main->setCurrentIndex(4);
+            recep_home->ui.welcome->setText("Welcome Back, Receptionist");
 
             return;
         }
@@ -163,10 +206,7 @@ XFitGym::XFitGym(QWidget* parent)
             }
             });
 
-
-
-        // padel gauge levels
-
+        // padel gauges
         if (!dash->ui.PadelGauge->layout()) {
             dash->ui.PadelGauge->setLayout(new QVBoxLayout);
             dash->ui.ClassGauge->setLayout(new QVBoxLayout);
@@ -459,7 +499,6 @@ XFitGym::XFitGym(QWidget* parent)
             }
 
 
-            // Assuming the QWidget you're working with is called ui->yourWidget
             padel->ui.widget->setLayout(grid);  // Set the QGridLayout to the widget
             stack<pair<QString, QString>>newsCopy = Padel::news;
             if (newsCopy.empty()) {
@@ -493,8 +532,6 @@ XFitGym::XFitGym(QWidget* parent)
             home->ui.Pages->setCurrentIndex(5);
             qDebug() << "Feedback";
             });
-
-
         connect(home->ui.Profile, &QPushButton::clicked, this, [=]() {
             setScrolltoTop();
             queue<TrainingSession>bookedsession = Login::membersData[user_Profile->ui.ID->text()].bookedsessions;
@@ -595,6 +632,7 @@ XFitGym::XFitGym(QWidget* parent)
                 QObject::connect(cancelClass, &QPushButton::clicked, [=]() {
                     Login::membersData[log->ui.ID->text()].CancelTrainingSession(ID->text().toInt());
                     activeClass->deleteLater();
+
                     });
                 bookedsession.pop();
             }
@@ -735,6 +773,7 @@ XFitGym::XFitGym(QWidget* parent)
 
             });
 
+        // manager homepage control panel
         connect(man_home->ui.Dashboard, &QPushButton::clicked, this, [=]() {
             man_home->ui.Pages->setCurrentIndex(1);
             });
@@ -764,7 +803,7 @@ XFitGym::XFitGym(QWidget* parent)
             addCard->setCursor(Qt::PointingHandCursor);
 
             int numStaff = 5;
-            for (int i = 0; i < numStaff; ++i) {
+            for (int i = 0; i < numStaff; i++) {
                 QString name = "Staff Member " + QString::number(i + 1);
                 QString position = i % 2 ? "Trainer" : "Receptionist";
                 QString joinDate = QDate::currentDate().addDays(-i * 30).toString("dd/MM/yyyy");
@@ -866,7 +905,9 @@ XFitGym::XFitGym(QWidget* parent)
         connect(man_home->ui.Tournament, &QPushButton::clicked, this, [=]() {
             man_home->ui.Pages->setCurrentIndex(4);
             });
-        connect(man_home->ui.Profile, &QPushButton::clicked, this, [=]() {});
+        connect(man_home->ui.Profile, &QPushButton::clicked, this, [=]() {
+            man_home->ui.Pages->setCurrentIndex(6);
+            });
         connect(man_home->ui.Logout, &QPushButton::clicked, this, [=]() {
             log->ui.Email->setText("");
             log->ui.ID->setText("");
@@ -904,7 +945,7 @@ XFitGym::XFitGym(QWidget* parent)
                 });
 
             int numMembers = 7;
-            for (int i = 0; i < numMembers; ++i) {
+            for (int i = 0; i < numMembers; i++) {
                 QString name = "Ahmed Salah " + QString::number(i + 1);
                 QString phone = "012345678" + QString::number(i);
                 QString subscription = "Ends: " + QDate::currentDate().addDays(i * 30).toString("dd/MM/yyyy");
@@ -926,7 +967,7 @@ XFitGym::XFitGym(QWidget* parent)
                 background-color: #8F5FEC;
             }
         )");
-
+                
                 removeBtn->setStyleSheet(R"(
             QPushButton {
                 background-color: #E53935; 
@@ -954,8 +995,60 @@ XFitGym::XFitGym(QWidget* parent)
 
                     reorganizeGrid(grid, addCard);
                     });
+                connect(renewBtn, &QPushButton::clicked, this, [=]() {
+                    renewMembers* renewPage = new renewMembers(this);
 
-                connect(renewBtn, &QPushButton::clicked, this, [name]() {
+                    int screenWidth = 960;
+                    int screenHeight = 540;
+
+                    int x = (screenWidth - renewPage->width()) / 2;
+                    int y = (screenHeight - renewPage->height()) / 2;
+
+                    renewPage->setWindowTitle("Subscription renewal");
+                    renewPage->move(x, y);
+                    renewPage->resize(400, 300);
+                    renewPage->show();
+                    renewPage->ui.Title->setText("Renew Subscription For " + name);
+                    QButtonGroup* group = new QButtonGroup(this);
+                    group->setExclusive(true);
+
+                    group->addButton(renewPage->ui.Month);
+                    group->addButton(renewPage->ui.sixMonth);
+                    group->addButton(renewPage->ui.Year);
+                    group->addButton(renewPage->ui.YearVIP);
+
+                    QMap<QPushButton*, double> priceMap = {
+                    { renewPage->ui.Month,    300 },
+                    { renewPage->ui.sixMonth, 1200 },
+                    { renewPage->ui.Year,     2200 },
+                    { renewPage->ui.YearVIP,  4000 }
+                    };
+
+                    for (auto it = priceMap.begin(); it != priceMap.end(); ++it) {
+                        QPushButton* button = it.key();
+                        double price = it.value();
+
+                        connect(button, &QPushButton::clicked, this, [=]() {
+                            double discount = 0.0;
+                            if (true) { 
+                                discount = 0.5 * price;
+                            }
+                            // make your conditions here .. like price == 300 && halfDiscApplied == true
+                            double total = price - discount;
+
+                            renewPage->ui.subFees->setText(QString::number(price) + "$");
+                            renewPage->ui.discount->setText(QString::number(discount) + "$");
+                            renewPage->ui.totalFees->setText(QString::number(total) + "$");
+                            });
+                    }
+
+                    connect(renewPage->ui.confirm, &QPushButton::clicked, this, [=]() {
+                        if (group->checkedButton() == nullptr) {
+                            return;
+                        }
+                        renewPage->close();
+                        });
+
                     qDebug() << "Renew clicked for" << name;
                     });
             }
@@ -970,7 +1063,260 @@ XFitGym::XFitGym(QWidget* parent)
             man_members->ui.scrollArea->setWidget(scrollWidget);
             man_members->ui.scrollArea->setWidgetResizable(true);
             man_home->ui.Pages->setCurrentIndex(2);
+        });
+        
+        //coach homepage control panel
+        connect(coach_home->ui.MyClasses, &QPushButton::clicked, this, [=]() {
+            QWidget* scrollWidget = new QWidget();
+            scrollWidget->setObjectName("scrollWidget");
+            scrollWidget->setStyleSheet("QWidget#scrollWidget{background-color: #1e1e1e;}");
+
+            QGridLayout* grid = new QGridLayout(scrollWidget);
+            grid->setSpacing(20);
+            grid->setContentsMargins(20, 20, 20, 20);
+
+            int numStaff = 5;
+            QList<Cards*> staffCards;
+            for (int i = 0; i < numStaff; i++) {
+                QString className = "Biceps Class";
+                QString date_time = "5/5/2025    7:00 PM";
+                QString coachName = "Coach: Khalx";
+                int attend = 30;
+                int max = 40;
+
+                Cards* staffCard = new Cards(className, date_time, coachName, attend, max, scrollWidget);
+                staffCards.append(staffCard);
+
+                QPushButton* cancelBtn = new QPushButton("Cancel", staffCard);
+                cancelBtn->setStyleSheet(R"(
+            QPushButton {
+                background-color: #E53935; 
+                color: white; 
+                font-family: 'Futura';
+                padding: 5px;
+                border-radius: 5px;
+                min-width: 80px;
+            }
+            QPushButton:hover {
+                background-color: #EF5350;
+            }
+            QPushButton:pressed {
+                background-color: #C62828;
+            }
+        )");
+
+                staffCard->buttonLayout->addWidget(cancelBtn);
+
+                int row = i / 3;
+                int col = i % 3;
+                grid->addWidget(staffCard, row, col);
+
+                connect(cancelBtn, &QPushButton::clicked, this, [=]() {
+                    grid->removeWidget(staffCard);
+                    staffCard->deleteLater();
+                    reorganizeGrid(grid, nullptr);
+                    });
+            }
+
+            if (coach_classes->ui.scrollArea->widget()) {
+                coach_classes->ui.scrollArea->widget()->deleteLater();
+            }
+
+            coach_classes->ui.scrollArea->setWidget(scrollWidget);
+            classes->ui.scrollArea->setWidgetResizable(true);
+            coach_home->ui.Pages->setCurrentIndex(2);
             });
+        connect(coach_home->ui.Profile, &QPushButton::clicked, this, [=]() {
+            coach_home->ui.Pages->setCurrentIndex(1);
+            });
+        connect(coach_home->ui.Logout, &QPushButton::clicked, this, [=]() {
+            log->ui.Email->setText("");
+            log->ui.ID->setText("");
+            setScrolltoTop();
+            coach_home->ui.Pages->setCurrentIndex(0);
+            ui.Main->setCurrentIndex(0);
+
+
+            });
+
+        //receptionist homepage control panel
+        connect(recep_home->ui.Members, &QPushButton::clicked, this, [=]() {
+            
+                QWidget* scrollWidget = new QWidget();
+                scrollWidget->setObjectName("scrollWidget");
+                scrollWidget->setStyleSheet("QWidget#scrollWidget{background-color: #1e1e1e;}");
+
+                QGridLayout* grid = new QGridLayout(scrollWidget);
+                grid->setSpacing(20);
+                grid->setContentsMargins(20, 20, 20, 20);
+
+                QPushButton* addCard = new QPushButton("+", scrollWidget);
+                addCard->setFixedSize(220, 160);
+                addCard->setStyleSheet(R"(
+                QPushButton {
+                background-color: #2e2e2e;
+                border: 2px dashed #6F3FCC;
+                border-radius: 15px;
+                color: #6F3FCC;
+                font-size: 48pt;
+                }
+                QPushButton:hover {
+                background-color: #3a3a3a;
+                }
+                )");
+                addCard->setCursor(Qt::PointingHandCursor);
+
+                connect(addCard, &QPushButton::clicked, this, []() {
+                    qDebug() << "Add Member Clicked";
+                    });
+
+                int numMembers = 7;
+                for (int i = 0; i < numMembers; i++) {
+                    QString name = "Ahmed Salah " + QString::number(i + 1);
+                    QString phone = "012345678" + QString::number(i);
+                    QString subscription = "Ends: " + QDate::currentDate().addDays(i * 30).toString("dd/MM/yyyy");
+
+                    Cards* card = new Cards(name, phone, subscription, scrollWidget);
+
+                    QPushButton* renewBtn = new QPushButton("Renew", card);
+                    QPushButton* removeBtn = new QPushButton("Remove", card);
+
+                    renewBtn->setStyleSheet(R"(
+                    QPushButton {
+                    background-color: #6F3FCC; 
+                    color: white; 
+                    font-family: 'Futura';
+                    padding: 5px;
+                    border-radius: 5px;
+                    }
+                    QPushButton:hover {
+                    background-color: #8F5FEC;
+                    }
+                    )");
+
+                    removeBtn->setStyleSheet(R"(
+                    QPushButton {
+                    background-color: #E53935; 
+                    color: white; 
+                    font-family: 'Futura';
+                    padding: 5px;
+                    border-radius: 5px;
+                    }
+                    QPushButton:hover {
+                    background-color: #EF5350;
+                    }
+                    )");
+
+                    card->buttonLayout->addWidget(renewBtn);
+                    card->buttonLayout->addWidget(removeBtn);
+
+                    int row = i / 3;
+                    int col = i % 3;
+                    grid->addWidget(card, row, col);
+
+                    connect(removeBtn, &QPushButton::clicked, this, [grid, card, addCard]() {
+                        grid->removeWidget(card);
+
+                        card->deleteLater();
+
+                        reorganizeGrid(grid, addCard);
+                        });
+                    connect(renewBtn, &QPushButton::clicked, this, [=]() {
+                        renewMembers* renewPage = new renewMembers(this);
+
+                        int screenWidth = 960;
+                        int screenHeight = 540;
+
+                        int x = (screenWidth - renewPage->width()) / 2;
+                        int y = (screenHeight - renewPage->height()) / 2;
+
+                        renewPage->setWindowTitle("Subscription renewal");
+                        renewPage->move(x, y);
+                        renewPage->resize(400, 300);
+                        renewPage->show();
+                        renewPage->ui.Title->setText("Renew Subscription For " + name);
+                        QButtonGroup* group = new QButtonGroup(this);
+                        group->setExclusive(true);
+
+                        group->addButton(renewPage->ui.Month);
+                        group->addButton(renewPage->ui.sixMonth);
+                        group->addButton(renewPage->ui.Year);
+                        group->addButton(renewPage->ui.YearVIP);
+
+                        QMap<QPushButton*, double> priceMap = {
+                        { renewPage->ui.Month,    300 },
+                        { renewPage->ui.sixMonth, 1200 },
+                        { renewPage->ui.Year,     2200 },
+                        { renewPage->ui.YearVIP,  4000 }
+                        };
+
+                        for (auto it = priceMap.begin(); it != priceMap.end(); ++it) {
+                            QPushButton* button = it.key();
+                            double price = it.value();
+
+                            connect(button, &QPushButton::clicked, this, [=]() {
+                                double discount = 0.0;
+                                if (true) {
+                                    discount = 0.5 * price;
+                                }
+                                // make your conditions here .. like price == 300 && halfDiscApplied == true
+                                double total = price - discount;
+
+                                renewPage->ui.subFees->setText(QString::number(price) + "$");
+                                renewPage->ui.discount->setText(QString::number(discount) + "$");
+                                renewPage->ui.totalFees->setText(QString::number(total) + "$");
+                                });
+                        }
+
+                        connect(renewPage->ui.confirm, &QPushButton::clicked, this, [=]() {
+                            if (group->checkedButton() == nullptr) {
+                                return;
+                            }
+                            renewPage->close();
+                            });
+
+                        qDebug() << "Renew clicked for" << name;
+                        });
+                }
+
+                int addRow = numMembers / 3;
+                int addCol = numMembers % 3;
+                grid->addWidget(addCard, addRow, addCol);
+
+                if (man_members->ui.scrollArea->widget()) {
+                    man_members->ui.scrollArea->widget()->deleteLater();
+                }
+                recep_members->ui.scrollArea->setWidget(scrollWidget);
+                recep_members->ui.scrollArea->setWidgetResizable(true);
+                recep_home->ui.Pages->setCurrentIndex(2);
+            
+        });
+        connect(recep_home->ui.Classes, &QPushButton::clicked, this, [=]() {
+            recep_classes->ui.coachNames->addItem("Coach Mona");
+            recep_classes->ui.coachNames->addItem("Coach Ahmed");
+            recep_classes->ui.dateTime->setMinimumDate(QDate::currentDate());
+            recep_classes->ui.dateTime->setMaximumDate(QDate::currentDate().addDays(30));
+            recep_classes->ui.className->setMaxLength(20);
+            recep_classes->ui.classCapacity->setValidator(new QIntValidator(0, 999, this));
+            recep_home->ui.Pages->setCurrentIndex(3);
+        });
+        connect(recep_home->ui.News, &QPushButton::clicked, this, [=]() {
+            recep_home->ui.Pages->setCurrentIndex(4);
+
+        });
+        connect(recep_home->ui.Profile, &QPushButton::clicked, this, [=]() {
+            recep_home->ui.Pages->setCurrentIndex(1);
+        });
+        connect(recep_home->ui.Logout, &QPushButton::clicked, this, [=]() {
+            log->ui.Email->setText("");
+            log->ui.ID->setText("");
+            setScrolltoTop();
+            recep_home->ui.Pages->setCurrentIndex(0);
+            ui.Main->setCurrentIndex(0);
+
+
+            });
+
         connect(user_Profile->ui.viewPlans, &QPushButton::clicked, this, [=]() {
             home->ui.Pages->setCurrentIndex(1);
             });
@@ -1052,7 +1398,32 @@ XFitGym::XFitGym(QWidget* parent)
 
 
             });
+        connect(recep_classes->ui.confirm, &QPushButton::clicked, this, [=]() {
 
+            if (recep_classes->ui.coachNames->currentIndex() == 0 || recep_classes->ui.className->text().isEmpty() || recep_classes->ui.classCapacity->text().isEmpty()) {
+                return;
+            }
+
+            QString coachName = recep_classes->ui.coachNames->currentText();
+            QString className = recep_classes->ui.className->text();
+            QString classCapacity = recep_classes->ui.classCapacity->text();
+            QString classDate = recep_classes->ui.dateTime->date().toString("yyyy-MM-dd");
+            QString classTime = recep_classes->ui.dateTime->time().toString("hh:mm AP");
+            //QString classID = QString::number( 201 + vectorOfSessions.size());
+
+            recep_classes->ui.coachNames->setCurrentIndex(0);
+            recep_classes->ui.classCapacity->clear();
+            recep_classes->ui.className->clear();
+            recep_classes->ui.dateTime->setDateTime(recep_classes->ui.dateTime->minimumDateTime());
+
+         });
+        connect(recep_news->ui.submit, &QPushButton::clicked, this, [=]() {
+            QString news = recep_news->ui.News->toPlainText();
+
+            recep_news->ui.News->clear();
+            recep_news->ui.image->clear();
+
+        });
 
     
 }

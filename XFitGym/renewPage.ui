@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>renewMembersClass</class>
+ <widget class="QWidget" name="renewMembersClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>240</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:#1e1e1e;</string>
+  </property>
+  <widget class="QPushButton" name="Month">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>60</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Futura</family>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: #2c2c2c;  
+    color: white;
+    border: 2px solid #2c2c2c;
+    border-radius: 6px;
+}
+
+QPushButton:hover {
+    background-color: #8B50FF ; 
+    border: 2px solid #8B50FF ;
+    color: white;
+}
+
+QPushButton:pressed {
+    background-color: #6F3FCC; 
+}
+QPushButton:checked {
+    background-color: #6F3FCC;
+    border: 2px solid #6F3FCC;
+    color: white;
+}</string>
+   </property>
+   <property name="text">
+    <string>1-Month</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="sixMonth">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>100</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Futura</family>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: #2c2c2c;  
+    color: white;
+    border: 2px solid #2c2c2c;
+    border-radius: 6px;
+}
+
+QPushButton:hover {
+    background-color: #8B50FF ; 
+    border: 2px solid #8B50FF ;
+    color: white;
+}
+
+QPushButton:pressed {
+    background-color: #6F3FCC; 
+}
+QPushButton:checked {
+    background-color: #6F3FCC;
+    border: 2px solid #6F3FCC;
+    color: white;
+}</string>
+   </property>
+   <property name="text">
+    <string>6-Months</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="Year">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>140</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Futura</family>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: #2c2c2c;  
+    color: white;
+    border: 2px solid #2c2c2c;
+    border-radius: 6px;
+}
+
+QPushButton:hover {
+    background-color: #8B50FF ; 
+    border: 2px solid #8B50FF ;
+    color: white;
+}
+
+QPushButton:pressed {
+    background-color: #6F3FCC; 
+}
+QPushButton:checked {
+    background-color: #6F3FCC;
+    border: 2px solid #6F3FCC;
+    color: white;
+}</string>
+   </property>
+   <property name="text">
+    <string>1-Year</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="YearVIP">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>180</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Futura</family>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: #2c2c2c;  
+    color: white;
+    border: 2px solid #2c2c2c;
+    border-radius: 6px;
+}
+
+QPushButton:hover {
+    background-color: #8B50FF ; 
+    border: 2px solid #8B50FF ;
+    color: white;
+}
+
+QPushButton:pressed {
+    background-color: #6F3FCC; 
+}
+QPushButton:checked {
+    background-color: #6F3FCC;
+    border: 2px solid #6F3FCC;
+    color: white;
+}</string>
+   </property>
+   <property name="text">
+    <string>1-Year VIP</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>381</width>
+     <height>221</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">	background-color: #4A4A4A;
+    border: 2px solid #8B50FF ;
+    border-radius: 14px;
+</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Title">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>20</y>
+     <width>381</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Futura</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:transparent;
+color:white;</string>
+   </property>
+   <property name="text">
+    <string>Renew Subscription For </string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>80</y>
+     <width>151</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Futura</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:transparent;
+color:white;</string>
+   </property>
+   <property name="text">
+    <string>Subscription fees:</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>110</y>
+     <width>111</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Futura</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:transparent;
+color:white;</string>
+   </property>
+   <property name="text">
+    <string>Discount:</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>139</y>
+     <width>101</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Futura</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:transparent;
+color:white;</string>
+   </property>
+   <property name="text">
+    <string>Total Fees:</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="subFees">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>80</y>
+     <width>111</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Futura</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:transparent;
+color:white;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="discount">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>110</y>
+     <width>111</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Futura</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:transparent;
+color:white;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="totalFees">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>140</y>
+     <width>111</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Futura</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:transparent;
+color:white;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="confirm">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>180</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Futura</family>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: #2c2c2c;  
+    color: white;
+    border: 2px solid #2c2c2c;
+    border-radius: 6px;
+}
+
+QPushButton:hover {
+    background-color: #8B50FF ; 
+    border: 2px solid #8B50FF ;
+    color: white;
+}
+
+QPushButton:pressed {
+    background-color: #6F3FCC; 
+}
+</string>
+   </property>
+   <property name="text">
+    <string>Confirm</string>
+   </property>
+  </widget>
+  <zorder>label</zorder>
+  <zorder>Month</zorder>
+  <zorder>sixMonth</zorder>
+  <zorder>Year</zorder>
+  <zorder>YearVIP</zorder>
+  <zorder>Title</zorder>
+  <zorder>label_3</zorder>
+  <zorder>label_4</zorder>
+  <zorder>label_5</zorder>
+  <zorder>subFees</zorder>
+  <zorder>discount</zorder>
+  <zorder>totalFees</zorder>
+  <zorder>confirm</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
