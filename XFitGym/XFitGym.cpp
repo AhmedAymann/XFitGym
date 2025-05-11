@@ -170,9 +170,7 @@ XFitGym::XFitGym(QWidget* parent)
         user_Profile->ui.Name->setText(Login::membersData[id].name);
         user_Profile->ui.DOB->setText(Login::membersData[id].DateOFBirth);
         if (Login::membersData[id].sub.type.isEmpty()) {
-            user_Profile->ui.ID->setText(Login::membersData[id].id);
-            user_Profile->ui.Name->setText(Login::membersData[id].name);
-            user_Profile->ui.DOB->setText(Login::membersData[id].DateOFBirth);
+            Login::membersData[id].sub.type = "NoSubscription";
             user_Profile->ui.Plan->setText("No Subscription");
 
         }
@@ -828,8 +826,8 @@ XFitGym::XFitGym(QWidget* parent)
         connect(man_home->ui.Feedback, &QPushButton::clicked, this, [=]() {
             setScrolltoTop();
             //replace true with the condition man_feedbackVector.isEmpty()
-
-            if (false) {
+            stack<QString> managerfeedback = Feedback::FeedBack;
+            if (managerfeedback.empty()) {
                 man_feedback->ui.emptyMessage->setVisible(true);
                 home->ui.Pages->setCurrentIndex(4);
                 return;
@@ -843,7 +841,7 @@ XFitGym::XFitGym(QWidget* parent)
             layout->setAlignment(Qt::AlignTop);
 
             //dynamically generating the feedbacks
-            for (int i = 0; i < 5; i++) {
+            while (!managerfeedback.empty()) {
                 QWidget* feedback = new QWidget(feedbackWidget);
                 feedback->setObjectName("feedback");
                 feedback->setStyleSheet("#feedback {"
@@ -852,7 +850,7 @@ XFitGym::XFitGym(QWidget* parent)
                     "border-radius: 14px;"
                     "}");
                 QLabel* label = new QLabel(feedback);
-                label->setText(QString("test."));
+                label->setText(QString(managerfeedback.top()));
                 label->setWordWrap(true);
                 label->setStyleSheet("color: white; font: 20pt 'DM Serif Display'; background-color:transparent;");
                 label->setFixedWidth(feedbackWidget->width() - 40);
@@ -861,6 +859,7 @@ XFitGym::XFitGym(QWidget* parent)
                 itemLayout->addWidget(label);
                 label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
                 layout->addWidget(feedback);
+                managerfeedback.pop();
             }
 
             feedbackWidget->setLayout(layout);

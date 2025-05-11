@@ -2,7 +2,6 @@
 #include <QFile>
 #include <QTextStream>
 
-stack<QString> Feedback::FeedBack;
 Feedback::Feedback(QWidget* parent)
     : QWidget(parent)
 {
@@ -11,6 +10,7 @@ Feedback::Feedback(QWidget* parent)
 }
 Feedback::~Feedback()
 {}
+stack<QString> Feedback::FeedBack;
 
 void Feedback::saveFeedBack()
 {

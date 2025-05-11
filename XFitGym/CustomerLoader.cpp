@@ -50,6 +50,7 @@ map<QString,Customer> CustomerLoader::LoadCustomersFromFile(const QString& filen
             c.sub.priceAfterDiscount = price;
         }
         else {
+            c.sub.type = "NoSubscription";
             ++index;
         }
 
@@ -71,12 +72,14 @@ map<QString,Customer> CustomerLoader::LoadCustomersFromFile(const QString& filen
             QStringList sessionEntries = mainParts[2].split(';');
             for (const QString& entry : sessionEntries) {
                 QStringList fields = entry.split(',');
-                if (fields.size() == 4) {
+                if (fields.size() == 5) {
                     TrainingSession ts;
                     ts.name = fields[0].toStdString();
                     ts.coachname = fields[1];
                     ts.date = QDate::fromString(fields[2], "yyyy-MM-dd");
                     ts.time = fields[3];
+                    ts.id = fields[4].toInt();
+
                     c.AddTrainingSession(ts);
                 }
             }

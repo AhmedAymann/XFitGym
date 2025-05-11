@@ -1,47 +1,8 @@
 77,Your Gym Membership Has Expired
 88,Your Gym Membership Has Expired
-99,this is my first notification
-99,this is my second notification
-99,You Have 10 Days Left in Your Subscription
-99,You Have 9 Days Left in Your Subscription
-99,You Have 8 Days Left in Your Subscription
-99,You Have 7 Days Left in Your Subscription
-99,You Have 6 Days Left in Your Subscription
-99,You Have 5 Days Left in Your Subscription
-99,You Have 4 Days Left in Your Subscription
-99,You Have 3 Days Left in Your Subscription
-99,You Have 2 Days Left in Your Subscription
-99,You Have 1 Days Left in Your Subscription
-99,You Have 0 Days Left in Your Subscription
-99,You Have 10 Days Left in Your Subscription
-99,You Have 9 Days Left in Your Subscription
-99,You Have 8 Days Left in Your Subscription
-99,You Have 7 Days Left in Your Subscription
-99,You Have 6 Days Left in Your Subscription
-99,You Have 5 Days Left in Your Subscription
-99,You Have 4 Days Left in Your Subscription
-99,You Have 3 Days Left in Your Subscription
-99,You Have 2 Days Left in Your Subscription
-99,You Have 1 Days Left in Your Subscription
 99,You Have 0 Days Left in Your Subscription
 99,Your Gym Membership Has Expired
-99,You Have 10 Days Left in Your Subscription
-99,You Have 9 Days Left in Your Subscription
-99,You Have 8 Days Left in Your Subscription
-99,You Have 7 Days Left in Your Subscription
-99,You Have 6 Days Left in Your Subscription
-99,You Have 5 Days Left in Your Subscription
-99,You Have 4 Days Left in Your Subscription
-99,You Have 3 Days Left in Your Subscription
-99,You Have 2 Days Left in Your Subscription
-99,You Have 1 Days Left in Your Subscription
-99,You Have 0 Days Left in Your Subscription
 101,Your Gym Membership Has Expired
-103,You Have 5 Days Left in Your Subscription
-103,You Have 4 Days Left in Your Subscription
-103,You Have 3 Days Left in Your Subscription
-103,You Have 2 Days Left in Your Subscription
-103,You Have 1 Days Left in Your Subscription
 103,You Have 0 Days Left in Your Subscription
 103,Your Gym Membership Has Expired
 103,You Have 0 Days Left in Your Subscription
