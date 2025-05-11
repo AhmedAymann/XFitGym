@@ -65,5 +65,3 @@ void Customer::CancelTrainingSession(int sessionId)
     }
     bookedsessions = bookedsessions2;
 }
-
-

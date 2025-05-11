@@ -2,7 +2,8 @@
 
 ProgramClock::ProgramClock()
 {
-    currentDate = QDate::currentDate();
+    currentDate = QDate(2025, 1, 1);
+    //currentDate = QDate::currentDate();
 }
 
 void ProgramClock::Tick()

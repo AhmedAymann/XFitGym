@@ -1,5 +1,8 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_dashboard.h"
+#include <vector>
+
+using namespace std;
 
 class Dashboard : public QWidget
 {
@@ -9,7 +12,8 @@ public:
 
     QFrame* cells[30];
 
-    void setAttendance(int day, bool attended);
+    void setAttendance(int day, vector<bool> attendance);
+
     Dashboard(QWidget* parent = nullptr);
     ~Dashboard();
     Ui::DashboardClass ui;

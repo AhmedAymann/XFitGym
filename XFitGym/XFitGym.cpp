@@ -132,6 +132,13 @@ XFitGym::XFitGym(QWidget* parent)
     connect(log->ui.Login, &QPushButton::clicked, this, [=]() {
         QString username = log->ui.Email->text();
         QString id = log->ui.ID->text();
+        
+        currentUserID = id;
+
+        qDebug() << currentUserID << "<-- User id in Connect";
+        Login::membersData[currentUserID].attendanceFlag = true;
+
+
 
         if (username == "manager" && id == "1") {
             ui.Main->setCurrentIndex(2); 
@@ -233,8 +240,8 @@ XFitGym::XFitGym(QWidget* parent)
             QString Cval = QString::number(Cvalue);
             dash->ui.CCounter->setText(Cval);
             Cgauge->setValue(Cvalue);
-            /*  Attendance Marking
-            dash->setAttendance(num, true);*/
+             
+            
             if (true)
             {
                 setScrolltoTop();

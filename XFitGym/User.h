@@ -2,6 +2,7 @@
 #include<iostream>
 #include<QString.h>
 using namespace std;
+
 class User {
 public:
 
