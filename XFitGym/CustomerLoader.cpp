@@ -74,7 +74,7 @@ map<QString,Customer> CustomerLoader::LoadCustomersFromFile(const QString& filen
                 QStringList fields = entry.split(',');
                 if (fields.size() == 5) {
                     TrainingSession ts;
-                    ts.name = fields[0].toStdString();
+                    ts.name = fields[0];
                     ts.coachname = fields[1];
                     ts.date = QDate::fromString(fields[2], "yyyy-MM-dd");
                     ts.time = fields[3];

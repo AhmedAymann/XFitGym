@@ -326,20 +326,21 @@ XFitGym::XFitGym(QWidget* parent)
 
             QGridLayout* grid = new QGridLayout(scrollWidget);
 
-            int numCards = 13;
-            for (int i = 0; i < numCards; i++) {
-                QString className = "Biceps Class";
-                QString date_time = "5/5/2025    7:00 PM";
-                QString coachName = "Coach: Khalx";
-                int attend = 30;
-                int max = 40;
+           
+            int i = 0;
+            for (auto a:Classes::allsessions) {
+                QString className = a.second.name;
+                QString date_time = a.second.date.toString("yyyy-MM-dd")+"    "+a.second.time;
+                QString coachName = a.second.coachname;
+                int attend = a.second.size;
+                int max = a.second.capacity;
 
                 Cards* card = new Cards(className, date_time, coachName, attend, max);
                 QPushButton* waitlist = new QPushButton("Waitlist");
                 QPushButton* book = new QPushButton("Book");
                 //************************
                 //  replace true with (attendedCounter < maxSize)
-                if (i < 3)
+                if (attend < max)
                 {
                     book->setStyleSheet("background-color:#6F3FCC ;font-family: 'Futura'; color: white;");
 
@@ -362,12 +363,41 @@ XFitGym::XFitGym(QWidget* parent)
                 int row = i / 3;
                 int col = i % 3;
                 grid->addWidget(card, row, col);
-
                 QObject::connect(waitlist, &QPushButton::clicked, [=]() {
+                    Classes::allsessions[a.first].WaitlistIds.push_back(user_Profile->ui.ID->text().toInt());
+                    qDebug() << Classes::allsessions[a.first].WaitlistIds.back();
+                    int size = Classes::allsessions[a.first].WaitlistIds.size();
+                    set <int>check;
+                    for (auto b: Classes::allsessions[a.first].WaitlistIds)
+                    {
+                        check.insert(b);
+                    }
+                    if (check.size() != size) 
+                    {
+                        Classes::allsessions[a.first].WaitlistIds.pop_back();
+                    }
+
                     });
                 QObject::connect(book, &QPushButton::clicked, [=]() {
-                    qDebug() << coachName;
+                    TrainingSession tr = a.second;
+                    Login::membersData[user_Profile->ui.ID->text()].AddTrainingSession(tr);
+                    
+
+                    queue<TrainingSession> bookedsession = Login::membersData[user_Profile->ui.ID->text()].bookedsessions;
+                    set<int>checkin;
+                    int size = bookedsession.size();
+                    while (!bookedsession.empty()) 
+                    {
+                        checkin.insert(bookedsession.front().id);
+                        bookedsession.pop();
+                    }
+                    if (checkin.size() != size)
+                    {
+                        Login::membersData[user_Profile->ui.ID->text()].CancelTrainingSession(a.first);
+                    }
+
                     });
+                i++;
             }
 
             scrollWidget->setLayout(grid);
@@ -476,8 +506,11 @@ XFitGym::XFitGym(QWidget* parent)
                 user_Profile->ui.messageClass->setVisible(true);
                 // user_Profile->ui.messageCourt->setVisible(true);
                 home->ui.Pages->setCurrentIndex(3);
+                QLayout* layout = user_Profile->ui.scrollAreaWidgetContents->layout();
+                delete user_Profile->ui.scrollAreaClass->widget();
                 return;
             }
+            user_Profile->ui.messageClass->setVisible(false);
 
 
             //dynamically generating the Classes
@@ -505,16 +538,22 @@ XFitGym::XFitGym(QWidget* parent)
                     "}"
                 );
 
-                QLabel* className = new QLabel(QString::fromStdString(bookedsession.front().name), activeClass);
+                QLabel* className = new QLabel(bookedsession.front().name, activeClass);
                 className->setStyleSheet("color: white;font-family: 'Futura'; font-weight: bold; font-size: 14pt; background: transparent;");
                 className->adjustSize();
                 className->move(15, 10);
 
-                QLabel* coach = new QLabel(bookedsession.front().coachname, activeClass);
-                coach->setStyleSheet("color: white;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
-                coach->adjustSize();
-                coach->move(15, className->y() + className->height() + 5);  // just below class name
+               QLabel* coach = new QLabel(bookedsession.front().coachname, activeClass);
+               coach->setStyleSheet("color: white;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
+               coach->adjustSize();
+               coach->move(15, className->y() + className->height() + 5);  // just below class name
 
+
+               QLabel* ID = new QLabel(QString::number(bookedsession.front().id), activeClass);
+               ID->setStyleSheet("color: #CCCCCC;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
+               ID->adjustSize();
+               ID->move(coach->x() + coach->width() + 50, coach->y());
+               
                 QLabel* date = new QLabel(bookedsession.front().date.toString("yyyy-MM-dd"), activeClass);
                 date->setStyleSheet("color: #CCCCCC;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
                 date->adjustSize();
@@ -554,6 +593,7 @@ XFitGym::XFitGym(QWidget* parent)
                 layoutClass->addWidget(activeClass);
 
                 QObject::connect(cancelClass, &QPushButton::clicked, [=]() {
+                    Login::membersData[log->ui.ID->text()].CancelTrainingSession(ID->text().toInt());
                     activeClass->deleteLater();
                     });
                 bookedsession.pop();
@@ -1029,6 +1069,7 @@ void XFitGym::setScrolltoTop()
 
 void XFitGym::save()
 {
+    classes->savesession();
     notifications->saveNotifications();
     feedback->saveFeedBack();
     log->saveData();
@@ -1037,6 +1078,7 @@ void XFitGym::save()
 
 void XFitGym::load()
 {
+    classes->loadsession();
     notifications->loadNotifications();
     feedback->loadFeedBack();
     padel->loadnews();
@@ -1110,7 +1152,7 @@ Cards::Cards(QString title, QString line1, QString line2, int attendees, int max
     QLabel* line1Label = new QLabel(line1);
     QLabel* line2Label = new QLabel(line2);
 
-    titleLabel->setStyleSheet("font-size: 18pt; font-family: 'Futura'; color: white;");
+    titleLabel->setStyleSheet("font-size: 13pt; font-family: 'Futura'; color: white;");
     line1Label->setStyleSheet("font-family: 'DM Serif Display'; color: white;");
     line2Label->setStyleSheet("font-family: 'DM Serif Display'; color: white;");
 

@@ -72,13 +72,13 @@ void Login::saveData()
             while (!tempQueue.empty()) {
                 const TrainingSession& session = tempQueue.front();
                 QString dateStr = session.date.toString("yyyy-MM-dd");
-                trainingEntries << QString::fromStdString(session.name) + "," + session.coachname + "," + dateStr + "," + session.time + "," + QString::number(session.id);
+                trainingEntries << session.name + "," + session.coachname + "," + dateStr + "," + session.time + "," + QString::number(session.id);
                 tempQueue.pop();
             }
 
             trainingPart = trainingEntries.join(';');
         }
-
+        //
         // Final line
         QString fullLine = basePart + "|" + courtPart + "|" + trainingPart;
         out << fullLine << "\n";

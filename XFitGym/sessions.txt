@@ -1,0 +1,11 @@
+200,Pilates,50,0,Coach Mona,2025-05-06,11:00
+201,Strength Training,50,50,Coach Ali,2025-05-15,16:00
+202,Yoga Basics,50,0,Coach Laila,2025-05-16,10:00
+203,Cardio Blast,50,0,Coach Sam,2025-05-17,18:30
+204,Pilates Core,50,0,Coach Mona,2025-05-18,09:00
+205,HIIT Challenge,50,0,Coach Omar,2025-05-19,17:00
+206,Boxing Fundamentals,50,0,Coach Karim,2025-05-20,19:00
+207,Spinning Power,50,0,Coach Sara,2025-05-21,08:00
+208,Zumba Fun,50,0,Coach Nada,2025-05-22,11:30
+209,Flexibility Flow,50,0,Coach Nour,2025-05-23,15:00
+210,Upper Body Strength,50,0,Coach Basel,2025-05-24,14:00

@@ -6,7 +6,7 @@
 class TrainingSession
 {
 public:
-	string name;
+	QString name;
 	int capacity;
 	int size;
 	int id;
@@ -15,5 +15,9 @@ public:
 	QString time;
 
 	deque<int> WaitlistIds;
+
+	TrainingSession(); 
+	TrainingSession(int id,QString name,int capacity,int size,QString coachname,QDate date,QString time);
+
 };
 
