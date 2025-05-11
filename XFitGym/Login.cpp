@@ -87,8 +87,6 @@ void Login::saveData()
     file.close();
 }
 
-
-
  
 bool Login::CheckLogin (QString& username, QString& id)
 {
@@ -98,3 +96,4 @@ bool Login::CheckLogin (QString& username, QString& id)
 
     return false;
 }
+

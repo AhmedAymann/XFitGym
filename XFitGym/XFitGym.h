@@ -37,6 +37,8 @@ class XFitGym : public QMainWindow
 
 public:
 
+
+QString currentUserID;
 Login* log;
 Dashboard* dash;
 Gauge* Pgauge;

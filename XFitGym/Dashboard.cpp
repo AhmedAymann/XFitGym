@@ -20,20 +20,35 @@ Dashboard::Dashboard(QWidget* parent)
             ui.AttendanceSheet->addWidget(cell, row, col);
         }
     }
+
+    
 }
 
 //filling cells attended
-void Dashboard::setAttendance(int day, bool attended)
+void Dashboard::setAttendance(int day, vector<bool> attendance)
 {
+    if (day != 0) {
+        day %= 30;
+    }
+
+    if (day % 30 == 0) {
+        for (int i = 0; i < 30; i++) {
+            cells[i]->setStyleSheet("background-color: transparent; border: 1px solid #8B50FF;");
+        }
+    }
+    
+    for (auto attended : attendance) {
+
     if (day >= 0 && day < 30) {
         if (attended) {
-            day -= 1;
             cells[day]->setStyleSheet("background-color: #6a5acd; border: 1px solid #8B50FF;");
         }
         else {
-            cells[day]->setStyleSheet("background-color: white; border: 1px solid #8B50FF;");
+            cells[day]->setStyleSheet("background-color: #cd5c5c; border: 1px solid #8B50FF;");
         }
     }
+    }
+
 }
 
 Dashboard::~Dashboard()

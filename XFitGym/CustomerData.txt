@@ -1,7 +1,7 @@
 101,sara,adel,2000-09-09,monthly,2025-04-01,2025-05-01,300|2025-05-05,18:00;2025-05-12,20:00|NoTrainingSessions
 102,mohamed,nour,1995-03-22,yearly,2025-01-01,2026-01-01,1200|NoCourtBookings|NoTrainingSessions
-103,lina,saeed,1998-07-15,monthly,2025-04-10,2025-05-10,300|2025-05-03,10:00;2025-05-07,14:00|NoTrainingSessions
+103,lina,saeed,1998-07-15,yearly,2024-01-15,2025-01-15,300|2025-05-03,10:00;2025-05-07,14:00|NoTrainingSessions
 104,omar,mostafa,1985-11-20,NoSubscription|NoCourtBookings|NoTrainingSessions
 177,bas,bassam,2005-05-15,NoSubscription|NoCourtBookings|NoTrainingSessions
-188,ahmed,khalx,1999-08-11,NoSubscription|NoCourtBookings|Strength Training,Coach Ali,2025-05-15,16:00,201
+188,ahmed,khalx,1999-08-11,NoSubscription|NoCourtBookings|NoTrainingSessions
 199,khalx,hoss,1978-10-25,NoSubscription|NoCourtBookings|NoTrainingSessions
