@@ -14,6 +14,7 @@ class Customer : public User
 public: 
 	queue<TrainingSession> bookedsessions;
 	vector <pair<QDate, QString>> bookedCourt;
+
 	
 	Subscription sub;
 
@@ -23,7 +24,7 @@ public:
 	
 	Customer();
 	Customer(QString id, QString email, QString name,QString DateOFBirth);
-	void AddCourtBooking(const QDate& date, const QString& time);
+	void AddCourtBooking(const QString& date, const QString& time);
 	void AddTrainingSession(TrainingSession& session);
 	void CancelPaddleCourt(int courtId);
 	void CancelTrainingSession(int sessionId);
