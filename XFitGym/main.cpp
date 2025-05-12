@@ -18,29 +18,31 @@ Notifications* notifier = nullptr;
 int daysSimulated = 0;
 
 void simulateDay(XFitGym& gui) {
-
-    //Logging Attendance for All customers
-
+    // Logging Attendance for All customers
     for (auto& c : customers) {
-        if (c.second.id == gui.currentUserID) {
-            //c.second.attendanceFlag = true;
+        qDebug() << "Customer of id" << c.second.id << " - gui.currentUserID " << gui.currentUserID;
 
-            c.second.attendance.push_back(true);
+        // Mark attendance as true for the logged-in customer, false for others
+        if (c.second.id == gui.currentUserID) {
+            c.second.attendance.push_back(true);  // Attendance is true for logged-in user
+            qDebug() << "Attendance True for " << c.second.name;
         }
         else {
-            c.second.attendance.push_back(false);
+            c.second.attendance.push_back(false);  // Attendance is false for others
+            qDebug() << "Attendance False for " << c.second.name;
         }
-       
-        qDebug() << gui.currentUserID << "<-- User id in main";
+
+        // Make sure attendance is updated for each customer in the vector
+        qDebug() << "Attendance for " << c.second.name << ": " << c.second.attendance.back();
+
+        qDebug() << "Day: " << daysSimulated << ", Attendance: " << c.second.attendance;
     }
 
-
-
+    // Log current date for simulation
     QDate currentDate = programClock->GetCurrentDate();
     qDebug() << "\n📅 Simulated Date:" << currentDate.toString("yyyy-MM-dd");
 
-
-    //Subscription Deadline Check for all customers
+    // Subscription Deadline Check for all customers
     for (auto& c : customers) {
         int daysLeft = notifier->CheckSubscriptionDeadline(c.second.sub, currentDate);
         qDebug() << "\n DAYS LEFT: " << daysLeft;
@@ -57,21 +59,16 @@ void simulateDay(XFitGym& gui) {
         }
     }
 
-    
-
-    //Checking attendance for all Customers
-    //Then clear the attendance to be ready for the next day
-    for (auto& c : customers) {
-        gui.dash->setAttendance(daysSimulated, c.second.attendance);
-        //c.second.attendanceFlag = false;
+    // Checking attendance for all customers and updating the GUI
+    if (customers.find(gui.currentUserID) != customers.end()) {
+        gui.dash->setAttendance(daysSimulated, customers[gui.currentUserID].attendance);
     }
 
-
-
-    //Moving to the Next Day
+    // Moving to the Next Day
     programClock->Tick();
     daysSimulated++;
 }
+
 
 int main(int argc, char* argv[])
 {
@@ -92,7 +89,7 @@ int main(int argc, char* argv[])
     QObject::connect(timer, &QTimer::timeout, [&]() {
         simulateDay(w);
         });
-    timer->start(3000); // 3 seconds per simulated day
+    timer->start(5000); // 3 seconds per simulated day
 
     return a.exec();
 }

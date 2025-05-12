@@ -11,7 +11,7 @@ class Dashboard : public QWidget
 public:
 
     QFrame* cells[30];
-
+    void clearAttendanceGui();
     void setAttendance(int day, vector<bool> attendance);
 
     Dashboard(QWidget* parent = nullptr);

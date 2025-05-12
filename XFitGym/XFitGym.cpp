@@ -133,10 +133,9 @@ XFitGym::XFitGym(QWidget* parent)
         QString username = log->ui.Email->text();
         QString id = log->ui.ID->text();
         
-        currentUserID = id;
+        
 
-        qDebug() << currentUserID << "<-- User id in Connect";
-        Login::membersData[currentUserID].attendanceFlag = true;
+       
 
 
 
@@ -173,6 +172,10 @@ XFitGym::XFitGym(QWidget* parent)
             QTimer::singleShot(2000, log->ui.warning, &QLabel::hide);
             return;
         }
+
+        currentUserID = Login::membersData[id].id;
+        qDebug() << currentUserID << "<-- User id in Connect";
+
         user_Profile->ui.ID->setText(Login::membersData[id].id);
         user_Profile->ui.Name->setText(Login::membersData[id].name);
         user_Profile->ui.DOB->setText(Login::membersData[id].DateOFBirth);
@@ -776,7 +779,7 @@ XFitGym::XFitGym(QWidget* parent)
             setScrolltoTop();
             home->ui.Pages->setCurrentIndex(0);
             ui.Main->setCurrentIndex(0);
-
+            dash->clearAttendanceGui();
 
             });
 

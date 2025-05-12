@@ -27,29 +27,32 @@ Dashboard::Dashboard(QWidget* parent)
 //filling cells attended
 void Dashboard::setAttendance(int day, vector<bool> attendance)
 {
+
+    for (int i = 0; i < attendance.size(); i++) {
+        qDebug() << "attended on day " << i << " Attendance: " << attendance[i];
+    }
+
+
     if (day != 0) {
         day %= 30;
     }
 
     if (day % 30 == 0) {
-        for (int i = 0; i < 30; i++) {
-            cells[i]->setStyleSheet("background-color: transparent; border: 1px solid #8B50FF;");
-        }
+        clearAttendanceGui();
     }
-    
-    for (auto attended : attendance) {
-
-    if (day >= 0 && day < 30) {
-        if (attended) {
-            cells[day]->setStyleSheet("background-color: #6a5acd; border: 1px solid #8B50FF;");
+        int i = 0;
+        while (i < day) {
+            
+        if (attendance[i]) {
+            cells[i]->setStyleSheet("background-color: #6a5acd; border: 1px solid #8B50FF;");
         }
         else {
-            cells[day]->setStyleSheet("background-color: #cd5c5c; border: 1px solid #8B50FF;");
+            cells[i]->setStyleSheet("background-color: #cd5c5c; border: 1px solid #8B50FF;");
         }
-    }
-    }
-
+        i++;
+        }
 }
+
 
 Dashboard::~Dashboard()
 {}
@@ -90,4 +93,11 @@ void Gauge::paintEvent(QPaintEvent*) {
     painter.setPen(progPen);
     painter.drawArc(rect, 0 * 16, (value * 180 * 16)  / 100);  // Proportion based on value
 
+}
+
+
+void Dashboard::clearAttendanceGui() {
+    for (int i = 0; i < 30; i++) {
+        cells[i]->setStyleSheet("background-color: transparent; border: 1px solid #8B50FF;");
+    }
 }
