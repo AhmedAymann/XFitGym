@@ -67,6 +67,7 @@ void Customer::CancelPaddleCourt(QDate date, QString time)
     vector<pair<QDate, QString>>::iterator it;
     for (it = bookedCourt.begin(); it != bookedCourt.end(); ++it) {
         if (it->first == date && it->second == time) {
+            qDebug() << it->first << " " << it->second;
             bookedCourt.erase(it);
             break;
        }

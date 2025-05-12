@@ -1387,6 +1387,7 @@ XFitGym::XFitGym(QWidget* parent)
                 Login::membersData[user_Profile->ui.ID->text()].AddCourtBooking(padel->selectedDay, padel->selectedTime);
                 padel->selectedSlot->setStyleSheet("background-color: red;border: 1px solid gray;");
                 padel->selectedSlot->setEnabled(false);
+                courtSlotButtons[{padel->selectedDay, padel->selectedTime}] = padel->selectedSlot;
                 padel->selectedSlot = nullptr;
             }
             else {
