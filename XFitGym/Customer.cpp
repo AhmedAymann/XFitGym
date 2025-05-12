@@ -4,6 +4,7 @@
 #include "Login.h"
 #include "Notifications.h"
 #include "Classes.h"
+#include<qtimer.h>
 
 
 
@@ -23,8 +24,34 @@ void Customer::GiveFeedback(QString feedbackText)
     
 }
 
-void Customer::AddCourtBooking(const QDate& date, const QString& time) {
-    bookedCourt.push_back(make_pair(date, time));
+void Customer::AddCourtBooking(const QString& date, const QString& time) {
+
+    QMap<QString, int> dayMap = {
+       {"Mon", Qt::Monday},
+       {"Tue", Qt::Tuesday},
+       {"Wed", Qt::Wednesday},
+       {"Thu", Qt::Thursday},
+       {"Fri", Qt::Friday},
+       {"Sat", Qt::Saturday},
+       {"Sun", Qt::Sunday}
+    };
+
+    QString dayKey = date;
+    if (!dayMap.contains(dayKey)) {
+        qWarning() << "Invalid day name!";
+         
+    }
+
+    QDate today = QDate::currentDate();
+    int todayWeekday = today.dayOfWeek();         // 1 (Mon) to 7 (Sun)
+    int targetWeekday = dayMap[dayKey];
+
+    int daysToAdd = (targetWeekday - todayWeekday + 7) % 7;
+    if (daysToAdd == 0) daysToAdd = 7; // ensure the result is AFTER today
+
+   // return today.addDays(daysToAdd);
+
+    bookedCourt.push_back(make_pair(today.addDays(daysToAdd), time));
 }
 
 void Customer::AddTrainingSession(TrainingSession& session) {

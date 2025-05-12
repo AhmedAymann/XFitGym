@@ -122,6 +122,8 @@ XFitGym::XFitGym(QWidget* parent)
     recep_home->ui.Pages->addWidget(recep_classes);
     recep_home->ui.Pages->addWidget(recep_news);
 
+    vector <pair<QString, QString>> allBookedCourts;
+
     // just for the show password functionality 
     QIcon show = QIcon("assets/showPassword.png");
     QIcon hide = QIcon("assets/hidePassword.png");
@@ -478,19 +480,27 @@ XFitGym::XFitGym(QWidget* parent)
                 for (int c = 0; c < courtCount; c++) {
                     QPushButton* slot = new QPushButton;
                     slot->setFixedSize(60, 40);
-                    slot->setStyleSheet("background-color: white; border: 1px solid gray;");
-
-                    //replace this condition when isBooked
-                    if (t < 5 && c % 2 == 0)
+                    slot->setStyleSheet("background-color: green; border: 1px solid gray;");
+                    
+                    for (auto a : Login::membersData)
                     {
-                        slot->setStyleSheet("background-color: red;border: 1px solid gray;");
-                        slot->setEnabled(false);
+                        for (auto b : a.second.bookedCourt)
+                        {
+                            QString day = b.first.toString("ddd");
+                            QString time = b.second;
+                            if (day == days[c] && time == times[t]) 
+                            {
+                                slot->setStyleSheet("background-color: red;border: 1px solid gray;");
+                                slot->setEnabled(false);
+                            }
+                            else
+                            {
+                                slot->setStyleSheet("background-color: green; border: 1px solid gray;");
+                            }
+                        }
                     }
+                    
 
-                    else
-                    {
-                        slot->setStyleSheet("background-color: green;border: 1px solid gray;");
-                    }
                     grid->addWidget(slot, t + 1, c + 1); // Adding slots to grid
                     QObject::connect(slot, &QPushButton::clicked, [=]() mutable {
                         if (padel->selectedSlot) {
@@ -542,19 +552,32 @@ XFitGym::XFitGym(QWidget* parent)
         connect(home->ui.Profile, &QPushButton::clicked, this, [=]() {
             setScrolltoTop();
             queue<TrainingSession>bookedsession = Login::membersData[user_Profile->ui.ID->text()].bookedsessions;
-
+            vector <pair<QDate, QString>> bookedCourts = Login::membersData[user_Profile->ui.ID->text()].bookedCourt;
 
 
             //change true with (class.empty && courts.empty) .. w e3mel condition di lw7dha w di lw7dha
             if (bookedsession.empty()) {
                 user_Profile->ui.messageClass->setVisible(true);
-                // user_Profile->ui.messageCourt->setVisible(true);
                 home->ui.Pages->setCurrentIndex(3);
                 QLayout* layout = user_Profile->ui.scrollAreaWidgetContents->layout();
                 delete user_Profile->ui.scrollAreaClass->widget();
-                return;
+                
             }
-            user_Profile->ui.messageClass->setVisible(false);
+            else
+            {
+                user_Profile->ui.messageClass->setVisible(false);
+            }
+            if (bookedCourts.empty()) {
+                user_Profile->ui.messageCourt->setVisible(true);
+                home->ui.Pages->setCurrentIndex(3);
+                QLayout* layout = user_Profile->ui.scrollAreaWidgetContents->layout();
+                delete user_Profile->ui.scrollAreaCourt->widget();
+                
+            }
+            else
+            {
+                user_Profile->ui.messageCourt->setVisible(false);
+            }
 
 
             //dynamically generating the Classes
@@ -660,7 +683,7 @@ XFitGym::XFitGym(QWidget* parent)
             layoutCourt->setContentsMargins(10, 10, 10, 10);
             layoutCourt->setSpacing(10);
 
-            for (int i = 0; i < 20; i++) {
+            for (auto a: bookedCourts) {
                 QWidget* activeCourt = new QWidget(Courts);
                 activeCourt->setObjectName("workout");
                 activeCourt->setFixedHeight(70);
@@ -673,17 +696,19 @@ XFitGym::XFitGym(QWidget* parent)
                     "}"
                 );
 
-                QLabel* className = new QLabel("Zumba Class", activeCourt);
+                QLabel* className = new QLabel("Paddel Court", activeCourt);
                 className->setStyleSheet("color: white;font-family: 'Futura'; font-weight: bold; font-size: 14pt; background: transparent;");
                 className->adjustSize();
                 className->move(15, 10);
 
-                QLabel* coach = new QLabel("Coach Ahmed", activeCourt);
+                QLabel* coach = new QLabel("", activeCourt);
                 coach->setStyleSheet("color: white;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
                 coach->adjustSize();
                 coach->move(15, className->y() + className->height() + 5);  // just below class name
-
-                QLabel* date = new QLabel("2025-05-04", activeCourt);
+                
+                QString day = a.first.toString("ddd");
+                QString time = a.second;
+                QLabel* date = new QLabel(day+"    "+time, activeCourt);
                 date->setStyleSheet("color: #CCCCCC;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
                 date->adjustSize();
 
@@ -751,6 +776,7 @@ XFitGym::XFitGym(QWidget* parent)
                 layoutCourt->addWidget(activeCourt);
 
                 QObject::connect(cancelCourt, &QPushButton::clicked, [=]() {
+
                     activeCourt->deleteLater();
                     });
 
@@ -1328,8 +1354,6 @@ XFitGym::XFitGym(QWidget* parent)
             home->ui.Pages->setCurrentIndex(1);
             });
         connect(user_Profile->ui.Cancel, &QPushButton::clicked, this, [=]() {
-            user_Profile->ui.Plan->setText("No Subscription");
-            Login::membersData[log->ui.ID->text()].sub.type = "No Subscription";
             user_Profile->ui.Plan->setText("NoSubscription");
             Login::membersData[log->ui.ID->text()].sub.type = "NoSubscription";
             });
@@ -1356,9 +1380,10 @@ XFitGym::XFitGym(QWidget* parent)
 
             feedback->ui.Feed->clear();
             });
-        connect(padel->ui.BookCourt, &QPushButton::clicked, this, [=]() {
+        connect(padel->ui.BookCourt, &QPushButton::clicked, this, [=,&allBookedCourts]() {
             if (padel->selectedSlot) {
                 qDebug() << "Booked:" << padel->selectedDay << padel->selectedTime;
+                Login::membersData[user_Profile->ui.ID->text()].AddCourtBooking(padel->selectedDay, padel->selectedTime);
                 padel->selectedSlot->setStyleSheet("background-color: red;border: 1px solid gray;");
                 padel->selectedSlot->setEnabled(false);
                 padel->selectedSlot = nullptr;
