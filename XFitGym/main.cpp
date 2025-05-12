@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
     QObject::connect(timer, &QTimer::timeout, [&]() {
         simulateDay(w);
         });
-    timer->start(5000); // 3 seconds per simulated day
+    timer->start(10000); // 3 seconds per simulated day
 
     return a.exec();
 }

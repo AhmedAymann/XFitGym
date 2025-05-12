@@ -1,2 +1,2 @@
-omar is nigger,assets/bookedMembers.png
-omar ,assets/deadImage.jpg
+THis is the news page,assets/bookedMembers.png
+news 2x we are going to sleep,assets/deadImage.jpg

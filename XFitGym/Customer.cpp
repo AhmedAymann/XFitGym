@@ -24,6 +24,8 @@ void Customer::GiveFeedback(QString feedbackText)
     
 }
 
+
+
 void Customer::AddCourtBooking(const QString& date, const QString& time) {
 
     QMap<QString, int> dayMap = {
@@ -42,7 +44,7 @@ void Customer::AddCourtBooking(const QString& date, const QString& time) {
          
     }
 
-    QDate today = QDate::currentDate();
+    QDate today = QDate(2025, 1, 1);
     int todayWeekday = today.dayOfWeek();         // 1 (Mon) to 7 (Sun)
     int targetWeekday = dayMap[dayKey];
 

@@ -3,7 +3,7 @@
 #ifndef PROGRAMCLOCK_H
 #define PROGRAMCLOCK_H
 
-#include <QDate>
+//#include "Customer.h"
 
 class ProgramClock
 {
