@@ -60,9 +60,11 @@ map<QString,Customer> CustomerLoader::LoadCustomersFromFile(const QString& filen
             for (const QString& entry : courtEntries) {
                 QStringList fields = entry.split(',');
                 if (fields.size() == 2) {
-                    QString date = fields[0];
+                    QDate date = QDate::fromString(fields[0], "yyyy-MM-dd");
+                    QString dayName = date.toString("ddd");  
+                    qDebug() << dayName;
                     QString time = fields[1];
-                    c.AddCourtBooking(fields[0], time);
+                    c.AddCourtBooking(dayName, time);
                 }
             }
         }

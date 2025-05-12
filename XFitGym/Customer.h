@@ -27,7 +27,7 @@ public:
 	Customer(QString id, QString email, QString name,QString DateOFBirth);
 	void AddCourtBooking(const QString& date, const QString& time);
 	void AddTrainingSession(TrainingSession& session);
-	void CancelPaddleCourt(int courtId);
+	void CancelPaddleCourt(QDate date, QString time);
 	void CancelTrainingSession(int sessionId);
 	void ReschedulePaddlecourt(int courtId, string newDate, string newTime);
 	void GiveFeedback(QString feedbackText);

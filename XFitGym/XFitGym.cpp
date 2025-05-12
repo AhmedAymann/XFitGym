@@ -122,7 +122,6 @@ XFitGym::XFitGym(QWidget* parent)
     recep_home->ui.Pages->addWidget(recep_classes);
     recep_home->ui.Pages->addWidget(recep_news);
 
-    vector <pair<QString, QString>> allBookedCourts;
 
     // just for the show password functionality 
     QIcon show = QIcon("assets/showPassword.png");
@@ -459,6 +458,8 @@ XFitGym::XFitGym(QWidget* parent)
 
             home->ui.Pages->setCurrentIndex(6);
             });
+        QStringList days = { "Sat", "Sun", "Mon", "Tue", "Wed","Thu" , "Fri" }; // Full week
+        QStringList times = { "12:00", "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00" }; // Updated times from 12:00 to 8:00
         connect(home->ui.Courts, &QPushButton::clicked, this, [=]() {
             setScrolltoTop();
             qDebug() << "Padel Courts";
@@ -466,8 +467,7 @@ XFitGym::XFitGym(QWidget* parent)
             QWidget courts;
             // Create the grid layout
             QGridLayout* grid = new QGridLayout;
-            QStringList days = { "Sat", "Sun", "Mon", "Tue", "Wed","Thu" , "Fri" }; // Full week
-            QStringList times = { "12:00", "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00" }; // Updated times from 12:00 to 8:00
+            
             int courtCount = 7;
 
             // Headers for weekdays (Mon, Tue, ..., Sun)
@@ -496,10 +496,7 @@ XFitGym::XFitGym(QWidget* parent)
                                 slot->setStyleSheet("background-color: red;border: 1px solid gray;");
                                 slot->setEnabled(false);
                             }
-                            else
-                            {
-                                slot->setStyleSheet("background-color: green; border: 1px solid gray;");
-                            }
+                            
                         }
                     }
                     
@@ -515,6 +512,8 @@ XFitGym::XFitGym(QWidget* parent)
                         padel->selectedTime = times[t];
                         slot->setStyleSheet("background-color: yellow;border: 1px solid gray;"); // Highlight as selected
                         });
+                    courtSlotButtons[{days[c], times[t]}] = slot;
+
                 }
             }
 
@@ -699,16 +698,11 @@ XFitGym::XFitGym(QWidget* parent)
                     "}"
                 );
 
-                QLabel* className = new QLabel("Paddel Court", activeCourt);
-                className->setStyleSheet("color: white;font-family: 'Futura'; font-weight: bold; font-size: 14pt; background: transparent;");
-                className->adjustSize();
-                className->move(15, 10);
+                QLabel* court = new QLabel("Paddel Court", activeCourt);
+                court->setStyleSheet("color: white;font-family: 'Futura'; font-weight: bold; font-size: 14pt; background: transparent;");
+                court->adjustSize();
+                court->move(15, 10);
 
-                QLabel* coach = new QLabel("", activeCourt);
-                coach->setStyleSheet("color: white;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
-                coach->adjustSize();
-                coach->move(15, className->y() + className->height() + 5);  // just below class name
-                
                 QString day = a.first.toString("ddd");
                 QString time = a.second;
                 QLabel* date = new QLabel(day+"    "+time, activeCourt);
@@ -773,13 +767,17 @@ XFitGym::XFitGym(QWidget* parent)
                 QTimer::singleShot(0, [=]() {
                     int w = activeCourt->width();
                     int h = activeCourt->height();
-                    date->move((w - date->width()) / 2 + 15, coach->y());
+                    date->move((w - date->width()) / 2 + 15, court->y() + court->height() + 5);
                     });
 
                 layoutCourt->addWidget(activeCourt);
 
                 QObject::connect(cancelCourt, &QPushButton::clicked, [=]() {
+                    Login::membersData[user_Profile->ui.ID->text()].CancelPaddleCourt(a.first,time);
 
+                    courtSlotButtons[{day, time}]->setStyleSheet("background-color: green;border: 1px solid gray;");
+                    courtSlotButtons[{day, time}]->setEnabled(true);
+                    
                     activeCourt->deleteLater();
                     });
 
@@ -1383,7 +1381,7 @@ XFitGym::XFitGym(QWidget* parent)
 
             feedback->ui.Feed->clear();
             });
-        connect(padel->ui.BookCourt, &QPushButton::clicked, this, [=,&allBookedCourts]() {
+        connect(padel->ui.BookCourt, &QPushButton::clicked, this, [=]() {
             if (padel->selectedSlot) {
                 qDebug() << "Booked:" << padel->selectedDay << padel->selectedTime;
                 Login::membersData[user_Profile->ui.ID->text()].AddCourtBooking(padel->selectedDay, padel->selectedTime);
@@ -1433,6 +1431,8 @@ XFitGym::XFitGym(QWidget* parent)
 
 
             });
+
+
         connect(recep_classes->ui.confirm, &QPushButton::clicked, this, [=]() {
 
             if (recep_classes->ui.coachNames->currentIndex() == 0 || recep_classes->ui.className->text().isEmpty() || recep_classes->ui.classCapacity->text().isEmpty()) {
@@ -1452,6 +1452,8 @@ XFitGym::XFitGym(QWidget* parent)
             recep_classes->ui.dateTime->setDateTime(recep_classes->ui.dateTime->minimumDateTime());
 
          });
+
+
         connect(recep_news->ui.submit, &QPushButton::clicked, this, [=]() {
             QString news = recep_news->ui.News->toPlainText();
 

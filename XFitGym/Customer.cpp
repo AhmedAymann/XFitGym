@@ -38,15 +38,15 @@ void Customer::AddCourtBooking(const QString& date, const QString& time) {
        {"Sun", Qt::Sunday}
     };
 
-    QString dayKey = date;
-    if (!dayMap.contains(dayKey)) {
+    
+    if (!dayMap.contains(date)) {
         qWarning() << "Invalid day name!";
          
     }
 
     QDate today = QDate(2025, 1, 1);
     int todayWeekday = today.dayOfWeek();         // 1 (Mon) to 7 (Sun)
-    int targetWeekday = dayMap[dayKey];
+    int targetWeekday = dayMap[date];
 
     int daysToAdd = (targetWeekday - todayWeekday + 7) % 7;
     if (daysToAdd == 0) daysToAdd = 7; // ensure the result is AFTER today
@@ -59,6 +59,18 @@ void Customer::AddCourtBooking(const QString& date, const QString& time) {
 void Customer::AddTrainingSession(TrainingSession& session) {
     bookedsessions.push(session);
     Classes::allsessions[session.id].size++;
+}
+
+void Customer::CancelPaddleCourt(QDate date, QString time)
+{
+    
+    vector<pair<QDate, QString>>::iterator it;
+    for (it = bookedCourt.begin(); it != bookedCourt.end(); ++it) {
+        if (it->first == date && it->second == time) {
+            bookedCourt.erase(it);
+            break;
+       }
+    }
 }
 
 void Customer::CancelTrainingSession(int sessionId)

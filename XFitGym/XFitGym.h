@@ -65,6 +65,8 @@ Receptionist_homepage* recep_home;
 Receptionist_members* recep_members;
 Receptionist_classes* recep_classes;
 Receptionist_news* recep_news;
+QMap<QPair<QString, QString>, QPushButton*> courtSlotButtons;
+
 
     XFitGym(QWidget *parent = nullptr);
     ~XFitGym();
