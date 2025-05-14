@@ -57,6 +57,7 @@ Manager_staff* man_staff;
 Manager_tournaments* man_tournaments;
 Manager_feedback* man_feedback;
 renewMembers* renewPage;
+addMembers* addPage;
 Staff_profile* manprofile;
 Staff_profile* coachprofile;
 Staff_profile* recepprofile;

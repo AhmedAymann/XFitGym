@@ -201,6 +201,9 @@
     <QtUic Include="receptionist_news.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="addPage.ui">
+      <Filter>Header Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Login.h">
@@ -270,6 +273,7 @@
     <Text Include="sessions.txt" />
     <Text Include="News.txt" />
     <Text Include="Notifications.txt" />
+    <Text Include="staff.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="User.h">
