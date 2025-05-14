@@ -4,7 +4,6 @@
 #include "Customer.h"
 #include "Coach.h"
 #include "Receptionist.h"
-#include "Tournament.h"
 #include<stack>
 class Manager : public Staff
 {
@@ -25,6 +24,6 @@ public:
 	void AddReceptionist(Receptionist receptionist);
 	void RemoveReceptionist(int receptionistId);
 
-	void AddTournament(Tournament tournament);
+	
 };
 

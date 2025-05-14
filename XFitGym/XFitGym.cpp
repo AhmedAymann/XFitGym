@@ -467,7 +467,6 @@ XFitGym::XFitGym(QWidget* parent)
             QWidget courts;
             // Create the grid layout
             QGridLayout* grid = new QGridLayout;
-            
             int courtCount = 7;
 
             // Headers for weekdays (Mon, Tue, ..., Sun)
@@ -495,6 +494,12 @@ XFitGym::XFitGym(QWidget* parent)
                             {
                                 slot->setStyleSheet("background-color: red;border: 1px solid gray;");
                                 slot->setEnabled(false);
+                                qDebug() << "red";
+                            }
+                            else
+                            {
+                                slot->setStyleSheet("background-color: green;border: 1px solid gray;");
+                                slot->setEnabled(true);
                             }
                             
                         }
@@ -516,7 +521,7 @@ XFitGym::XFitGym(QWidget* parent)
 
                 }
             }
-
+           
 
             padel->ui.widget->setLayout(grid);  // Set the QGridLayout to the widget
             stack<pair<QString, QString>>newsCopy = Padel::news;
@@ -543,6 +548,7 @@ XFitGym::XFitGym(QWidget* parent)
                 padel->ui.secondImage->setPixmap(newsCopy.top().second);
                 newsCopy.pop();
             }
+
 
             home->ui.Pages->setCurrentIndex(7);
             });
@@ -776,7 +782,9 @@ XFitGym::XFitGym(QWidget* parent)
                     Login::membersData[user_Profile->ui.ID->text()].CancelPaddleCourt(a.first,time);
 
                     courtSlotButtons[{day, time}]->setStyleSheet("background-color: green;border: 1px solid gray;");
+
                     courtSlotButtons[{day, time}]->setEnabled(true);
+                    qDebug() << courtSlotButtons[{day, time}]->styleSheet();
                     
                     activeCourt->deleteLater();
                     });
@@ -1416,6 +1424,13 @@ XFitGym::XFitGym(QWidget* parent)
                 QTimer::singleShot(1250, man_tournaments->ui.message, &QLabel::hide);
                 return;
             }
+            padel->ui.firstPlayers->setText(firstTeam_firstName + "&" + firstTeam_secondName);
+            padel->ui.firstScore->setText(firstScore);
+            padel->ui.secondPlayers->setText(secondTeam_firstName + "&" + secondTeam_secondName);
+            padel->ui.secondScore->setText(secondScore);
+            padel->ui.thirdPlayers->setText(thirdTeam_firstName + "&" + thirdTeam_secondName);
+            padel->ui.thirdScore->setText(thirdScore);
+
             man_tournaments->ui.message->setText("Submitted successfully!");
             man_tournaments->ui.message->setStyleSheet("color:green;");
             man_tournaments->ui.message->setVisible(true);

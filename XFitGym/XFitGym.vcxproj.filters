@@ -79,9 +79,6 @@
     <ClCompile Include="Subscription.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tournament.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TrainingSession.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -270,6 +267,7 @@
     <Text Include="sessions.txt" />
     <Text Include="News.txt" />
     <Text Include="Notifications.txt" />
+    <Text Include="staff.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="User.h">
@@ -288,9 +286,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Subscription.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Tournament.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TrainingSession.h">

@@ -141,7 +141,6 @@
     <ClCompile Include="Receptionist_news.cpp" />
     <ClCompile Include="Staff_profile.cpp" />
     <ClCompile Include="Subscription.cpp" />
-    <ClCompile Include="Tournament.cpp" />
     <ClCompile Include="TrainingSession.cpp" />
     <ClCompile Include="userProfile.cpp" />
     <ClCompile Include="Manager.cpp" />
@@ -190,7 +189,6 @@
     <ClInclude Include="Staff.h" />
     <QtMoc Include="Staff_profile.h" />
     <ClInclude Include="Subscription.h" />
-    <ClInclude Include="Tournament.h" />
     <ClInclude Include="TrainingSession.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
