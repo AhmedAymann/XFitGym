@@ -11,6 +11,8 @@ struct CourtWidgetData {
     QString timeSlot;
     QPushButton* cancelButton;
 
+
+
     // Optional: Add a constructor if you still have issues
     CourtWidgetData(QDate date, QString time, QPushButton* button)
         : bookingDate(date), timeSlot(time), cancelButton(button) {
@@ -18,3 +20,10 @@ struct CourtWidgetData {
 };
 
 #endif // COURTWIDGETDATA_H
+
+
+
+
+
+
+//put the training session passed in 

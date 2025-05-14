@@ -5,6 +5,7 @@
 #include<qstring.h>
 #include<queue>
 #include <vector>
+#include <Stack>
 #include "ProgramClock.h"
 
 
@@ -21,6 +22,7 @@ public:
 
 	vector<bool> attendance;
 	bool attendanceFlag = false;
+	stack<TrainingSession> historyTrainingSessions;
 
 	
 	Customer();

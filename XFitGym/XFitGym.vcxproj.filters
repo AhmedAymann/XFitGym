@@ -301,5 +301,8 @@
     <ClInclude Include="CustomerLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CourtWidgetData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

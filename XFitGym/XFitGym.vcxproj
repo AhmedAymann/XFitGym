@@ -169,6 +169,7 @@
     <QtMoc Include="Classes.h" />
     <ClInclude Include="Coach.h" />
     <QtMoc Include="Coach_homepage.h" />
+    <ClInclude Include="CourtWidgetData.h" />
     <ClInclude Include="Customer.h" />
     <QtMoc Include="Feedback.h" />
     <ClInclude Include="CustomerLoader.h" />
