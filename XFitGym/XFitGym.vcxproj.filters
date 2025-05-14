@@ -199,7 +199,7 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="addPage.ui">
-      <Filter>Header Files</Filter>
+      <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
