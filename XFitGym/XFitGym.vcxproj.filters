@@ -268,6 +268,7 @@
     <Text Include="News.txt" />
     <Text Include="Notifications.txt" />
     <Text Include="staff.txt" />
+    <Text Include="tournament.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="User.h">

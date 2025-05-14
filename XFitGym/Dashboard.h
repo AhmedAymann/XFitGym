@@ -14,6 +14,8 @@ public:
     void clearAttendanceGui();
     void setAttendance(int day, vector<bool> attendance);
 
+
+
     Dashboard(QWidget* parent = nullptr);
     ~Dashboard();
     Ui::DashboardClass ui;

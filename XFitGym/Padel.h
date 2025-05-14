@@ -1,6 +1,7 @@
 #pragma once
 #include <QtWidgets/QMainWindow>
 #include "ui_Padel.h"
+#include<vector>
 #include<stack>
 using namespace std;
 
@@ -16,6 +17,10 @@ public:
     QPushButton* selectedSlot = nullptr;
     QString selectedDay;
     QString selectedTime;
+    vector<pair<int, QString>> competitors;
+
+    void loadcompetitors();
+    void savecompetitors();
 
     void loadnews();
     void savenews();

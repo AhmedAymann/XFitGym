@@ -557,6 +557,13 @@ XFitGym::XFitGym(QWidget* parent)
                 padel->ui.secondImage->setPixmap(newsCopy.top().second);
                 newsCopy.pop();
             }
+            padel->ui.firstPlayers->setText(padel->competitors[0].second);
+            padel->ui.firstScore->setText(QString::number(padel->competitors[0].first));
+            padel->ui.secondPlayers->setText(padel->competitors[1].second);
+            padel->ui.secondScore->setText(QString::number(padel->competitors[1].first));
+            padel->ui.thirdPlayers->setText(padel->competitors[2].second);
+            padel->ui.thirdScore->setText(QString::number(padel->competitors[2].first));
+           
 
 
             home->ui.Pages->setCurrentIndex(7);
@@ -1432,12 +1439,16 @@ XFitGym::XFitGym(QWidget* parent)
                 QTimer::singleShot(1250, man_tournaments->ui.message, &QLabel::hide);
                 return;
             }
-            padel->ui.firstPlayers->setText(firstTeam_firstName + "&" + firstTeam_secondName);
-            padel->ui.firstScore->setText(firstScore);
-            padel->ui.secondPlayers->setText(secondTeam_firstName + "&" + secondTeam_secondName);
-            padel->ui.secondScore->setText(secondScore);
-            padel->ui.thirdPlayers->setText(thirdTeam_firstName + "&" + thirdTeam_secondName);
-            padel->ui.thirdScore->setText(thirdScore);
+             
+            
+             padel->competitors[0].first = firstScore.toInt();
+             padel->competitors[0].second = firstTeam_firstName+ " & " + firstTeam_secondName;
+             padel->competitors[1].first = secondScore.toInt();
+             padel->competitors[1].second = secondTeam_firstName + " & " + secondTeam_secondName;
+             padel->competitors[2].first = thirdScore.toInt();
+             padel->competitors[2].second = thirdTeam_firstName + " & " + thirdTeam_secondName;
+            
+            sort(padel->competitors.rbegin(), padel->competitors.rend());
 
             man_tournaments->ui.message->setText("Submitted successfully!");
             man_tournaments->ui.message->setStyleSheet("color:green;");
@@ -1501,6 +1512,7 @@ void XFitGym::setScrolltoTop()
 
 void XFitGym::save()
 {
+    padel->savecompetitors();
     classes->savesession();
     notifications->saveNotifications();
     feedback->saveFeedBack();
@@ -1510,6 +1522,7 @@ void XFitGym::save()
 
 void XFitGym::load()
 {
+    padel->loadcompetitors();
     classes->loadsession();
     notifications->loadNotifications();
     feedback->loadFeedBack();

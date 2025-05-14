@@ -9,12 +9,15 @@ Receptionist::Receptionist(QString id, QString email, QString name, QString Date
 
 void Receptionist::AddMember(Customer customer)
 {
+    
 }
 
 void Receptionist::RemoveMember(int userID)
 {
+
 }
 
 void Receptionist::RenewSubscription(int userID, int Startdate)
 {
+
 }
