@@ -4,4 +4,4 @@
 104,omar,mostafa,1985-11-20,NoSubscription|NoCourtBookings|NoTrainingSessions
 177,bas,bassam,2005-05-15,NoSubscription|NoCourtBookings|NoTrainingSessions
 188,ahmed,khalx,1999-08-11,NoSubscription|NoCourtBookings|NoTrainingSessions
-199,khalx,hoss,1978-10-25,NoSubscription|2025-01-04,8:00|NoTrainingSessions
+199,khalx,hoss,1978-10-25,NoSubscription|NoCourtBookings|NoTrainingSessions

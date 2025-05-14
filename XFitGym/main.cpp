@@ -20,22 +20,22 @@ int daysSimulated = 0;
 void simulateDay(XFitGym& gui) {
     // Logging Attendance for All customers
     for (auto& c : customers) {
-        qDebug() << "Customer of id" << c.second.id << " - gui.currentUserID " << gui.currentUserID;
+        //qDebug() << "Customer of id" << c.second.id << " - gui.currentUserID " << gui.currentUserID;
 
         // Mark attendance as true for the logged-in customer, false for others
         if (c.second.id == gui.currentUserID) {
             c.second.attendance.push_back(true);  // Attendance is true for logged-in user
-            qDebug() << "Attendance True for " << c.second.name;
+            //qDebug() << "Attendance True for " << c.second.name;
         }
         else {
             c.second.attendance.push_back(false);  // Attendance is false for others
-            qDebug() << "Attendance False for " << c.second.name;
+            //qDebug() << "Attendance False for " << c.second.name;
         }
 
         // Make sure attendance is updated for each customer in the vector
-        qDebug() << "Attendance for " << c.second.name << ": " << c.second.attendance.back();
+        //qDebug() << "Attendance for " << c.second.name << ": " << c.second.attendance.back();
 
-        qDebug() << "Day: " << daysSimulated << ", Attendance: " << c.second.attendance;
+        //qDebug() << "Day: " << daysSimulated << ", Attendance: " << c.second.attendance;
     }
 
     // Log current date for simulation
@@ -45,7 +45,7 @@ void simulateDay(XFitGym& gui) {
     // Subscription Deadline Check for all customers
     for (auto& c : customers) {
         int daysLeft = notifier->CheckSubscriptionDeadline(c.second.sub, currentDate);
-        qDebug() << "\n DAYS LEFT: " << daysLeft;
+        //qDebug() << "\n DAYS LEFT: " << daysLeft;
         if (daysLeft < 0) {
             if (!Notifications::notifications[c.first.toInt()].contains("Your Gym Membership Has Expired")) {
                 Notifications::notifications[c.first.toInt()].push_back("Your Gym Membership Has Expired");
@@ -65,7 +65,6 @@ void simulateDay(XFitGym& gui) {
     //for (auto& c : customers) {
     //    for (auto a : c.second.bookedCourt) {
     //        int daysLeftCancelCourts = currentDate.daysTo(a.first);
-
     //        if (daysLeftCancelCourts <= 3) {
     //            // Find the button that matches this booking
     //            for (CourtWidgetData& data : gui.allCourtButtons) {
@@ -77,6 +76,52 @@ void simulateDay(XFitGym& gui) {
     //        }
     //    }
     //}
+
+
+
+    ////Check for all Training Sessions if Their date had passed
+    for (auto it = Classes::allsessions.begin(); it != Classes::allsessions.end(); ) {
+        int daysLeftSessions = currentDate.daysTo(it->second.date);
+        if (it->second.id == 200) {
+            qDebug() << "daysLeftSessions " << "For Class: " << it->second.id << "is: " << daysLeftSessions;
+        }
+        if (daysLeftSessions < 0) {
+            it = Classes::allsessions.erase(it);  // safe erase
+        }
+        else {
+            ++it;
+        }
+    }
+    
+
+    //Check if a Training Session had passed and put it in the History
+    for (auto& c : customers) {
+        int sz = Login::membersData[c.first].bookedsessions.size();
+        if (sz == 0) continue;
+        //if (c.first == "199") {
+        //qDebug() << "SZ IS : " << sz;
+        //qDebug() << "Booked session id " << Login::membersData[c.first].bookedsessions.front().id;
+        //}
+        for (int i = 0; i < sz; i++) {
+            int daysLeftHistoryCourts = currentDate.daysTo(Login::membersData[c.first].bookedsessions.front().date);
+            //qDebug() << "daysLeftHistoryCourts " << "of customer " << c.second.name << " is ";
+            TrainingSession tp = Login::membersData[c.first].bookedsessions.front();
+            if (daysLeftHistoryCourts < 0) {
+                //qDebug() << "TrainingSession: " << tp.id << "PASSED x 1";
+                Login::membersData[c.first].historyTrainingSessions.push(tp);
+                //qDebug() << "TrainingSession: " << tp.id << "PASSED x 2";
+                Login::membersData[c.first].bookedsessions.pop();
+                //qDebug() << "TrainingSession: " << tp.id << "PASSED x 3";
+                //Classes::allsessions.erase(tp.id);
+            }
+            else {
+                //qDebug() << "TrainingSession: " << tp.id << "NOT PASS";
+                Login::membersData[c.first].bookedsessions.pop();
+                Login::membersData[c.first].bookedsessions.push(tp);
+            }
+       }
+    }
+
 
 
 
@@ -110,7 +155,7 @@ int main(int argc, char* argv[])
     QObject::connect(timer, &QTimer::timeout, [&]() {
         simulateDay(w);
         });
-    timer->start(10000); // 3 seconds per simulated day
+    timer->start(3000); // #/1000 seconds per simulated day
 
     return a.exec();
 }

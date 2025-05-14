@@ -29,7 +29,7 @@ void Dashboard::setAttendance(int day, vector<bool> attendance)
 {
 
     for (int i = 0; i < attendance.size(); i++) {
-        qDebug() << "attended on day " << i << " Attendance: " << attendance[i];
+        //qDebug() << "attended on day " << i << " Attendance: " << attendance[i];
     }
 
 

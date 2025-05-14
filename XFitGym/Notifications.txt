@@ -18,6 +18,17 @@
 103,You Have 9 Days Left in Your Subscription
 103,You Have 8 Days Left in Your Subscription
 103,You Have 10 Days Left in Your Subscription
+103,You Have 10 Days Left in Your Subscription
+103,You Have 9 Days Left in Your Subscription
+103,You Have 8 Days Left in Your Subscription
+103,You Have 10 Days Left in Your Subscription
+103,You Have 9 Days Left in Your Subscription
+103,You Have 8 Days Left in Your Subscription
+103,You Have 7 Days Left in Your Subscription
+103,You Have 6 Days Left in Your Subscription
+103,You Have 5 Days Left in Your Subscription
+103,You Have 4 Days Left in Your Subscription
+103,You Have 10 Days Left in Your Subscription
 104,Your Gym Membership Has Expired
 177,Your Gym Membership Has Expired
 188,Your Gym Membership Has Expired

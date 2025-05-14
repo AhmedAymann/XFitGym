@@ -1,4 +1,4 @@
-60,khalx & hamdy
-100,khalx & hamdy
-50,khalx & hamdy
 120,khalx & hamdy
+100,khalx & hamdy
+60,khalx & hamdy
+50,khalx & hamdy
