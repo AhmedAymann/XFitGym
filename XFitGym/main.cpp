@@ -59,6 +59,27 @@ void simulateDay(XFitGym& gui) {
         }
     }
 
+
+
+    // Check if Each bookedcourts of each customer is due in 3 days or not 
+    //for (auto& c : customers) {
+    //    for (auto a : c.second.bookedCourt) {
+    //        int daysLeftCancelCourts = currentDate.daysTo(a.first);
+
+    //        if (daysLeftCancelCourts <= 3) {
+    //            // Find the button that matches this booking
+    //            for (CourtWidgetData& data : gui.allCourtButtons) {
+    //                if (data.bookingDate == a.first && data.timeSlot == a.second) {
+    //                    data.cancelButton->setEnabled(false);
+    //                    data.cancelButton->setStyleSheet(" QPushButton { background-color: grey; border: 1px solid grey; }");
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+
+
+
     // Checking attendance for all customers and updating the GUI
     if (customers.find(gui.currentUserID) != customers.end()) {
         gui.dash->setAttendance(daysSimulated, customers[gui.currentUserID].attendance);

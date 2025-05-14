@@ -753,6 +753,7 @@ XFitGym::XFitGym(QWidget* parent)
                     "}"
                 );
 
+                allCourtButtons.push_back({ a.first,a.second,cancelCourt});
                 QPushButton* rescheduleCourt = new QPushButton("Reschedule", activeCourt);
                 rescheduleCourt->setStyleSheet(R"(
                 QPushButton {
