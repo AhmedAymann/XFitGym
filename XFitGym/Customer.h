@@ -31,9 +31,7 @@ public:
 	void AddTrainingSession(TrainingSession& session);
 	void CancelPaddleCourt(QDate date, QString time);
 	void CancelTrainingSession(int sessionId);
-	void ReschedulePaddlecourt(int courtId, string newDate, string newTime);
 	void GiveFeedback(QString feedbackText);
-	void CancelSubscription();
 
 };
 

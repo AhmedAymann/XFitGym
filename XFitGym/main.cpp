@@ -94,6 +94,8 @@ void simulateDay(XFitGym& gui) {
     }
     
 
+    
+
     //Check if a Training Session had passed and put it in the History
     for (auto& c : customers) {
         int sz = Login::membersData[c.first].bookedsessions.size();

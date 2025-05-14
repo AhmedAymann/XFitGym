@@ -246,12 +246,15 @@ XFitGym::XFitGym(QWidget* parent)
             Cgauge->setValue(Cvalue);
              
             
-            if (true)
+            if (Login::membersData[user_Profile->ui.ID->text()].historyTrainingSessions.empty())
             {
                 setScrolltoTop();
                 dash->ui.message->setVisible(true);
                 home->ui.Pages->setCurrentIndex(2);
                 return;
+            }
+            else {
+                dash->ui.message->setVisible(false);
             }
             //dynamically generating the past workouts
 
@@ -263,7 +266,11 @@ XFitGym::XFitGym(QWidget* parent)
             layout->setContentsMargins(10, 10, 10, 10);
             layout->setSpacing(10);
 
-            for (int i = 0; i < 20; i++) {
+            stack<TrainingSession> temp = Login::membersData[user_Profile->ui.ID->text()].historyTrainingSessions;
+            while(!temp.empty()) {
+              
+                TrainingSession trTop = temp.top();
+
                 QWidget* workouts = new QWidget(pastWorkouts);
                 workouts->setObjectName("workout");
                 workouts->setFixedHeight(70);
@@ -276,17 +283,21 @@ XFitGym::XFitGym(QWidget* parent)
                     "}"
                 );
 
-                QLabel* className = new QLabel("Zumba Class", workouts);
+                QLabel* className = new QLabel(trTop.name, workouts);
                 className->setStyleSheet("color: white;font-family: 'Futura'; font-weight: bold; font-size: 14pt; background: transparent;");
                 className->adjustSize();
                 className->move(15, 10);
 
-                QLabel* coach = new QLabel("Coach Ahmed", workouts);
+                QLabel* coach = new QLabel(trTop.coachname, workouts);
                 coach->setStyleSheet("color: white;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
                 coach->adjustSize();
                 coach->move(15, className->y() + className->height() + 5);  // just below class name
 
-                QLabel* date = new QLabel("2025-05-04", workouts);
+
+
+                QString datee = trTop.date.toString("yyyy-MM-dd");
+
+                QLabel* date = new QLabel(datee + "    " + trTop.time, workouts);
                 date->setStyleSheet("color: #CCCCCC;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
                 date->adjustSize();
 
@@ -296,8 +307,13 @@ XFitGym::XFitGym(QWidget* parent)
                     date->move((w - date->width()) / 2 + 35, coach->y());
                     });
 
+
+                temp.pop();
+          
                 layout->addWidget(workouts);
             }
+
+            
 
             pastWorkouts->setLayout(layout);
             dash->ui.scrollArea->setWidget(pastWorkouts);
