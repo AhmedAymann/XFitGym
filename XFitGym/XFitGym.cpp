@@ -464,61 +464,74 @@ XFitGym::XFitGym(QWidget* parent)
             setScrolltoTop();
             qDebug() << "Padel Courts";
 
-            QWidget courts;
-            // Create the grid layout
-            QGridLayout* grid = new QGridLayout;
-            
+            // Clean previous state
+            padel->selectedSlot = nullptr;
+
+            // 1. Delete existing layout and widgets in padel->ui.widget
+            if (padel->ui.widget->layout()) {
+                QLayout* oldLayout = padel->ui.widget->layout();
+                QLayoutItem* item;
+                while ((item = oldLayout->takeAt(0)) != nullptr) {
+                    delete item->widget();  // Delete the widget
+                    delete item;            // Delete the layout item
+                }
+                delete oldLayout;  // Delete the old layout itself
+            }
+            courtSlotButtons.clear();
+
+            // 2. Create new grid directly in padel->ui.widget
+            QGridLayout* grid = new QGridLayout(padel->ui.widget);
+            grid->setContentsMargins(0, 0, 0, 0);  // Remove default margins
+            grid->setSpacing(0);  // Adjust spacing as needed
+
             int courtCount = 7;
 
             // Headers for weekdays (Mon, Tue, ..., Sun)
-            for (int d = 0; d < days.size(); ++d)
-                grid->addWidget(new QLabel(days[d]), 0, d + 1);
+            for (int d = 0; d < days.size(); ++d) {
+                QLabel* dayLabel = new QLabel(days[d], padel->ui.widget);
+                dayLabel->setAlignment(Qt::AlignCenter);
+                grid->addWidget(dayLabel, 0, d + 1);
+            }
 
             // Time slots on the left
-            for (int t = 0; t < times.size(); ++t)
-                grid->addWidget(new QLabel(times[t]), t + 1, 0);
+            for (int t = 0; t < times.size(); ++t) {
+                QLabel* timeLabel = new QLabel(times[t], padel->ui.widget);
+                timeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+                grid->addWidget(timeLabel, t + 1, 0);
+            }
 
             // Slots for court bookings
             for (int t = 0; t < times.size(); t++) {
                 for (int c = 0; c < courtCount; c++) {
-                    QPushButton* slot = new QPushButton;
+                    QPushButton* slot = new QPushButton(padel->ui.widget);
                     slot->setFixedSize(60, 40);
                     slot->setStyleSheet("background-color: green; border: 1px solid gray;");
-                    
-                    for (auto a : Login::membersData)
-                    {
-                        for (auto b : a.second.bookedCourt)
-                        {
+
+                    for (auto a : Login::membersData) {
+                        for (auto b : a.second.bookedCourt) {
                             QString day = b.first.toString("ddd");
                             QString time = b.second;
-                            if (day == days[c] && time == times[t]) 
-                            {
+                            if (day == days[c] && time == times[t]) {
                                 slot->setStyleSheet("background-color: red;border: 1px solid gray;");
                                 slot->setEnabled(false);
                             }
-                            
                         }
                     }
-                    
 
-                    grid->addWidget(slot, t + 1, c + 1); // Adding slots to grid
+                    grid->addWidget(slot, t + 1, c + 1);
                     QObject::connect(slot, &QPushButton::clicked, [=]() mutable {
                         if (padel->selectedSlot) {
                             padel->selectedSlot->setStyleSheet("background-color: green;border: 1px solid gray;");
                         }
-
                         padel->selectedSlot = slot;
                         padel->selectedDay = days[c];
                         padel->selectedTime = times[t];
-                        slot->setStyleSheet("background-color: yellow;border: 1px solid gray;"); // Highlight as selected
+                        slot->setStyleSheet("background-color: yellow;border: 1px solid gray;");
                         });
                     courtSlotButtons[{days[c], times[t]}] = slot;
-
                 }
             }
 
-
-            padel->ui.widget->setLayout(grid);  // Set the QGridLayout to the widget
             stack<pair<QString, QString>>newsCopy = Padel::news;
             if (newsCopy.empty()) {
                 padel->ui.firstNew->setText("No news");
@@ -777,7 +790,7 @@ XFitGym::XFitGym(QWidget* parent)
 
                     courtSlotButtons[{day, time}]->setStyleSheet("background-color: green;border: 1px solid gray;");
                     courtSlotButtons[{day, time}]->setEnabled(true);
-                    
+                    padel->selectedSlot = nullptr;
                     activeCourt->deleteLater();
                     });
 

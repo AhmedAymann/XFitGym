@@ -2,6 +2,7 @@
 
 #include <QtWidgets/QMainWindow>
 #include <QString>
+#include <set>
 #include <QScrollBar>
 #include <QButtonGroup>
 #include <QIntValidator>
