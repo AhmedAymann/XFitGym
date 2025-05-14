@@ -9,6 +9,48 @@ Padel::Padel(QWidget* parent)
 Padel::~Padel()
 {}
 stack<pair<QString, QString>> Padel::news;
+void Padel::loadcompetitors()
+{
+    QFile file("tournament.txt");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qDebug() << "Cannot open file:" << file.errorString();
+
+    }
+    QTextStream in(&file);
+    while (!in.atEnd())
+    {
+        QString line = in.readLine();
+        QStringList parts = line.split(",");
+        competitors.push_back({ parts[0].toInt(), parts[1]});
+        qDebug() << line;
+
+    }
+    sort(competitors.rbegin(), competitors.rend());
+    file.close();
+}
+void Padel::savecompetitors()
+{
+    QFile file("tournament.txt");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    {
+        qDebug() << "Failed to clear file:" << file.errorString();
+
+    }
+    if (!file.open(QIODevice::Append | QIODevice::Text))
+    {
+        qDebug() << "Cannot open file:" << file.errorString();
+
+    }
+
+    QTextStream out(&file);
+    for(int i=0;i<competitors.size();i++)
+    {
+        out << competitors[i].first<<"," << competitors[i].second<<'\n';
+    }
+
+    file.close();
+}
 void Padel::loadnews()
 {
     QFile file("News.txt");
@@ -26,7 +68,7 @@ void Padel::loadnews()
         qDebug() << line;
 
     }
-   
+    file.close();
 }
 
 void Padel::savenews()

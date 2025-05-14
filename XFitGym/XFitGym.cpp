@@ -446,14 +446,17 @@ XFitGym::XFitGym(QWidget* parent)
         Cgauge->setValue(Cvalue);
              
             
-        if (true)
-        {
-            setScrolltoTop();
-            dash->ui.message->setVisible(true);
-            home->ui.Pages->setCurrentIndex(2);
-            return;
-        }
-        //dynamically generating the past workouts
+            if (Login::membersData[user_Profile->ui.ID->text()].historyTrainingSessions.empty())
+            {
+                setScrolltoTop();
+                dash->ui.message->setVisible(true);
+                home->ui.Pages->setCurrentIndex(2);
+                return;
+            }
+            else {
+                dash->ui.message->setVisible(false);
+            }
+            //dynamically generating the past workouts
 
         QWidget* pastWorkouts = new QWidget;
         pastWorkouts->setStyleSheet("background-color: #1e1e1e; color: white;");
@@ -463,32 +466,40 @@ XFitGym::XFitGym(QWidget* parent)
         layout->setContentsMargins(10, 10, 10, 10);
         layout->setSpacing(10);
 
-        for (int i = 0; i < 20; i++) {
-            QWidget* workouts = new QWidget(pastWorkouts);
-            workouts->setObjectName("workout");
-            workouts->setFixedHeight(70);
-            workouts->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-            workouts->setStyleSheet(
-                "#workout {"
-                "background-color: #4A4A4A;"
-                "border: 2px solid #8B50FF;"
-                "border-radius: 14px;"
-                "}"
-            );
+            stack<TrainingSession> temp = Login::membersData[user_Profile->ui.ID->text()].historyTrainingSessions;
+            while(!temp.empty()) {
+              
+                TrainingSession trTop = temp.top();
 
-            QLabel* className = new QLabel("Zumba Class", workouts);
-            className->setStyleSheet("color: white;font-family: 'Futura'; font-weight: bold; font-size: 14pt; background: transparent;");
-            className->adjustSize();
-            className->move(15, 10);
+                QWidget* workouts = new QWidget(pastWorkouts);
+                workouts->setObjectName("workout");
+                workouts->setFixedHeight(70);
+                workouts->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+                workouts->setStyleSheet(
+                    "#workout {"
+                    "background-color: #4A4A4A;"
+                    "border: 2px solid #8B50FF;"
+                    "border-radius: 14px;"
+                    "}"
+                );
 
-            QLabel* coach = new QLabel("Coach Ahmed", workouts);
-            coach->setStyleSheet("color: white;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
-            coach->adjustSize();
-            coach->move(15, className->y() + className->height() + 5);  // just below class name
+                QLabel* className = new QLabel(trTop.name, workouts);
+                className->setStyleSheet("color: white;font-family: 'Futura'; font-weight: bold; font-size: 14pt; background: transparent;");
+                className->adjustSize();
+                className->move(15, 10);
 
-            QLabel* date = new QLabel("2025-05-04", workouts);
-            date->setStyleSheet("color: #CCCCCC;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
-            date->adjustSize();
+                QLabel* coach = new QLabel(trTop.coachname, workouts);
+                coach->setStyleSheet("color: white;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
+                coach->adjustSize();
+                coach->move(15, className->y() + className->height() + 5);  // just below class name
+
+
+
+                QString datee = trTop.date.toString("yyyy-MM-dd");
+
+                QLabel* date = new QLabel(datee + "    " + trTop.time, workouts);
+                date->setStyleSheet("color: #CCCCCC;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
+                date->adjustSize();
 
             QTimer::singleShot(0, [=]() {
                 int w = workouts->width();
@@ -496,12 +507,17 @@ XFitGym::XFitGym(QWidget* parent)
                 date->move((w - date->width()) / 2 + 35, coach->y());
                 });
 
-            layout->addWidget(workouts);
-        }
 
-        pastWorkouts->setLayout(layout);
-        dash->ui.scrollArea->setWidget(pastWorkouts);
-        dash->ui.scrollArea->setWidgetResizable(true);
+                temp.pop();
+          
+                layout->addWidget(workouts);
+            }
+
+            
+
+            pastWorkouts->setLayout(layout);
+            dash->ui.scrollArea->setWidget(pastWorkouts);
+            dash->ui.scrollArea->setWidgetResizable(true);
 
 
 
@@ -752,22 +768,30 @@ XFitGym::XFitGym(QWidget* parent)
             padel->ui.firstImage->setPixmap(newsCopy.top().second);
             newsCopy.pop();
 
-            padel->ui.secondNew->setText(newsCopy.top().first);
-            padel->ui.secondImage->setPixmap(newsCopy.top().second);
-            newsCopy.pop();
-        }
+                padel->ui.secondNew->setText(newsCopy.top().first);
+                padel->ui.secondImage->setPixmap(newsCopy.top().second);
+                newsCopy.pop();
+            }
+            padel->ui.firstPlayers->setText(padel->competitors[0].second);
+            padel->ui.firstScore->setText(QString::number(padel->competitors[0].first));
+            padel->ui.secondPlayers->setText(padel->competitors[1].second);
+            padel->ui.secondScore->setText(QString::number(padel->competitors[1].first));
+            padel->ui.thirdPlayers->setText(padel->competitors[2].second);
+            padel->ui.thirdScore->setText(QString::number(padel->competitors[2].first));
+           
 
-        home->ui.Pages->setCurrentIndex(7);
-        });
-    connect(home->ui.Feedback, &QPushButton::clicked, this, [=]() {
-        setScrolltoTop();
-        home->ui.Pages->setCurrentIndex(5);
-        qDebug() << "Feedback";
-        });
-    connect(home->ui.Profile, &QPushButton::clicked, this, [=]() {
-        setScrolltoTop();
-        queue<TrainingSession>bookedsession = Login::membersData[user_Profile->ui.ID->text()].bookedsessions;
-        vector <pair<QDate, QString>> bookedCourts = Login::membersData[user_Profile->ui.ID->text()].bookedCourt;
+
+            home->ui.Pages->setCurrentIndex(7);
+            });
+        connect(home->ui.Feedback, &QPushButton::clicked, this, [=]() {
+            setScrolltoTop();
+            home->ui.Pages->setCurrentIndex(5);
+            qDebug() << "Feedback";
+            });
+        connect(home->ui.Profile, &QPushButton::clicked, this, [=]() {
+            setScrolltoTop();
+            queue<TrainingSession>bookedsession = Login::membersData[user_Profile->ui.ID->text()].bookedsessions;
+            vector <pair<QDate, QString>> bookedCourts = Login::membersData[user_Profile->ui.ID->text()].bookedCourt;
 
 
         //change true with (class.empty && courts.empty) .. w e3mel condition di lw7dha w di lw7dha
@@ -944,17 +968,18 @@ XFitGym::XFitGym(QWidget* parent)
                 "}"
             );
 
-            QPushButton* rescheduleCourt = new QPushButton("Reschedule", activeCourt);
-            rescheduleCourt->setStyleSheet(R"(
-            QPushButton {
-                background-color: #2c2c2c;
-                color: white;
-                border: 2px solid #2c2c2c;
-                border-radius: 6px;
-                font-family: 'Futura';
-                font-size: 11pt;
-                padding: 6px 16px;
-            }
+                allCourtButtons.push_back({ a.first,a.second,cancelCourt});
+                QPushButton* rescheduleCourt = new QPushButton("Reschedule", activeCourt);
+                rescheduleCourt->setStyleSheet(R"(
+                QPushButton {
+                    background-color: #2c2c2c;
+                    color: white;
+                    border: 2px solid #2c2c2c;
+                    border-radius: 6px;
+                    font-family: 'Futura';
+                   font-size: 11pt;
+                   padding: 6px 16px;
+                }
 
             QPushButton:hover {
                 background-color: #8B50FF;
@@ -988,11 +1013,12 @@ XFitGym::XFitGym(QWidget* parent)
             QObject::connect(cancelCourt, &QPushButton::clicked, [=]() {
                 Login::membersData[user_Profile->ui.ID->text()].CancelPaddleCourt(a.first,time);
 
-                courtSlotButtons[{day, time}]->setStyleSheet("background-color: green;border: 1px solid gray;");
-                courtSlotButtons[{day, time}]->setEnabled(true);
-                padel->selectedSlot = nullptr;
-                activeCourt->deleteLater();
-                });
+                    courtSlotButtons[{day, time}]->setStyleSheet("background-color: green;border: 1px solid gray;");
+
+                    courtSlotButtons[{day, time}]->setEnabled(true);
+                    padel->selectedSlot = nullptr;
+                    activeCourt->deleteLater();
+                    });
 
             QObject::connect(rescheduleCourt, &QPushButton::clicked, [=]() {
                 qDebug() << "Rescheduled";
@@ -1330,26 +1356,37 @@ XFitGym::XFitGym(QWidget* parent)
         bool empty = (firstTeam_firstName.isEmpty() || firstTeam_secondName.isEmpty() || firstScore.isEmpty() || secondTeam_firstName.isEmpty() || secondTeam_secondName.isEmpty()
             || secondScore.isEmpty() || thirdTeam_firstName.isEmpty() || thirdTeam_secondName.isEmpty() || thirdScore.isEmpty());
 
-        if (empty) {
-            man_tournaments->ui.message->setText("Fill all the boxes");
-            man_tournaments->ui.message->setStyleSheet("color:red;");
+            if (empty) {
+                man_tournaments->ui.message->setText("Fill all the boxes");
+                man_tournaments->ui.message->setStyleSheet("color:red;");
+                man_tournaments->ui.message->setVisible(true);
+                QTimer::singleShot(1250, man_tournaments->ui.message, &QLabel::hide);
+                return;
+            }
+             
+            
+             padel->competitors[0].first = firstScore.toInt();
+             padel->competitors[0].second = firstTeam_firstName+ " & " + firstTeam_secondName;
+             padel->competitors[1].first = secondScore.toInt();
+             padel->competitors[1].second = secondTeam_firstName + " & " + secondTeam_secondName;
+             padel->competitors[2].first = thirdScore.toInt();
+             padel->competitors[2].second = thirdTeam_firstName + " & " + thirdTeam_secondName;
+            
+            sort(padel->competitors.rbegin(), padel->competitors.rend());
+
+            man_tournaments->ui.message->setText("Submitted successfully!");
+            man_tournaments->ui.message->setStyleSheet("color:green;");
             man_tournaments->ui.message->setVisible(true);
             QTimer::singleShot(1250, man_tournaments->ui.message, &QLabel::hide);
-            return;
-        }
-        man_tournaments->ui.message->setText("Submitted successfully!");
-        man_tournaments->ui.message->setStyleSheet("color:green;");
-        man_tournaments->ui.message->setVisible(true);
-        QTimer::singleShot(1250, man_tournaments->ui.message, &QLabel::hide);
-        man_tournaments->ui.FFname->clear();
-        man_tournaments->ui.FSname->clear();
-        man_tournaments->ui.SFname->clear();
-        man_tournaments->ui.SSname->clear();
-        man_tournaments->ui.TFname->clear();
-        man_tournaments->ui.TSname->clear();
-        man_tournaments->ui.Fscore->clear();
-        man_tournaments->ui.Sscore->clear();
-        man_tournaments->ui.Tscore->clear();
+            man_tournaments->ui.FFname->clear();
+            man_tournaments->ui.FSname->clear();
+            man_tournaments->ui.SFname->clear();
+            man_tournaments->ui.SSname->clear();
+            man_tournaments->ui.TFname->clear();
+            man_tournaments->ui.TSname->clear();
+            man_tournaments->ui.Fscore->clear();
+            man_tournaments->ui.Sscore->clear();
+            man_tournaments->ui.Tscore->clear();
 
 
         });
@@ -1395,6 +1432,7 @@ void XFitGym::setScrolltoTop()
 
 void XFitGym::save()
 {
+    padel->savecompetitors();
     classes->savesession();
     notifications->saveNotifications();
     feedback->saveFeedBack();
@@ -1404,6 +1442,7 @@ void XFitGym::save()
 
 void XFitGym::load()
 {
+    padel->loadcompetitors();
     classes->loadsession();
     notifications->loadNotifications();
     feedback->loadFeedBack();

@@ -142,7 +142,6 @@
     <ClCompile Include="Receptionist_news.cpp" />
     <ClCompile Include="Staff_profile.cpp" />
     <ClCompile Include="Subscription.cpp" />
-    <ClCompile Include="Tournament.cpp" />
     <ClCompile Include="TrainingSession.cpp" />
     <ClCompile Include="userProfile.cpp" />
     <ClCompile Include="Manager.cpp" />
@@ -165,11 +164,13 @@
     <Text Include="Notifications.txt" />
     <Text Include="sessions.txt" />
     <Text Include="staff.txt" />
+    <Text Include="tournament.txt" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Classes.h" />
     <ClInclude Include="Coach.h" />
     <QtMoc Include="Coach_homepage.h" />
+    <ClInclude Include="CourtWidgetData.h" />
     <ClInclude Include="Customer.h" />
     <QtMoc Include="Feedback.h" />
     <ClInclude Include="CustomerLoader.h" />
@@ -191,7 +192,6 @@
     <ClInclude Include="Staff.h" />
     <QtMoc Include="Staff_profile.h" />
     <ClInclude Include="Subscription.h" />
-    <ClInclude Include="Tournament.h" />
     <ClInclude Include="TrainingSession.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
