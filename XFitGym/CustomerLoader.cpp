@@ -1,7 +1,9 @@
 ﻿#include "CustomerLoader.h"
+#include "Classes.h"
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
+
 
 map<QString,Customer> CustomerLoader::LoadCustomersFromFile(const QString& filename)
 {
@@ -83,6 +85,7 @@ map<QString,Customer> CustomerLoader::LoadCustomersFromFile(const QString& filen
                     ts.id = fields[4].toInt();
 
                     c.AddTrainingSession(ts);
+                    Classes::allsessions[ts.id].size--;
                 }
             }
         }
