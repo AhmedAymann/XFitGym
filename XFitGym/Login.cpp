@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QTextStream>
 #include"CustomerLoader.h"
+#include <Staff.h>
 
 
 
