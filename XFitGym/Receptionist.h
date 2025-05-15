@@ -8,7 +8,7 @@ public:
 
 	string newsText;
 
-	Receptionist(QString id, QString email, QString name, QString DateOFBirth,string role, string newsText);
+	Receptionist(QString id, QString email, QString name, QString DateOFBirth,QString role, string newsText);
 
 
 	void AddMember(Customer customer);

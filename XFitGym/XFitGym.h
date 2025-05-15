@@ -31,7 +31,7 @@
 #include "Receptionist_classes.h"
 #include "Receptionist_news.h"
 #include "CourtWidgetData.h"
-
+#include "Staff.h"
 
 
 class XFitGym : public QMainWindow
@@ -69,6 +69,8 @@ Receptionist_homepage* recep_home;
 Receptionist_members* recep_members;
 Receptionist_classes* recep_classes;
 Receptionist_news* recep_news;
+Staff* staff;
+Coach* coach;
 QMap<QPair<QString, QString>, QPushButton*> courtSlotButtons;
 
 

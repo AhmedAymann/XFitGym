@@ -103,3 +103,5 @@ void Padel::savenews()
 
     file.close();
 }
+
+bool Padel::deadline;

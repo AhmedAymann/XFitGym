@@ -34,4 +34,3 @@ public:
 	void GiveFeedback(QString feedbackText);
 
 };
-

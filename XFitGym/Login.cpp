@@ -16,8 +16,12 @@ Login::Login(QWidget* parent)
 Login::~Login()
 {}
 
-map<QString, Customer> Login::membersData= CustomerLoader::LoadCustomersFromFile("CustomerData.txt");
+bool Login::isMember;
+bool Login::isStaff;
+bool Login::isCoach;
+bool Login::isReceptionist;
 
+map<QString, Customer> Login::membersData= CustomerLoader::LoadCustomersFromFile("CustomerData.txt");
 void Login::saveData()
 {
     QFile file("CustomerData.txt");
@@ -88,18 +92,27 @@ void Login::saveData()
 
     file.close();
 }
-
-
-
-
-
- 
 bool Login::CheckLogin (QString& username, QString& id)
 {
     qDebug() << membersData.size();
     if (membersData[id].email == username)
+    {
+        isMember = true;
         return true;
-
+    }
+    else if (Staff::staffData[id].email == username)
+    {
+        isStaff = true;
+        if (Staff::staffData[id].role.toLower() == "receptionist")
+        {
+            isReceptionist = true;
+        }
+        else if (Staff::staffData[id].role.toLower() == "coach")
+        {
+            isCoach = true;
+        }
+        return true;
+    }
     return false;
 }
 

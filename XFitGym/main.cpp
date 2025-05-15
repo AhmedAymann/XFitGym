@@ -62,20 +62,21 @@ void simulateDay(XFitGym& gui) {
 
 
     // Check if Each bookedcourts of each customer is due in 3 days or not 
-    //for (auto& c : customers) {
-    //    for (auto a : c.second.bookedCourt) {
-    //        int daysLeftCancelCourts = currentDate.daysTo(a.first);
-    //        if (daysLeftCancelCourts <= 3) {
-    //            // Find the button that matches this booking
-    //            for (CourtWidgetData& data : gui.allCourtButtons) {
-    //                if (data.bookingDate == a.first && data.timeSlot == a.second) {
-    //                    data.cancelButton->setEnabled(false);
-    //                    data.cancelButton->setStyleSheet(" QPushButton { background-color: grey; border: 1px solid grey; }");
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
+    for (auto& c : customers) {
+        for (auto a : c.second.bookedCourt) {
+            int daysLeftCancelCourts = currentDate.daysTo(a.first);
+
+            if (daysLeftCancelCourts <= 3) {
+                // Find the button that matches this booking
+                for (CourtWidgetData& data : gui.allCourtButtons) {
+                    if (data.bookingDate == a.first && data.timeSlot == a.second) {
+                        data.cancelButton->setEnabled(false);
+                        data.cancelButton->setStyleSheet(" QPushButton { background-color: grey; border: 1px solid grey; }");
+                    }
+                }
+            }
+        }
+    }
 
 
 
@@ -157,7 +158,7 @@ int main(int argc, char* argv[])
     QObject::connect(timer, &QTimer::timeout, [&]() {
         simulateDay(w);
         });
-    timer->start(3000); // #/1000 seconds per simulated day
+    timer->start(15000); // #/1000 seconds per simulated day
 
     return a.exec();
 }

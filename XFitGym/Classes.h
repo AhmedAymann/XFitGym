@@ -16,7 +16,6 @@ public:
     static map<int, TrainingSession> allsessions;
     static map<int, TrainingSession> tempallsessions;
 
-
     void savesession();
     void loadsession();
 

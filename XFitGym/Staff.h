@@ -1,11 +1,16 @@
 #pragma once
 #include "User.h"
+#include<map>
 class Staff : public User
 {
 public:
-	string role;
+	QString role;
 
-	Staff(QString id, QString email, QString name, QString DateOFBirth, string role);
+	static map<QString, Staff> staffData;
+	Staff();
+	Staff(QString id, QString email, QString name, QString DateOFBirth, QString role);
+	void LoadStaffData();
+	void SaveStaffData();
 
 };
 

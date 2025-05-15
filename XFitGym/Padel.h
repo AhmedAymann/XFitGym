@@ -11,6 +11,7 @@ class Padel : public QWidget
 
 public:
     static stack<pair<QString, QString>>news;
+    static bool deadline;
     Padel(QWidget* parent = nullptr);
     ~Padel();
     Ui::PadelClass ui;

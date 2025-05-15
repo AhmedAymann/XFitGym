@@ -1,10 +1,9 @@
 #include "Receptionist.h"
 
-Receptionist::Receptionist(QString id, QString email, QString name, QString DateOFBirth,string role,string newsText)
+Receptionist::Receptionist(QString id, QString email, QString name, QString DateOFBirth, QString role, string newsText)
     : Staff(id, email, name, DateOFBirth, role)
-     
 {
- 
+
 }
 
 void Receptionist::AddMember(Customer customer)

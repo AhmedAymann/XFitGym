@@ -10,7 +10,7 @@ class Manager : public Staff
 public:
 	
 
-	Manager(QString id, QString email, QString name, QString DateOFBirth, string role);
+	Manager(QString id, QString email, QString name, QString DateOFBirth, QString role);
 
 	void AddMember(Customer customer);
 	void RemoveMember(int userID);

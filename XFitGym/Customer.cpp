@@ -59,6 +59,7 @@ void Customer::AddCourtBooking(const QString& date, const QString& time) {
 void Customer::AddTrainingSession(TrainingSession& session) {
     bookedsessions.push(session);
     Classes::allsessions[session.id].size++;
+    Classes::tempallsessions[session.id].size++;
 }
 
 void Customer::CancelPaddleCourt(QDate date, QString time)
@@ -92,11 +93,12 @@ void Customer::CancelTrainingSession(int sessionId)
                 Login::membersData[QString::number( Classes::allsessions[sessionId].WaitlistIds.front())].AddTrainingSession(tr);
                 Notifications::notifications[Classes::allsessions[sessionId].WaitlistIds.front()].push_back("you have been added to " + tr.name + " on " + tr.date.toString("yyyy-MM-dd") + " at " + tr.time);
                 Classes::allsessions[sessionId].WaitlistIds.pop_front();
-                Classes::allsessions[sessionId].size--;
+                
             }
-            else {
+            
                 Classes::allsessions[sessionId].size--;
-            }
+                Classes::tempallsessions[sessionId].size--;
+            
             bookedsessions1.pop();
             found = false;
         }

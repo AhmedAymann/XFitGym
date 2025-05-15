@@ -42,29 +42,40 @@ using namespace std;
 // 4 -> News                          *
 //*************************************
 
+// nzbot 7war el ids fi al a5er
 void reorganizeGrid(QGridLayout* grid, QPushButton* addCard) {
     grid->removeWidget(addCard);
+
     QList<QWidget*> cards;
-    for (int i = 0; i < grid->count(); i++) {
+    for (int i = 0; i < grid->count(); ++i) {
         QWidget* widget = grid->itemAt(i)->widget();
-        if (widget && widget != addCard) {
+        if (widget) {
             cards.append(widget);
         }
     }
-    while (grid->count() > 0) {
-        grid->takeAt(0);
+
+    while (QLayoutItem* item = grid->takeAt(0)) {
+        delete item;
     }
+
     for (int i = 0; i < cards.size(); ++i) {
         int row = i / 3;
         int col = i % 3;
         grid->addWidget(cards[i], row, col);
     }
+
     int addRow = cards.size() / 3;
     int addCol = cards.size() % 3;
     grid->addWidget(addCard, addRow, addCol);
 }
 // El Timeeeee YA AYMAAAAN
 void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
+
+    if (scrollArea->widget()) {
+        QWidget* oldWidget = scrollArea->widget();
+        scrollArea->takeWidget();
+        oldWidget->deleteLater();  // Destroys previous layout and all its widgets
+    }
 
     QWidget* scrollWidget = new QWidget();
     scrollWidget->setObjectName("scrollWidget");
@@ -73,6 +84,14 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
     QGridLayout* grid = new QGridLayout(scrollWidget);
     grid->setSpacing(20);
     grid->setContentsMargins(20, 20, 20, 20);
+
+    QLayoutItem* item;
+    while ((item = grid->takeAt(0)) != nullptr) {
+        if (QWidget* widget = item->widget()) {
+            widget->deleteLater();
+        }
+        delete item;
+    }
 
     QPushButton* addCard = new QPushButton("+", scrollWidget);
     addCard->setFixedSize(220, 160);
@@ -109,7 +128,17 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
         addPage->ui.DOB->setInputMask("0000-00-00");
 
         QString id = QString::number(Login::membersData.size() + 1001);
+
+        for (auto it : Login::membersData) {
+            if (id == it.first) {
+                int num = id.toInt();
+                num++;
+                id = QString::number(num);
+            }
+
+        }
         addPage->ui.ID->setText(id);
+
 
         addPage->ui.comboBox->addItem("Choose plan");
         addPage->ui.comboBox->addItem("Monthly");
@@ -136,7 +165,13 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
 
             bool used = false;
             for (auto it : Login::membersData)
-                if (addPage->ui.USERNAME->text() == it.second.email)
+                if (addPage->ui.USERNAME->text().toLower() == it.second.email.toLower())
+                {
+                    used = true;
+                    break;
+                }
+            for (auto it : Staff::staffData)
+                if (addPage->ui.USERNAME->text().toLower() == it.second.email.toLower())
                 {
                     used = true;
                     break;
@@ -164,6 +199,13 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
         });
     int i = 0;
     for (auto user : Login::membersData) {
+        
+            if (user.second.name.isEmpty())
+            {
+                qDebug() << "Skipped ";
+                continue;
+            }
+        
         QString name = user.second.name;
         QString plan = user.second.sub.type;
         QString subscription;
@@ -225,7 +267,6 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
 
             grid->removeWidget(card);
             card->deleteLater();
-
             reorganizeGrid(grid, addCard);
             });
         QObject::connect(renewBtn, &QPushButton::clicked, parent, [=]() {
@@ -303,6 +344,13 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
 }
 void generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
 
+    if (scrollArea->widget()) {
+        QWidget* oldWidget = scrollArea->widget();
+        scrollArea->takeWidget();
+        oldWidget->deleteLater();
+    }
+
+
     QWidget* scrollWidget = new QWidget();
     scrollWidget->setObjectName("scrollWidget");
     scrollWidget->setStyleSheet("QWidget#scrollWidget{background-color: #1e1e1e;}");
@@ -310,6 +358,14 @@ void generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
     QGridLayout* grid = new QGridLayout(scrollWidget);
     grid->setSpacing(20);
     grid->setContentsMargins(20, 20, 20, 20);
+
+    QLayoutItem* item;
+    while ((item = grid->takeAt(0)) != nullptr) {
+        if (QWidget* widget = item->widget()) {
+            widget->deleteLater();
+        }
+        delete item;
+    }
 
     QPushButton* addCard = new QPushButton("+", scrollWidget);
     addCard->setFixedSize(220, 160);
@@ -327,7 +383,7 @@ void generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
 )");
     addCard->setCursor(Qt::PointingHandCursor);
 
-    int numStaff = 5;
+    int numStaff = Staff::staffData.size();
     QObject::connect(addCard, &QPushButton::clicked, parent, [=,&numStaff]() {
         addMembers* addPage = new addMembers(parent);
         
@@ -350,7 +406,15 @@ void generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
         addPage->ui.comboBox->addItem("Receptionist");
         addPage->ui.comboBox->addItem("Coach");
 
-        QString id = QString::number(Login::membersData.size() + 1001);
+        QString id = QString::number(Staff::staffData.size() + 2001);
+        for (auto it : Staff::staffData) {
+            if (id == it.first) {
+                int num = id.toInt();
+                num++;
+                id = QString::number(num);
+            }
+
+        }
         addPage->ui.ID->setText(id);
 
         QObject::connect(addPage->ui.Submit, &QPushButton::clicked, parent, [=,&numStaff]() {
@@ -372,7 +436,13 @@ void generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
                 || !date.isValid() || year > QDate::currentDate().year());
             bool used = false;
             for (auto it : Login::membersData)
-                if (addPage->ui.USERNAME->text() == it.second.email)
+                if (addPage->ui.USERNAME->text().toLower() == it.second.email.toLower() || addPage->ui.NAME->text().toLower() == it.second.name.toLower())
+                {
+                    used = true;
+                    break;
+                }
+            for (auto it : Staff::staffData)
+                if (addPage->ui.USERNAME->text().toLower() == it.second.email.toLower() || addPage->ui.NAME->text().toLower() == it.second.name.toLower())
                 {
                     used = true;
                     break;
@@ -390,17 +460,22 @@ void generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
                 return;
             }
 
+            Staff s;
+            s.email = addPage->ui.USERNAME->text();
+            s.name = addPage->ui.NAME->text();
+            s.DateOFBirth = addPage->ui.DOB->text();
+            s.role = addPage->ui.comboBox->currentText();
+            Staff::staffData.insert({ id, s });
+
             addPage->close();
-            numStaff++;
             });
         });
 
-
-    for (int i = 0; i < numStaff; i++) {
-        QString name = "Staff Member " + QString::number(i + 1);
-        QString position = i % 2 ? "Trainer" : "Receptionist";
-        QString joinDate = QDate::currentDate().addDays(-i * 30).toString("dd/MM/yyyy");
-        Cards* staffCard = new Cards(name, position, joinDate, scrollWidget);
+    int i = 0;
+    for (auto staff : Staff::staffData) {
+        QString name = staff.second.name;
+        QString position = staff.second.role;
+        Cards* staffCard = new Cards(name, position, "", scrollWidget);
 
         QPushButton* removeBtn = new QPushButton("Remove", staffCard);
         removeBtn->setStyleSheet(R"(
@@ -423,22 +498,29 @@ void generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
         int col = i % 3;
         grid->addWidget(staffCard, row, col);
 
+        QString Username = staff.first;
         QObject::connect(removeBtn, &QPushButton::clicked, parent, [=]() {
-            grid->removeWidget(staffCard);
 
+            for (auto it = Staff::staffData.begin(); it != Staff::staffData.end(); it++) {
+                if (Username == it->first) {
+                    Staff::staffData.erase(it);
+                    break;
+                }
+            }
+
+
+            grid->removeWidget(staffCard);
             staffCard->deleteLater();
 
             reorganizeGrid(grid, addCard);
             });
+        i++;
+
     }
 
     int addRow = numStaff / 3;
     int addCol = numStaff % 3;
     grid->addWidget(addCard, addRow, addCol);
-
-    QObject::connect(addCard, &QPushButton::clicked, parent, [=]() {
-        qDebug() << "Add Staff Clicked";
-        });
 
     if (scrollArea->widget()) {
         scrollArea->widget()->deleteLater();
@@ -513,31 +595,16 @@ XFitGym::XFitGym(QWidget* parent)
     log->ui.warning->setVisible(false);
 
     connect(log->ui.Login, &QPushButton::clicked, this, [=]() {
+
         QString username = log->ui.Email->text();
         QString id = log->ui.ID->text();
-        
-        
-
-       
-
-
 
         if (username == "manager" && id == "1") {
             ui.Main->setCurrentIndex(2); 
             man_home->ui.welcome->setText("Welcome Back, Manager");
-
-            return;
-        }
-        else if (username == "coach" && id == "2") {
-            ui.Main->setCurrentIndex(3);
-            coach_home->ui.welcome->setText("Welcome Back, Coach");
-
-            return;
-        }
-        else if (username == "recep" && id == "3") {
-            ui.Main->setCurrentIndex(4);
-            recep_home->ui.welcome->setText("Welcome Back, Receptionist");
-
+            manprofile->ui.ID->setText(id);
+            manprofile->ui.Name->setText("XFitGym Manager");
+            manprofile->ui.DOB->setText("2004/12/13");
             return;
         }
         qDebug() << username << " " << id;
@@ -556,30 +623,46 @@ XFitGym::XFitGym(QWidget* parent)
             return;
         }
 
-        currentUserID = Login::membersData[id].id;
-        qDebug() << currentUserID << "<-- User id in Connect";
+        else if (Login::isCoach) {
+            ui.Main->setCurrentIndex(3);
+            coach_home->ui.welcome->setText("Welcome Back, Coach");
+            coachprofile->ui.ID->setText(id);
+            coachprofile->ui.Name->setText(Staff::staffData[id].name);
+            coachprofile->ui.DOB->setText(Staff::staffData[id].DateOFBirth);
+            coachprofile->ui.Role->setText(Staff::staffData[id].role);
+            return;
+        }
+        else if (Login::isReceptionist) {
+            ui.Main->setCurrentIndex(4);
+            recepprofile->ui.ID->setText(id);
+            recepprofile->ui.Name->setText(Staff::staffData[id].name);
+            recepprofile->ui.DOB->setText(Staff::staffData[id].DateOFBirth);
+            recepprofile->ui.Role->setText(Staff::staffData[id].role);
+            recep_home->ui.welcome->setText("Welcome Back, Receptionist");
 
-        user_Profile->ui.ID->setText(Login::membersData[id].id);
-        user_Profile->ui.Name->setText(Login::membersData[id].name);
-        user_Profile->ui.DOB->setText(Login::membersData[id].DateOFBirth);
-        if (Login::membersData[id].sub.type.isEmpty()) {
-            Login::membersData[id].sub.type = "NoSubscription";
-            user_Profile->ui.Plan->setText("No Subscription");
-
+            return;
         }
         else
         {
-            user_Profile->ui.Plan->setText(Login::membersData[id].sub.type);
-        }
-        home->ui.welcome->setText("Welcome Back, " + Login::membersData[id].name);
+            user_Profile->ui.ID->setText(Login::membersData[id].id);
+            user_Profile->ui.Name->setText(Login::membersData[id].name);
+            user_Profile->ui.DOB->setText(Login::membersData[id].DateOFBirth);
+            if (Login::membersData[id].sub.type.isEmpty()) {
+                Login::membersData[id].sub.type = "NoSubscription";
+                user_Profile->ui.Plan->setText("No Subscription");
 
+            }
+            else
+            {
+                user_Profile->ui.Plan->setText(Login::membersData[id].sub.type);
+            }
+            home->ui.welcome->setText("Welcome Back, " + Login::membersData[id].name);
 
-
-            qDebug() << "LogIn";
-            log->ui.showPassword->setIcon(hide);
-            log->ui.ID->setEchoMode(QLineEdit::Password);
             ui.Main->setCurrentIndex(1);
 
+            log->ui.showPassword->setIcon(hide);
+            log->ui.ID->setEchoMode(QLineEdit::Password);
+        }
         });
     connect(log->ui.Exit, &QPushButton::clicked, this, [=]()
         {
@@ -810,6 +893,10 @@ XFitGym::XFitGym(QWidget* parent)
             int col = i % 3;
             grid->addWidget(card, row, col);
             QObject::connect(waitlist, &QPushButton::clicked, [=]() {
+                if (Login::membersData[user_Profile->ui.ID->text()].sub.type.toLower() == "yearly vip")
+                {
+                    Classes::allsessions[a.first].WaitlistIds.push_front(user_Profile->ui.ID->text().toInt());
+                }
                 Classes::allsessions[a.first].WaitlistIds.push_back(user_Profile->ui.ID->text().toInt());
                 qDebug() << Classes::allsessions[a.first].WaitlistIds.back();
                 int size = Classes::allsessions[a.first].WaitlistIds.size();
@@ -827,8 +914,7 @@ XFitGym::XFitGym(QWidget* parent)
             QObject::connect(book, &QPushButton::clicked, [=]() {
                 TrainingSession tr = a.second;
                 Login::membersData[user_Profile->ui.ID->text()].AddTrainingSession(tr);
-                    
-
+                
                 queue<TrainingSession> bookedsession = Login::membersData[user_Profile->ui.ID->text()].bookedsessions;
                 set<int>checkin;
                 int size = bookedsession.size();
@@ -1091,8 +1177,6 @@ XFitGym::XFitGym(QWidget* parent)
 
 
     //dynamically generating the Courts
-
-
     QWidget* Courts = new QWidget;
     Courts->setStyleSheet("background-color: #1e1e1e; color: white;");
 
@@ -1125,58 +1209,34 @@ XFitGym::XFitGym(QWidget* parent)
         date->setStyleSheet("color: #CCCCCC;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
         date->adjustSize();
 
-
         QPushButton* cancelCourt = new QPushButton("Cancel", activeCourt);
-        cancelCourt->setStyleSheet(
-            "QPushButton {"
-            "  background-color: #2c2c2c;"
-            "  color: white;"
-            "  font-family: 'Futura';"
-            "  font-size: 11pt;"
-            "  padding: 6px 16px;"
-            "  border: 2px solid #2c2c2c;"
-            "  border-radius: 6px;"
-            "}"
-            "QPushButton:hover {"
-            "  background-color: #FF0000;"
-            "  border: 2px solid #FF0000;"
-            "  color: white;"
-            "}"
-            "QPushButton:pressed {"
-            "  background-color: #c0392b;"
-            "}"
-        );
-
-            allCourtButtons.push_back({ a.first,a.second,cancelCourt});
-            QPushButton* rescheduleCourt = new QPushButton("Reschedule", activeCourt);
-            rescheduleCourt->setStyleSheet(R"(
-            QPushButton {
-                background-color: #2c2c2c;
-                color: white;
-                border: 2px solid #2c2c2c;
-                border-radius: 6px;
-                font-family: 'Futura';
-                font-size: 11pt;
-                padding: 6px 16px;
-            }
-
-        QPushButton:hover {
-            background-color: #8B50FF;
-            border: 2px solid #8B50FF;
-            color: white;
+        if (true)
+        {
+            cancelCourt->setStyleSheet(
+                "QPushButton {"
+                "  background-color: #2c2c2c;"
+                "  color: white;"
+                "  font-family: 'Futura';"
+                "  font-size: 11pt;"
+                "  padding: 6px 16px;"
+                "  border: 2px solid #2c2c2c;"
+                "  border-radius: 6px;"
+                "}"
+                "QPushButton:hover {"
+                "  background-color: #FF0000;"
+                "  border: 2px solid #FF0000;"
+                "  color: white;"
+                "}"
+                "QPushButton:pressed {"
+                "  background-color: #c0392b;"
+                "}"
+            );
         }
 
-        QPushButton:pressed {
-            background-color: #6F3FCC;
-        }
-    )");
 
-
-        rescheduleCourt->adjustSize();
         cancelCourt->adjustSize();
         QTimer::singleShot(0, [=]() {
             int w = activeCourt->width();
-            rescheduleCourt->move(w - cancelCourt->width() - 30 - rescheduleCourt->width(), 20);
             cancelCourt->move(w - cancelCourt->width() - 15, 20);
             });
 
@@ -1199,10 +1259,8 @@ XFitGym::XFitGym(QWidget* parent)
                 activeCourt->deleteLater();
                 });
 
-        QObject::connect(rescheduleCourt, &QPushButton::clicked, [=]() {
-            qDebug() << "Rescheduled";
-            });
 
+        allCourtButtons.push_back({ a.first,a.second,cancelCourt});
     }
 
     Courts->setLayout(layoutCourt);
@@ -1308,20 +1366,23 @@ XFitGym::XFitGym(QWidget* parent)
         grid->setSpacing(20);
         grid->setContentsMargins(20, 20, 20, 20);
 
-        int numStaff = 5;
-        QList<Cards*> staffCards;
-        for (int i = 0; i < numStaff; i++) {
-            QString className = "Biceps Class";
-            QString date_time = "5/5/2025    7:00 PM";
-            QString coachName = "Coach: Khalx";
-            int attend = 30;
-            int max = 40;
+        int numStaff = Classes::tempallsessions.size();
+        QList<Cards*> classCards;
+        int i = 0;
+        for (auto session : Classes::tempallsessions) {
+            if(session.second.coachname == coachprofile->ui.Name->text())
+            {
+                QString className = session.second.name;
+                QString date_time = session.second.date.toString() + "   " + session.second.time;
+                QString coachName = session.second.coachname;
+                int attend = session.second.size;
+                int max = session.second.capacity;
 
-            Cards* staffCard = new Cards(className, date_time, coachName, attend, max, scrollWidget);
-            staffCards.append(staffCard);
+                Cards* classCard = new Cards(className, date_time, coachName, attend, max, scrollWidget);
+                classCards.append(classCard);
 
-            QPushButton* cancelBtn = new QPushButton("Cancel", staffCard);
-            cancelBtn->setStyleSheet(R"(
+                QPushButton* cancelBtn = new QPushButton("Cancel", classCard);
+                cancelBtn->setStyleSheet(R"(
         QPushButton {
             background-color: #E53935; 
             color: white; 
@@ -1338,17 +1399,21 @@ XFitGym::XFitGym(QWidget* parent)
         }
     )");
 
-            staffCard->buttonLayout->addWidget(cancelBtn);
+                classCard->buttonLayout->addWidget(cancelBtn);
 
-            int row = i / 3;
-            int col = i % 3;
-            grid->addWidget(staffCard, row, col);
+                int row = i / 3;
+                int col = i % 3;
+                grid->addWidget(classCard, row, col);
 
-            connect(cancelBtn, &QPushButton::clicked, this, [=]() {
-                grid->removeWidget(staffCard);
-                staffCard->deleteLater();
-                reorganizeGrid(grid, nullptr);
-                });
+                connect(cancelBtn, &QPushButton::clicked, this, [=]() {
+
+                    coach->CancelSession(session.second.id);
+                    grid->removeWidget(classCard);
+                    classCard->deleteLater();
+                    reorganizeGrid(grid, nullptr);
+                    });
+                i++;
+            }
         }
 
         if (coach_classes->ui.scrollArea->widget()) {
@@ -1542,6 +1607,7 @@ void XFitGym::save()
     feedback->saveFeedBack();
     log->saveData();
     padel->savenews();
+    staff->SaveStaffData();
 }
 void XFitGym::load()
 {
@@ -1550,6 +1616,7 @@ void XFitGym::load()
     notifications->loadNotifications();
     feedback->loadFeedBack();
     padel->loadnews();
+    staff->LoadStaffData();
 }
 
 Cards::Cards(QString title, QString line1, QString line2, QWidget* parent)
