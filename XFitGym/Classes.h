@@ -1,4 +1,4 @@
-
+#pragma once
 #include <QtWidgets/QMainWindow>
 #include "ui_Classes.h"
 #include"TrainingSession.h"

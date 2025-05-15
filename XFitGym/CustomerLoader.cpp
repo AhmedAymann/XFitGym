@@ -1,8 +1,10 @@
 ﻿#include "CustomerLoader.h"
+#include "Classes.h"
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
 #include "Classes.h"
+
 
 
 map<QString,Customer> CustomerLoader::LoadCustomersFromFile(const QString& filename)
