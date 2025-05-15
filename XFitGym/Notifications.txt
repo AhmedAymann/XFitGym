@@ -1,0 +1,47 @@
+103,You Have 10 Days Left in Your Subscription
+103,You Have 9 Days Left in Your Subscription
+103,You Have 8 Days Left in Your Subscription
+103,You Have 7 Days Left in Your Subscription
+103,You Have 6 Days Left in Your Subscription
+103,You Have 5 Days Left in Your Subscription
+103,You Have 4 Days Left in Your Subscription
+103,You Have 3 Days Left in Your Subscription
+103,You Have 2 Days Left in Your Subscription
+103,You Have 10 Days Left in Your Subscription
+103,You Have 9 Days Left in Your Subscription
+103,You Have 10 Days Left in Your Subscription
+103,You Have 9 Days Left in Your Subscription
+103,You Have 8 Days Left in Your Subscription
+103,You Have 7 Days Left in Your Subscription
+103,You Have 6 Days Left in Your Subscription
+103,You Have 10 Days Left in Your Subscription
+103,You Have 9 Days Left in Your Subscription
+103,You Have 8 Days Left in Your Subscription
+103,You Have 7 Days Left in Your Subscription
+103,You Have 6 Days Left in Your Subscription
+103,You Have 5 Days Left in Your Subscription
+103,You Have 4 Days Left in Your Subscription
+103,You Have 3 Days Left in Your Subscription
+103,You Have 2 Days Left in Your Subscription
+103,You Have 1 Days Left in Your Subscription
+103,You Have 0 Days Left in Your Subscription
+103,You Have 10 Days Left in Your Subscription
+103,You Have 9 Days Left in Your Subscription
+103,You Have 8 Days Left in Your Subscription
+103,You Have 10 Days Left in Your Subscription
+103,You Have 9 Days Left in Your Subscription
+103,You Have 8 Days Left in Your Subscription
+103,You Have 7 Days Left in Your Subscription
+103,You Have 6 Days Left in Your Subscription
+103,You Have 5 Days Left in Your Subscription
+103,You Have 4 Days Left in Your Subscription
+103,You Have 3 Days Left in Your Subscription
+103,You Have 2 Days Left in Your Subscription
+103,You Have 1 Days Left in Your Subscription
+103,You Have 0 Days Left in Your Subscription
+103,Your Gym Membership Has Expired
+104,Your Gym Membership Has Expired
+177,Your Gym Membership Has Expired
+188,Your Gym Membership Has Expired
+199,Your Gym Membership Has Expired
+1008,Your Gym Membership Has Expired

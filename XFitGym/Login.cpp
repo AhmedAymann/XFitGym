@@ -29,9 +29,11 @@ void Login::saveData()
     QTextStream out(&file);
 
     for (const auto& pair : Login::membersData) {
+
         const QString& id = pair.first;
         const Customer& c = pair.second;
 
+        if (c.email.isEmpty()) continue;
         QStringList baseFields;
         baseFields << id << c.email << c.name << c.DateOFBirth;
 
