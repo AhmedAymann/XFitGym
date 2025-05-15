@@ -185,32 +185,15 @@
     border: 2px solid #8B50FF ;
 	background-color: #2e2f30;</string>
    </property>
-   <property name="maximumDateTime">
-    <datetime>
-     <hour>23</hour>
-     <minute>59</minute>
-     <second>59</second>
-     <year>2025</year>
-     <month>5</month>
-     <day>31</day>
-    </datetime>
-   </property>
-   <property name="minimumDateTime">
-    <datetime>
-     <hour>8</hour>
-     <minute>0</minute>
-     <second>0</second>
-     <year>2025</year>
-     <month>5</month>
-     <day>1</day>
-    </datetime>
-   </property>
    <property name="minimumTime">
     <time>
-     <hour>8</hour>
+     <hour>0</hour>
      <minute>0</minute>
      <second>0</second>
     </time>
+   </property>
+   <property name="displayFormat">
+    <string>yyyy/MM/dd h:mm AP</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="classCapacity">

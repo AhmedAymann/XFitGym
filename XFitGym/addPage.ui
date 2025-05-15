@@ -190,7 +190,7 @@ padding-left: 10px;
 color: white;</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_6">
+  <widget class="QLabel" name="keyLabel">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -258,7 +258,7 @@ padding-left: 10px;
 color: white;</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="subPlans">
+  <widget class="QComboBox" name="comboBox">
    <property name="geometry">
     <rect>
      <x>180</x>
@@ -280,31 +280,6 @@ color: white;</string>
 background-color: #4A4A4A;
 text-align: center;</string>
    </property>
-   <item>
-    <property name="text">
-     <string>Choose Plan</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Monthly Plan</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>6-Months Plan</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Yearly Plan</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Yearly VIP Plan </string>
-    </property>
-   </item>
   </widget>
   <widget class="QLabel" name="ID">
    <property name="geometry">
