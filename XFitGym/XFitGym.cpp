@@ -229,12 +229,16 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
                 QPushButton* button = it.key();
                 double price = it.value();
 
+                //RENEW BUTTON
                 QObject::connect(button, &QPushButton::clicked, parent, [=]() {
                     double discount = 0.0;
+                    //int daysRemainingSubEnd = currentDate.daysTo(/* end date of the current subscription */);
+                    
+                    
                     if (true) {
                         discount = 0.5 * price;
                     }
-                    // make your conditions here .. like price == 300 && halfDiscApplied == true
+                    
                     double total = price - discount;
 
                     renewPage->ui.subFees->setText(QString::number(price) + "$");
@@ -502,7 +506,7 @@ XFitGym::XFitGym(QWidget* parent)
                 date->adjustSize();
 
             QTimer::singleShot(0, [=]() {
-                int w = workouts->width();
+                int w = workouts->width(); ////// MIGHT THROW AN EXCEPTION
                 int h = workouts->height();
                 date->move((w - date->width()) / 2 + 35, coach->y());
                 });
@@ -1349,8 +1353,8 @@ XFitGym::XFitGym(QWidget* parent)
         QString secondTeam_firstName = man_tournaments->ui.SFname->text();
         QString secondTeam_secondName = man_tournaments->ui.SSname->text();
         QString secondScore = man_tournaments->ui.Sscore->text();
-        QString thirdTeam_firstName = man_tournaments->ui.SSname->text();
-        QString thirdTeam_secondName = man_tournaments->ui.SSname->text();
+        QString thirdTeam_firstName = man_tournaments->ui.TFname->text();
+        QString thirdTeam_secondName = man_tournaments->ui.TSname->text();
         QString thirdScore = man_tournaments->ui.Tscore->text();
 
         bool empty = (firstTeam_firstName.isEmpty() || firstTeam_secondName.isEmpty() || firstScore.isEmpty() || secondTeam_firstName.isEmpty() || secondTeam_secondName.isEmpty()

@@ -13,6 +13,7 @@ Notifications::~Notifications()
 {}
 
 QMap<int, QVector<QString>> Notifications::notifications;
+QMap<int, QVector<QString>> Notifications::tempNotifications;
 
 int Notifications::CheckSubscriptionDeadline(const Subscription& sub, const QDate& currentDate)
 {
@@ -47,6 +48,12 @@ int Notifications::CheckSubscriptionDeadline(const Subscription& sub, const QDat
     }
 }
 
+
+
+
+// Load and Save Functiona (We decided To remove them at the end)
+
+
 void Notifications::saveNotifications()
 {
 
@@ -64,8 +71,8 @@ void Notifications::saveNotifications()
     }
 
     QTextStream out(&file);
-    
-    for (auto it = notifications.begin(); it != notifications.end(); ++it) {
+
+    for (auto it = tempNotifications.begin(); it != tempNotifications.end(); ++it) {
         int id = it.key();
         const QVector<QString>& messages = it.value();
         for (const QString& msg : messages) {
@@ -78,6 +85,9 @@ void Notifications::saveNotifications()
     file.close();
 
 }
+
+
+
 
 void Notifications::loadNotifications()
 {
@@ -97,8 +107,6 @@ void Notifications::loadNotifications()
         notifications[parts[0].toInt()].push_back(parts[1]);
     }
 
-
+    tempNotifications = notifications;
     file.close();
-
-
 }

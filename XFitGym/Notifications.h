@@ -17,6 +17,7 @@ public:
     Ui::NotificationsClass ui;
 
     static QMap<int, QVector<QString>> notifications;
+    static QMap<int, QVector<QString>> tempNotifications;
     void saveNotifications();
     void loadNotifications();
 
