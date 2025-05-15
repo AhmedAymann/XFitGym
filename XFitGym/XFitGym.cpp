@@ -459,12 +459,27 @@ void generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
                 QTimer::singleShot(1250, addPage->ui.message, &QLabel::hide);
                 return;
             }
-
             Staff s;
             s.email = addPage->ui.USERNAME->text();
             s.name = addPage->ui.NAME->text();
             s.DateOFBirth = addPage->ui.DOB->text();
             s.role = addPage->ui.comboBox->currentText();
+            if (s.role.toLower() == "coach") {
+                Coach c;
+                c.email = addPage->ui.USERNAME->text();
+                c.name = addPage->ui.NAME->text();
+                c.DateOFBirth = addPage->ui.DOB->text();
+                c.role = addPage->ui.comboBox->currentText();
+                Coach::coachData.insert({ id,c });
+            }
+            else if (s.role.toLower() == "receptionist") {
+                Receptionist r;
+                r.email = addPage->ui.USERNAME->text();
+                r.name = addPage->ui.NAME->text();
+                r.DateOFBirth = addPage->ui.DOB->text();
+                r.role = addPage->ui.comboBox->currentText();
+                Receptionist::recepData.insert({ id,r });
+            }
             Staff::staffData.insert({ id, s });
 
             addPage->close();
@@ -630,6 +645,8 @@ XFitGym::XFitGym(QWidget* parent)
             coachprofile->ui.Name->setText(Staff::staffData[id].name);
             coachprofile->ui.DOB->setText(Staff::staffData[id].DateOFBirth);
             coachprofile->ui.Role->setText(Staff::staffData[id].role);
+            Login::isCoach = false;
+            Login::isStaff = false;
             return;
         }
         else if (Login::isReceptionist) {
@@ -639,7 +656,8 @@ XFitGym::XFitGym(QWidget* parent)
             recepprofile->ui.DOB->setText(Staff::staffData[id].DateOFBirth);
             recepprofile->ui.Role->setText(Staff::staffData[id].role);
             recep_home->ui.welcome->setText("Welcome Back, Receptionist");
-
+            Login::isReceptionist = false;
+            Login::isStaff = false;
             return;
         }
         else
@@ -662,6 +680,7 @@ XFitGym::XFitGym(QWidget* parent)
 
             log->ui.showPassword->setIcon(hide);
             log->ui.ID->setEchoMode(QLineEdit::Password);
+            Login::isMember = false;
         }
         });
     connect(log->ui.Exit, &QPushButton::clicked, this, [=]()
@@ -1443,8 +1462,12 @@ XFitGym::XFitGym(QWidget* parent)
         recep_home->ui.Pages->setCurrentIndex(2);
         });
     connect(recep_home->ui.Classes, &QPushButton::clicked, this, [=]() {
-        recep_classes->ui.coachNames->addItem("Coach Mona");//
-        recep_classes->ui.coachNames->addItem("Coach Ahmed");
+
+        recep_classes->ui.coachNames->clear();
+        for(auto coach : Coach::coachData)
+        {
+            recep_classes->ui.coachNames->addItem(coach.second.name);
+        }
         //recep_classes->ui.dateTime->setMinimumDate(QDate::currentDate());
         //recep_classes->ui.dateTime->setMaximumDate(QDate::currentDate().addDays(30));
         recep_classes->ui.className->setMaxLength(20);

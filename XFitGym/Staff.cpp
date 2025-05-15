@@ -2,6 +2,8 @@
 #include "Staff.h"
 #include <qfile.h>
 #include <QTextStream>
+#include <Coach.h>
+#include <Receptionist.h>
 
 map<QString, Staff> Staff::staffData;
 
@@ -36,6 +38,14 @@ void Staff::LoadStaffData()
         QString dob = parts[3];
         QString role = parts[4];
 
+        if (role.toLower() == "coach") {
+            Coach c(id,username,name,dob,role);
+            Coach::coachData.insert({ id,c });
+        }
+        else if (role.toLower() == "receptionist") {
+            Receptionist r(id,username,name,dob,role,"");
+            Receptionist::recepData.insert({ id, r });
+        }
         Staff s(id, username,name, dob, role);
         staffData.insert({ id,s });
     }

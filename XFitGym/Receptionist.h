@@ -6,10 +6,11 @@ class Receptionist : public Staff
 {
 public:
 
+	static map<QString, Receptionist> recepData;
 	string newsText;
-
+	
+	Receptionist();
 	Receptionist(QString id, QString email, QString name, QString DateOFBirth,QString role, string newsText);
-
 
 	void AddMember(Customer customer);
 	void RemoveMember(int userID);
