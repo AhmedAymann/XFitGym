@@ -1,6 +1,7 @@
 #pragma once
-#include"Coach.h"
 #include "qdatetime.h"
+#include <deque>
+using namespace std;
 
 
 class TrainingSession

@@ -3,5 +3,5 @@
 1002,lina,saeed,1998-07-15,yearly,2024-01-15,2025-01-15,300|NoCourtBookings|NoTrainingSessions
 1003,omar,mostafa,1985-11-20,NoSubscription|NoCourtBookings|NoTrainingSessions
 1004,bas,bassam,2005-05-15,NoSubscription|NoCourtBookings|NoTrainingSessions
-1005,ahmed,khalx,1999-08-11,NoSubscription|NoCourtBookings|NoTrainingSessions
-1006,khalx,hoss,1978-10-25,NoSubscription|NoCourtBookings|NoTrainingSessions
+1005,ahmed,khalx,1999-08-11,NoSubscription|NoCourtBookings|Pilates,Coach Mona,2025-01-13,09:00,2004
+1006,khalx,hoss,1978-10-25,NoSubscription|NoCourtBookings|Pilates,Coach Mona,2025-01-13,09:00,2004

@@ -1277,10 +1277,10 @@ XFitGym::XFitGym(QWidget* parent)
         recep_home->ui.Pages->setCurrentIndex(2);
         });
     connect(recep_home->ui.Classes, &QPushButton::clicked, this, [=]() {
-        recep_classes->ui.coachNames->addItem("Coach Mona");
+        recep_classes->ui.coachNames->addItem("Coach Mona");//
         recep_classes->ui.coachNames->addItem("Coach Ahmed");
-        recep_classes->ui.dateTime->setMinimumDate(QDate::currentDate());
-        recep_classes->ui.dateTime->setMaximumDate(QDate::currentDate().addDays(30));
+        //recep_classes->ui.dateTime->setMinimumDate(QDate::currentDate());
+        //recep_classes->ui.dateTime->setMaximumDate(QDate::currentDate().addDays(30));
         recep_classes->ui.className->setMaxLength(20);
         recep_classes->ui.classCapacity->setValidator(new QIntValidator(0, 999, this));
         recep_home->ui.Pages->setCurrentIndex(3);
@@ -1402,10 +1402,16 @@ XFitGym::XFitGym(QWidget* parent)
 
         QString coachName = recep_classes->ui.coachNames->currentText();
         QString className = recep_classes->ui.className->text();
-        QString classCapacity = recep_classes->ui.classCapacity->text();
-        QString classDate = recep_classes->ui.dateTime->date().toString("yyyy-MM-dd");
+        int classCapacity = recep_classes->ui.classCapacity->text().toInt();
+        QDate classDate = recep_classes->ui.dateTime->date();
         QString classTime = recep_classes->ui.dateTime->time().toString("hh:mm AP");
-        //QString classID = QString::number( 201 + vectorOfSessions.size());
+        int classID =  2001 + Classes::tempallsessions.size();
+        int classSize = 0;
+
+
+        TrainingSession tr(classID, className, classCapacity, classSize,coachName, classDate, classTime);
+        Classes::tempallsessions[classID] = tr;
+        Classes::allsessions[classID] = tr;
 
         recep_classes->ui.coachNames->setCurrentIndex(0);
         recep_classes->ui.classCapacity->clear();
@@ -1415,6 +1421,9 @@ XFitGym::XFitGym(QWidget* parent)
         });
     connect(recep_news->ui.submit, &QPushButton::clicked, this, [=]() {
         QString news = recep_news->ui.News->toPlainText();
+        QString image = recep_news->relativePath;
+
+        Padel::news.push({ news,image });
 
         recep_news->ui.News->clear();
         recep_news->ui.image->clear();
