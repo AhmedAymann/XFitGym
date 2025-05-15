@@ -13,6 +13,7 @@ Classes::~Classes()
 {}
 
 map<int, TrainingSession> Classes:: allsessions;
+map<int, TrainingSession> Classes:: tempallsessions;
 
 void Classes::savesession()
 {
@@ -30,7 +31,7 @@ void Classes::savesession()
 
     QTextStream out(&file);
 
-    for (auto a : allsessions) {
+    for (auto a : tempallsessions) {
 
         QString line = QString::number(a.first) + "," +
             a.second.name + "," +
@@ -72,6 +73,6 @@ void Classes::loadsession()
         
         allsessions[id] = session;
     }
-
+    tempallsessions = allsessions;
     file.close();
 }

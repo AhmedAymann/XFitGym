@@ -15,3 +15,11 @@ renewMembers::renewMembers(QWidget* parent)
 }
 renewMembers::~renewMembers()
 {}
+
+addMembers::addMembers(QWidget* parent)
+    : QMainWindow(parent)
+{
+    ui.setupUi(this);
+}
+addMembers::~addMembers()
+{}
