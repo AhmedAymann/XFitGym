@@ -2,6 +2,7 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_Classes.h"
 #include"TrainingSession.h"
+#include "Coach.h"
 #include<map>
 
 class Classes : public QWidget

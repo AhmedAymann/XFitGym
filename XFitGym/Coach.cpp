@@ -18,4 +18,10 @@ void Coach::CancelSession(int id)
             break;
         }
     }
+    for (auto it = Classes::allsessions.begin(); it != Classes::allsessions.end(); it++) {
+        if (it->second.id == id) {
+            Classes::allsessions.erase(it);
+            break;
+        }
+    }
 }

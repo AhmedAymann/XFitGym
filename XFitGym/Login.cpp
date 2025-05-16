@@ -93,27 +93,24 @@ void Login::saveData()
 
     file.close();
 }
-bool Login::CheckLogin (QString& username, QString& id)
-{
-    qDebug() << membersData.size();
-    if (membersData[id].email == username)
-    {
+bool Login::CheckLogin(QString& username, QString& id) {
+    auto memberIt = membersData.find(id);
+    if (memberIt != membersData.end() && memberIt->second.email == username) {
         isMember = true;
         return true;
     }
-    else if (Staff::staffData[id].email == username)
-    {
+    
+    auto staffIt = Staff::staffData.find(id);
+    if (staffIt != Staff::staffData.end() && staffIt->second.email == username) {
         isStaff = true;
-        if (Staff::staffData[id].role.toLower() == "receptionist")
-        {
+        if (staffIt->second.role.toLower() == "receptionist") {
             isReceptionist = true;
         }
-        else if (Staff::staffData[id].role.toLower() == "coach")
-        {
+        else if (staffIt->second.role.toLower() == "coach") {
             isCoach = true;
         }
         return true;
     }
+    
     return false;
 }
-
