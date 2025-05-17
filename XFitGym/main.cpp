@@ -19,17 +19,17 @@ int daysSimulated = 0;
 
 void simulateDay(XFitGym& gui) {
     // Logging Attendance for All customers
-    for (auto& c : customers) {
+    for (auto& c : Login::membersData) {
         //qDebug() << "Customer of id" << c.second.id << " - gui.currentUserID " << gui.currentUserID;
 
         // Mark attendance as true for the logged-in customer, false for others
         if (c.second.id == gui.currentUserID) {
             c.second.attendance.push_back(true);  // Attendance is true for logged-in user
-            //qDebug() << "Attendance True for " << c.second.name;
+            qDebug() << "Attendance True for " << c.second.name;
         }
         else {
             c.second.attendance.push_back(false);  // Attendance is false for others
-            //qDebug() << "Attendance False for " << c.second.name;
+            qDebug() << "Attendance False for " << c.second.name;
         }
 
         // Make sure attendance is updated for each customer in the vector
@@ -43,7 +43,7 @@ void simulateDay(XFitGym& gui) {
     qDebug() << "\n📅 Simulated Date:" << currentDate.toString("yyyy-MM-dd");
 
     // Subscription Deadline Check for all customers
-    for (auto& c : customers) {
+    for (auto& c : Login::membersData) {
         int daysLeft = notifier->CheckSubscriptionDeadline(c.second.sub, currentDate);
         //qDebug() << "\n DAYS LEFT: " << daysLeft;
         if (daysLeft < 0) {
@@ -61,22 +61,21 @@ void simulateDay(XFitGym& gui) {
 
 
 
-    // Check if Each bookedcourts of each customer is due in 3 days or not 
-    for (auto& c : customers) {
-        for (auto a : c.second.bookedCourt) {
-            int daysLeftCancelCourts = currentDate.daysTo(a.first);
-
-            if (daysLeftCancelCourts <= 3) {
-                // Find the button that matches this booking
-                for (CourtWidgetData& data : gui.allCourtButtons) {
-                    if (data.bookingDate == a.first && data.timeSlot == a.second) {
-                        data.cancelButton->setEnabled(false);
-                        data.cancelButton->setStyleSheet(" QPushButton { background-color: grey; border: 1px solid grey; }");
-                    }
-                }
-            }
-        }
-    }
+    //// Check if Each bookedcourts of each customer is due in 3 days or not 
+    //for (auto& c : Login::membersData) {
+    //    for (auto a : c.second.bookedCourt) {
+    //        int daysLeftCancelCourts = currentDate.daysTo(a.first);
+    //        if (daysLeftCancelCourts <= 3) {
+    //            // Find the button that matches this booking
+    //            for (CourtWidgetData& data : gui.allCourtButtons) {
+    //                if (data.bookingDate == a.first && data.timeSlot == a.second) {
+    //                    data.cancelButton->setEnabled(false);
+    //                    data.cancelButton->setStyleSheet(" QPushButton { background-color: grey; border: 1px solid grey; }");
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
 
 
 
@@ -98,7 +97,7 @@ void simulateDay(XFitGym& gui) {
     
 
     //Check if a Training Session had passed and put it in the History
-    for (auto& c : customers) {
+    for (auto& c : Login::membersData) {
         int sz = Login::membersData[c.first].bookedsessions.size();
         if (sz == 0) continue;
         //if (c.first == "199") {
@@ -129,8 +128,8 @@ void simulateDay(XFitGym& gui) {
 
 
     // Checking attendance for all customers and updating the GUI
-    if (customers.find(gui.currentUserID) != customers.end()) {
-        gui.dash->setAttendance(daysSimulated, customers[gui.currentUserID].attendance);
+    if (Login::membersData.find(gui.currentUserID) != Login::membersData.end()) {
+        gui.dash->setAttendance(daysSimulated, Login::membersData[gui.currentUserID].attendance);
     }
 
     // Moving to the Next Day
@@ -158,7 +157,7 @@ int main(int argc, char* argv[])
     QObject::connect(timer, &QTimer::timeout, [&]() {
         simulateDay(w);
         });
-    timer->start(7000); // #/1000 seconds per simulated day
+    timer->start(1000000000); // #/1000 seconds per simulated day
 
     return a.exec();
 }

@@ -69,6 +69,7 @@ void Classes::loadsession()
         QDate date = QDate::fromString(parts[5], "yyyy-MM-dd");
         QString time = parts[6];
 
+
         TrainingSession session(id, name, capacity, size, coachname, date, time);
         
         allsessions[id] = session;

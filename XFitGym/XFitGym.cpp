@@ -199,13 +199,6 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
         });
     int i = 0;
     for (auto user : Login::membersData) {
-        
-            if (user.second.name.isEmpty())
-            {
-                qDebug() << "Skipped ";
-                continue;
-            }
-        
         QString name = user.second.name;
         QString plan = user.second.sub.type;
         QString subscription;
@@ -256,7 +249,7 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
         int col = i % 3;
         grid->addWidget(card, row, col);
         
-        QString Username = user.second.id;
+        QString Username = user.first;
         QObject::connect(removeBtn, &QPushButton::clicked, parent, [=]() {
             for (auto it = Login::membersData.begin(); it != Login::membersData.end(); it++) {
                 if (Username == it->first) {
@@ -662,6 +655,7 @@ XFitGym::XFitGym(QWidget* parent)
         }
         else
         {
+            currentUserID = Login::membersData[id].id;
             user_Profile->ui.ID->setText(Login::membersData[id].id);
             user_Profile->ui.Name->setText(Login::membersData[id].name);
             user_Profile->ui.DOB->setText(Login::membersData[id].DateOFBirth);
@@ -879,7 +873,7 @@ XFitGym::XFitGym(QWidget* parent)
         for (auto a:Classes::allsessions) {
             QString className = a.second.name;
             QString date_time = a.second.date.toString("yyyy-MM-dd")+"    "+a.second.time;
-            QString coachName = a.second.coachname;
+            QString coachName = "Coach: " + a.second.coachname;
             int attend = a.second.size;
             int max = a.second.capacity;
 
@@ -1372,6 +1366,7 @@ XFitGym::XFitGym(QWidget* parent)
         });
     connect(man_home->ui.Members, &QPushButton::clicked, this, [=]() {
         generateMemberCards(man_members->ui.scrollArea, this);
+        qDebug() << Login::membersData.size();
         man_home->ui.Pages->setCurrentIndex(2);
     });
         
@@ -1459,11 +1454,13 @@ XFitGym::XFitGym(QWidget* parent)
     //receptionist homepage control panel
     connect(recep_home->ui.Members, &QPushButton::clicked, this, [=]() {
         generateMemberCards(recep_members->ui.scrollArea, this);
+        qDebug() << Login::membersData.size();
         recep_home->ui.Pages->setCurrentIndex(2);
         });
     connect(recep_home->ui.Classes, &QPushButton::clicked, this, [=]() {
 
         recep_classes->ui.coachNames->clear();
+        recep_classes->ui.coachNames->addItem("Choose coach");
         for(auto coach : Coach::coachData)
         {
             recep_classes->ui.coachNames->addItem(coach.second.name);
