@@ -9,6 +9,17 @@ class Manager : public Staff
 {
 public:
 	
+	static int monthlyCounter ;
+	static int sixmonthlyCounter ;
+	static int yearlyCounter ;
+	static int yearlyVIPCounter ;
+
+	
+
+	static int sessionsCounter;
+	static int courtsCounter;
+
+	
 
 	Manager(QString id, QString email, QString name, QString DateOFBirth, QString role);
 

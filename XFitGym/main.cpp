@@ -76,7 +76,7 @@ void simulateDay(XFitGym& gui) {
     //        }
     //    }
     //}
-
+    //
 
 
     ////Check for all Training Sessions if Their date had passed
@@ -157,7 +157,7 @@ int main(int argc, char* argv[])
     QObject::connect(timer, &QTimer::timeout, [&]() {
         simulateDay(w);
         });
-    timer->start(1000000000); // #/1000 seconds per simulated day
+    timer->start(7000); // #/1000 seconds per simulated day
 
     return a.exec();
 }

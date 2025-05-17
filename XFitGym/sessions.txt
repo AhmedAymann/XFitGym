@@ -2,7 +2,7 @@
 2001,Indoor Cycling,12,0,Ayman,2025-01-07,17:00
 2002,Yoga Basics,20,0,Ayman,2025-01-09,10:00
 2003,Cardio Blast,18,0,Bigramy,2025-01-11,18:30
-2004,Pilates,10,1,Mona,2025-01-13,09:00
+2004,Pilates,10,0,Mona,2025-01-13,09:00
 2005,Indoor Cycling,1,0,Omar,2025-01-14,17:00
 2006,Yoga Basics,14,0,Mona,2025-01-16,10:00
 2007,Cardio Blast,16,0,Bigramy,2025-01-18,18:30

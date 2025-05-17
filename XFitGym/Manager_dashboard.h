@@ -9,5 +9,6 @@ public:
     Manager_dashboard(QWidget* parent = nullptr);
     ~Manager_dashboard();
     Ui::Manager_DashboardClass ui;
+
 };
 

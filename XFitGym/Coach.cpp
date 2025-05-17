@@ -1,4 +1,5 @@
 #include "Coach.h"
+#include "Login.h"
 
 map<QString, Coach> Coach::coachData;
 
@@ -22,6 +23,23 @@ void Coach::CancelSession(int id)
         if (it->second.id == id) {
             Classes::allsessions.erase(it);
             break;
+        }
+    }
+    for (auto& a : Login::membersData)
+    {
+        int size=a.second.bookedsessions.size();
+        for (int i = 0; i < size; i++)
+        {
+            TrainingSession tr = a.second.bookedsessions.front();
+            if (tr.id == id)
+            {
+                a.second.bookedsessions.pop();
+            }
+            else
+            {
+                a.second.bookedsessions.push(tr);
+                a.second.bookedsessions.pop();
+            }
         }
     }
 }
