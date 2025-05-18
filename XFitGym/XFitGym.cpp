@@ -246,16 +246,16 @@ void XFitGym::generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
             });
         });
     int i = 0;
-    for (auto user : Login::membersData) {
+    for (auto& user : Login::membersData) {
         QString name = user.second.getName();
         QString plan = user.second.sub.type;
         QString subscription;
         if(plan.toLower() == "monthly")
-            subscription = "Ends: " + QDate::currentDate().addMonths(1).toString("yyyy/MM/dd");
+            subscription = "Ends: " + user.second.sub.endDate.toString("yyyy/MM/dd");
         else if(plan.toLower() == "6-months")
-            subscription = "Ends: " + QDate::currentDate().addMonths(6).toString("yyyy/MM/dd");
+            subscription = "Ends: " + user.second.sub.endDate.toString("yyyy/MM/dd");
         else if(plan.toLower() == "yearly")
-            subscription = "Ends: " + QDate::currentDate().addYears(1).toString("yyyy/MM/dd");
+            subscription = "Ends: " + user.second.sub.endDate.toString("yyyy/MM/dd");
         else if (plan.toLower() == "yearly vip")
             subscription = "Ends: " + user.second.sub.endDate.toString("yyyy/MM/dd");
 
@@ -308,13 +308,10 @@ void XFitGym::generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
             card->deleteLater();
             reorganizeGrid(grid, addCard);
             });
-        bool* half = new bool(false);
-        bool* quarter = new bool(false);
-        bool* tenth = new bool(false);
         double* Total = new double();
         QString* Plan = new QString("");
 
-        QObject::connect(renewBtn, &QPushButton::clicked, parent, [=, &man, &recep]() {
+        QObject::connect(renewBtn, &QPushButton::clicked, parent, [=, &man, &recep, &user]() {
             renewMembers* renewPage = new renewMembers(parent);
 
             int screenWidth = 960;
@@ -338,42 +335,21 @@ void XFitGym::generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
             group->addButton(renewPage->ui.YearVIP);
 
             QMap<QPushButton*, QPair<double, QString>> priceMap = {
-            { renewPage->ui.Month,    {300, "Month"}},
+            { renewPage->ui.Month,    {300, "Monthly"}},
             { renewPage->ui.sixMonth, {1200, "6-Months"}},
-            { renewPage->ui.Year,     {2200, "Year"}},
-            { renewPage->ui.YearVIP,  {4000, "YearVIP"} }
+            { renewPage->ui.Year,     {2200, "Yearly"}},
+            { renewPage->ui.YearVIP,  {4000, "Yearly VIP"} }
             };
 
             for (auto it = priceMap.begin(); it != priceMap.end(); ++it) {
                 QPushButton* button = it.key();
                 double price = it.value().first;
                 QString pl = it.value().second;
-
                 
-                QObject::connect(button, &QPushButton::clicked, parent, [=]() {
+                QObject::connect(button, &QPushButton::clicked, parent, [=, &user]() {
                     *Plan = pl;
-                    double discount = 0.0;
-
-                    int daysLeftSessions = currentDate->daysTo(user.second.sub.endDate);
-                    
-                    if (false) {
-                        discount = 0.5 * price;
-                        *half = true;
-                        *quarter = false;
-                        *tenth = false;
-                    }
-                    else if (false) {
-                        discount = 0.25 * price;
-                        *half = false;
-                        *quarter = true;
-                        *tenth = false;
-                    }
-                    else if (false) {
-                        discount = 0.1 * price;
-                        *half = false;
-                        *quarter = false;
-                        *tenth = true;
-                    }
+                    Subscription sub;
+                    double discount = sub.CalculatePrice(price, *currentDate, user.second.sub.endDate, user.second.sub.type);
                     double total = price - discount;
                     *Total = total;
                     renewPage->ui.subFees->setText(QString::number(price) + "$");
@@ -382,40 +358,53 @@ void XFitGym::generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
                     });
             }
 
-            QObject::connect(renewPage->ui.confirm, &QPushButton::clicked, parent, [=]() {
+            QObject::connect(renewPage->ui.confirm, &QPushButton::clicked, parent, [=, &user]() {
                 if (group->checkedButton() == nullptr) {
                     return;
                 }
-                if (*half) {
-                    Manager::discountHalfCounter++;
-                }
-                else if (*quarter) {
-                    Manager::discountQuarterCounter++;
-                }
-                else if (*tenth) {
+
+                if (Subscription::tenth) {
                     Manager::discountTenthCounter++;
                 }
-
-                if (*Plan == "Month") {
-                    Subscription::monthlyCounter++;
+                else if (Subscription::half) {
+                    Manager::discountHalfCounter++;
                 }
-                else if (*Plan == "6-Months") {
-                    Subscription::sixmonthlyCounter++;
-                }
-                else if (*Plan == "Year") {
-                    Subscription::yearlyCounter++;
-                }
-                else if (*Plan == "YearVIP") {
-                    Subscription::yearlyVIPCounter++;
+                else if (Subscription::quarter) {
+                    Manager::discountQuarterCounter++;
                 }
 
+                if (user.second.sub.type == "NoSubscription")
+                {
+                    qDebug() << Subscription::notSubscribed;
+                    user.second.sub.SetStartDate(*currentDate);
+                    if (Plan->toLower() == "monthly") {
+                        user.second.sub.endDate = currentDate->addMonths(1);
+                    }
+                    else if (Plan->toLower().toLower() == "6-months") {
+                        user.second.sub.endDate = currentDate->addMonths(6);
+                    }
+                    else if (Plan->toLower().toLower() == "yearly") {
+                        user.second.sub.endDate = currentDate->addYears(1);
+                    }
+                    else if (Plan->toLower().toLower() == "yearly vip") {
+                        user.second.sub.endDate = currentDate->addYears(1);
+                    }
+                    user.second.sub.priceAfterDiscount = *Total;
+                }
+                Subscription sub;
+                sub.confirmRenew(user.second.sub.endDate, *Plan, user.second.sub.type, *currentDate);
+                qDebug() << user.second.sub.type;
+
+                qDebug() << user.second.sub.endDate;
                 Manager::totalSubFees += *Total;
+
                 renewPage->close();
-
-
-                delete half, quarter, tenth, Plan;
-
+                Subscription::tenth = false;
+                Subscription::quarter = false;
+                Subscription::half = false;
+                Subscription::notSubscribed = false;
                 });
+
             });
         i++;
     }

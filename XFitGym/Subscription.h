@@ -17,8 +17,14 @@ public:
     QDate endDate;
     int priceAfterDiscount;
 
+    static bool half;
+    static bool quarter;
+    static bool tenth;
+    static bool notSubscribed;
+
     Subscription();
     Subscription(QString type);
+    void confirmRenew(QDate& end, QString newType, QString& oldType, QDate start);
     double CalculatePrice(double priceBeforeDiscount, QDate currentDate, QDate endDate, QString type);
     void SetStartDate(QDate currentDate);
     void SetEndDate(QDate end);
