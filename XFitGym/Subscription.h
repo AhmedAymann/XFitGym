@@ -19,8 +19,8 @@ public:
 
     Subscription();
     Subscription(QString type);
-    int CalculatePrice(int priceBeforeDiscount, const QString& currentDate);
-    void SetStartDate();  
-    void SetEndDate(int durationDays); 
+    double CalculatePrice(double priceBeforeDiscount, QDate currentDate, QDate endDate, QString type);
+    void SetStartDate(QDate currentDate);
+    void SetEndDate(QDate end);
 };
 

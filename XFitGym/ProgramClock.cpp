@@ -11,6 +11,8 @@ void ProgramClock::Tick()
     currentDate = currentDate.addDays(1);
 }
 
+
+
 QDate ProgramClock::GetCurrentDate() const
 {
     return currentDate;

@@ -4,4 +4,4 @@
 1005,bas,bassam,2005-05-15,NoSubscription|NoCourtBookings|NoTrainingSessions
 1006,ahmed,khalx,1999-08-11,NoSubscription|NoCourtBookings|NoTrainingSessions
 1007,khalx,hoss,1978-10-25,NoSubscription|NoCourtBookings|NoTrainingSessions
-1008,hamdiola,Ahmed,2004-12-13,Yearly VIP,,,0|NoCourtBookings|NoTrainingSessions
+1008,hamdiola,Ahmed,2004-12-13,Yearly VIP,2025-01-03,2026-01-03,4000|NoCourtBookings|NoTrainingSessions

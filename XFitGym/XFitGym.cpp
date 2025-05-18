@@ -1,4 +1,5 @@
-#include "XFitGym.h"
+﻿#include "XFitGym.h"
+#include <CustomerLoader.h>
 using namespace std;
 
 // Pages Guide:
@@ -43,7 +44,7 @@ using namespace std;
 //*************************************
 
 // nzbot 7war el ids fi al a5er
-void reorganizeGrid(QGridLayout* grid, QPushButton* addCard) {
+void XFitGym::reorganizeGrid(QGridLayout* grid, QPushButton* addCard) {
     grid->removeWidget(addCard);
 
     QList<QWidget*> cards;
@@ -69,7 +70,7 @@ void reorganizeGrid(QGridLayout* grid, QPushButton* addCard) {
     grid->addWidget(addCard, addRow, addCol);
 }
 // El Timeeeee YA AYMAAAAN
-void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
+void XFitGym::generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
 
     if (scrollArea->widget()) {
         QWidget* oldWidget = scrollArea->widget();
@@ -147,7 +148,7 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
         addPage->ui.comboBox->addItem("6-Months");
         addPage->ui.comboBox->addItem("Yearly");
         addPage->ui.comboBox->addItem("Yearly VIP");
-
+        
         QObject::connect(addPage->ui.Submit, &QPushButton::clicked, parent, [=, &man, &recep]() {
 
             QString dob = addPage->ui.DOB->text();
@@ -198,35 +199,48 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
             
             Customer c(id,email,name,DateOFBirth);
             c.sub.type = plan;
-           
+            c.sub.SetStartDate(*currentDate);
             Manager m;
-            if(Login::isReceptionist){
-                Receptionist recep;
-                recep.AddMember(c);
-            }
-            else {
-                man.AddMember(c);
-            }
+            
             // add 
             if (plan.toLower() == "monthly")
             {
                 Subscription::monthlyCounter++;
                 Manager::totalSubFees += m.monthFee;
+                c.sub.SetEndDate(currentDate->addMonths(1));
+                c.sub.priceAfterDiscount = m.monthFee;
+
             }
             else if (plan.toLower() == "6-months")
             {
                 Subscription::sixmonthlyCounter++;
                 Manager::totalSubFees += m.sixmonthFee;
+                c.sub.SetEndDate(currentDate->addMonths(6));
+                c.sub.priceAfterDiscount = m.sixmonthFee;
+
             }
             else if (plan.toLower() == "yearly")
             {
                 Subscription::yearlyCounter++;
                 Manager::totalSubFees += m.yearFee;
+                c.sub.SetEndDate(currentDate->addYears(1));
+                c.sub.priceAfterDiscount = m.yearFee;
+
             }
             else if (plan.toLower() == "yearly vip")
             {
                 Subscription::yearlyVIPCounter++;
                 Manager::totalSubFees += m.VIPFee;
+                c.sub.SetEndDate(currentDate->addYears(1));
+                c.sub.priceAfterDiscount = m.VIPFee;
+            }
+            
+            if (Login::isReceptionist) {
+                Receptionist recep;
+                recep.AddMember(c);
+            }
+            else {
+                man.AddMember(c);
             }
             addPage->close();
             });
@@ -294,11 +308,13 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
             card->deleteLater();
             reorganizeGrid(grid, addCard);
             });
-        bool half = false;
-        bool quarter = false;
-        bool tenth = false;
-        double Total;
-        QObject::connect(renewBtn, &QPushButton::clicked, parent, [=, &man, &recep, &half, &quarter, &tenth, &Total]() {
+        bool* half = new bool(false);
+        bool* quarter = new bool(false);
+        bool* tenth = new bool(false);
+        double* Total = new double();
+        QString* Plan = new QString("");
+
+        QObject::connect(renewBtn, &QPushButton::clicked, parent, [=, &man, &recep]() {
             renewMembers* renewPage = new renewMembers(parent);
 
             int screenWidth = 960;
@@ -321,41 +337,45 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
             group->addButton(renewPage->ui.Year);
             group->addButton(renewPage->ui.YearVIP);
 
-            QMap<QPushButton*, double> priceMap = {
-            { renewPage->ui.Month,    300 },
-            { renewPage->ui.sixMonth, 1200 },
-            { renewPage->ui.Year,     2200 },
-            { renewPage->ui.YearVIP,  4000 }
+            QMap<QPushButton*, QPair<double, QString>> priceMap = {
+            { renewPage->ui.Month,    {300, "Month"}},
+            { renewPage->ui.sixMonth, {1200, "6-Months"}},
+            { renewPage->ui.Year,     {2200, "Year"}},
+            { renewPage->ui.YearVIP,  {4000, "YearVIP"} }
             };
 
             for (auto it = priceMap.begin(); it != priceMap.end(); ++it) {
                 QPushButton* button = it.key();
-                double price = it.value();
+                double price = it.value().first;
+                QString pl = it.value().second;
 
-                QObject::connect(button, &QPushButton::clicked, parent, [=, &half, &quarter, &tenth, &Total]() {
+                
+                QObject::connect(button, &QPushButton::clicked, parent, [=]() {
+                    *Plan = pl;
                     double discount = 0.0;
-                    //int daysRemainingSubEnd = currentDate.daysTo(/* end date of the current subscription */);
-                    qDebug() << quarter;
+
+                    int daysLeftSessions = currentDate->daysTo(user.second.sub.endDate);
+                    
                     if (false) {
                         discount = 0.5 * price;
-                        half = true;
-                        quarter = false;
-                        tenth = false;
+                        *half = true;
+                        *quarter = false;
+                        *tenth = false;
                     }
                     else if (false) {
                         discount = 0.25 * price;
-                        half = false;
-                        quarter = true;
-                        tenth = false;
+                        *half = false;
+                        *quarter = true;
+                        *tenth = false;
                     }
                     else if (false) {
                         discount = 0.1 * price;
-                        half = false;
-                        quarter = false;
-                        tenth = true;
+                        *half = false;
+                        *quarter = false;
+                        *tenth = true;
                     }
                     double total = price - discount;
-                    Total = total;
+                    *Total = total;
                     renewPage->ui.subFees->setText(QString::number(price) + "$");
                     renewPage->ui.discount->setText(QString::number(discount) + "$");
                     renewPage->ui.totalFees->setText(QString::number(total) + "$");
@@ -366,17 +386,35 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
                 if (group->checkedButton() == nullptr) {
                     return;
                 }
-                if (half) {
+                if (*half) {
                     Manager::discountHalfCounter++;
                 }
-                else if (quarter) {
+                else if (*quarter) {
                     Manager::discountQuarterCounter++;
                 }
-                else if (tenth) {
+                else if (*tenth) {
                     Manager::discountTenthCounter++;
                 }
-                    Manager::totalSubFees += Total;
+
+                if (*Plan == "Month") {
+                    Subscription::monthlyCounter++;
+                }
+                else if (*Plan == "6-Months") {
+                    Subscription::sixmonthlyCounter++;
+                }
+                else if (*Plan == "Year") {
+                    Subscription::yearlyCounter++;
+                }
+                else if (*Plan == "YearVIP") {
+                    Subscription::yearlyVIPCounter++;
+                }
+
+                Manager::totalSubFees += *Total;
                 renewPage->close();
+
+
+                delete half, quarter, tenth, Plan;
+
                 });
             });
         i++;
@@ -393,7 +431,7 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
     scrollArea->setWidgetResizable(true);
 
 }
-void generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
+void XFitGym::generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
 
     if (scrollArea->widget()) {
         QWidget* oldWidget = scrollArea->widget();
@@ -580,9 +618,117 @@ void generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
 
 }
 
+// optimiiiiiiiiiiiiiiiize daroory
+void XFitGym::simulateDay() {
+
+    QDate currentDate = programClock->GetCurrentDate();
+    qDebug() << "\n📅 Simulated Date:" << currentDate.toString("yyyy-MM-dd");
+
+    // Subscription Deadline Check for all customers
+    for (auto& c : Login::membersData) {
+        int daysLeft = notifier->CheckSubscriptionDeadline(c.second.sub, currentDate);
+        if (daysLeft < 0) {
+            if (!Notifications::notifications[c.first.toInt()].contains("Your Gym Membership Has Expired")) {
+                Notifications::notifications[c.first.toInt()].push_back("Your Gym Membership Has Expired");
+                qDebug() << "Notification for" << c.second.getName() << ": Your Gym Membership Has Expired";
+            }
+        }
+        else if (daysLeft <= 10) {
+            QString message = "You Have " + QString::number(daysLeft) + " Days Left in Your Subscription";
+            Notifications::notifications[c.first.toInt()].push_back(message);
+            qDebug() << "Notification for" << c.second.getName() << ":" << message;
+        }
+    }
+
+    // Check for all Training Sessions if Their date had passed
+    for (auto it = Classes::allsessions.begin(); it != Classes::allsessions.end(); ) {
+        // satr el minus
+        int daysLeftSessions = currentDate.daysTo(it->second.date);
+        if (it->second.id == 200) {
+            qDebug() << "daysLeftSessions " << "For Class: " << it->second.id << "is: " << daysLeftSessions;
+        }
+        if (daysLeftSessions < 0) {
+            it = Classes::allsessions.erase(it);  // safe erase
+        }
+        else {
+            ++it;
+        }
+    }
+
+    // Check if a Training Session had passed and put it in the History
+    for (auto& c : Login::membersData) {
+        int sz = Login::membersData[c.first].bookedsessions.size();
+        if (sz == 0) continue;
+
+        for (int i = 0; i < sz; i++) {
+            int daysLeftHistoryCourts = currentDate.daysTo(Login::membersData[c.first].bookedsessions.front().date);
+            TrainingSession tp = Login::membersData[c.first].bookedsessions.front();
+            if (daysLeftHistoryCourts < 0) {
+                Login::membersData[c.first].historyTrainingSessions.push(tp);
+                Login::membersData[c.first].bookedsessions.pop();
+            }
+            else {
+                Login::membersData[c.first].bookedsessions.pop();
+                Login::membersData[c.first].bookedsessions.push(tp);
+            }
+        }
+    }
+
+    // Attendance
+    for (auto& c : Login::membersData) {
+        if (usersLoggedInToday.count(c.second.getId())) {
+            c.second.attendance.push_back(true);
+        }
+        else {
+            c.second.attendance.push_back(false);
+        }
+    }
+    if (Login::membersData.find(currentUserID) != Login::membersData.end()) {
+        dash->setAttendance(daysSimulated, Login::membersData[currentUserID].attendance);
+    }
+
+    for (auto it : usersLoggedInToday) {
+        qDebug() << it << "   ";
+    }
+    programClock->Tick();
+    daysSimulated++;
+    usersLoggedInToday.clear();
+    
+}
+void XFitGym::simulateHour() {
+
+    usersLoggedInToday.insert(currentUserID);
+
+    // Increasing and Displaying hours
+    int hourDisplay = simulatedHour % 12;
+    if (hourDisplay == 0) hourDisplay = 12;
+    QString ampm = (simulatedHour < 12) ? "AM" : "PM";
+    QString hourText = QString("%1:00 %2").arg(hourDisplay, 2, 10, QChar('0')).arg(ampm);
+
+    QDate simDate = programClock->GetCurrentDate().addDays(simulatedDay);
+    currentDate = new QDate(simDate);
+    home->ui.Date_time->setText(simDate.toString("yyyy-MM-dd") + "  " + hourText);
+    recep_home->ui.Date_time->setText(simDate.toString("yyyy-MM-dd") + "  " + hourText);
+    man_home->ui.Date_time->setText(simDate.toString("yyyy-MM-dd") + "  " + hourText);
+    coach_home->ui.Date_time->setText(simDate.toString("yyyy-MM-dd") + "  " + hourText);
+
+    simulatedHour++;
+    if (simulatedHour >= 24) {
+        simulatedHour = 0;
+        simulateDay();
+    }
+}
+
 XFitGym::XFitGym(QWidget* parent)
     : QMainWindow(parent)
 {
+
+    customers = CustomerLoader::LoadCustomersFromFile("CustomerData.txt");
+
+    programClock = new ProgramClock();
+    notifier = new Notifications();
+
+
     ui.setupUi(this);
     log = new Login(this);
     dash = new Dashboard(this);
@@ -611,6 +757,13 @@ XFitGym::XFitGym(QWidget* parent)
     recep_news = new Receptionist_news(this);
     Manager man;
     Receptionist recep;
+
+    QTimer* timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &XFitGym::simulateHour);
+    timer->start(1000);  // 1 simulated hour = 0.5 real seconds
+
+
+
 
     ui.Main->addWidget(log);
     ui.Main->addWidget(home);
@@ -652,6 +805,7 @@ XFitGym::XFitGym(QWidget* parent)
         QString id = log->ui.ID->text();
 
         if (username == "manager" && id == "1") {
+            currentUserID = "1";
             ui.Main->setCurrentIndex(2); 
             man_home->ui.welcome->setText("Welcome Back, Manager");
             manprofile->ui.ID->setText(id);
@@ -675,6 +829,7 @@ XFitGym::XFitGym(QWidget* parent)
         }
 
         else if (Login::isCoach) {
+            currentUserID = Staff::staffData[id].getId();
             ui.Main->setCurrentIndex(3);
             coach_home->ui.welcome->setText("Welcome Back, Coach");
             coachprofile->ui.ID->setText(id);
@@ -686,6 +841,7 @@ XFitGym::XFitGym(QWidget* parent)
             return;
         }
         else if (Login::isReceptionist) {
+            currentUserID = Staff::staffData[id].getId();
             ui.Main->setCurrentIndex(4);
             recepprofile->ui.ID->setText(id);
             recepprofile->ui.Name->setText(Staff::staffData[id].getName());
@@ -750,21 +906,26 @@ XFitGym::XFitGym(QWidget* parent)
     dash->ui.message->setVisible(false);
 
     // user homepage control panel
-    int Pvalue = 0;
-    int Cvalue = 0;
-    connect(home->ui.Dashboard, &QPushButton::clicked, this, [=, &Pvalue, &Cvalue]() {
+    int* Pvalue = new int(0);
+    int* Cvalue = new int(0);
+    connect(home->ui.Dashboard, &QPushButton::clicked, this, [=]() {
 
-        Pvalue += Login::membersData[user_Profile->ui.ID->text()].bookedCourt.size();
-        QString Pval = QString::number(Pvalue);
+        int currentCourtSize = Login::membersData[user_Profile->ui.ID->text()].bookedCourt.size();
+        if (currentCourtSize > *Pvalue)
+            *Pvalue = currentCourtSize;
+
+        QString Pval = QString::number(*Pvalue);
         dash->ui.PCounter->setText(Pval);
-        Pgauge->setValue(Pvalue);
+        Pgauge->setValue(*Pvalue);
 
-        // class gauge level
-        Cvalue += Login::membersData[user_Profile->ui.ID->text()].bookedsessions.size();
-        QString Cval = QString::number(Cvalue);
+        int currentSessionSize = Login::membersData[user_Profile->ui.ID->text()].bookedsessions.size();
+        if (currentSessionSize > *Cvalue)
+            *Cvalue = currentSessionSize;
+
+        QString Cval = QString::number(*Cvalue);
         dash->ui.CCounter->setText(Cval);
-        Cgauge->setValue(Cvalue);
-             
+        Cgauge->setValue(*Cvalue);
+
         if (Login::membersData[user_Profile->ui.ID->text()].historyTrainingSessions.empty())
         {
             setScrolltoTop();
@@ -971,7 +1132,7 @@ XFitGym::XFitGym(QWidget* parent)
             QObject::connect(book, &QPushButton::clicked, [=]() {
                 TrainingSession tr = a.second;
                 Login::membersData[user_Profile->ui.ID->text()].AddTrainingSession(tr);
-                
+                TrainingSession::sessionsCounter++;
                 queue<TrainingSession> bookedsession = Login::membersData[user_Profile->ui.ID->text()].bookedsessions;
                 set<int>checkin;
                 int size = bookedsession.size();
@@ -1221,6 +1382,7 @@ XFitGym::XFitGym(QWidget* parent)
         layoutClass->addWidget(activeClass);
 
         QObject::connect(cancelClass, &QPushButton::clicked, [=]() {
+            TrainingSession::sessionsCounter--;
             Login::membersData[log->ui.ID->text()].CancelTrainingSession(ID->text().toInt());
             activeClass->deleteLater();
 
@@ -1309,11 +1471,11 @@ XFitGym::XFitGym(QWidget* parent)
         QObject::connect(cancelCourt, &QPushButton::clicked, [=]() {
             Login::membersData[user_Profile->ui.ID->text()].CancelPaddleCourt(a.first,time);
 
-                courtSlotButtons[{day, time}]->setStyleSheet("background-color: green;border: 1px solid gray;");
-
-                courtSlotButtons[{day, time}]->setEnabled(true);
-                padel->selectedSlot = nullptr;
-                activeCourt->deleteLater();
+            Padel::courtsCounter--;
+            courtSlotButtons[{day, time}]->setStyleSheet("background-color: green;border: 1px solid gray;");
+            courtSlotButtons[{day, time}]->setEnabled(true);
+            padel->selectedSlot = nullptr;
+            activeCourt->deleteLater();
                 });
 
 
@@ -1337,6 +1499,7 @@ XFitGym::XFitGym(QWidget* parent)
         home->ui.Pages->setCurrentIndex(0);
         ui.Main->setCurrentIndex(0);
         dash->clearAttendanceGui();
+        currentUserID.clear();
         });
 
     // manager homepage control panel
@@ -1350,12 +1513,19 @@ XFitGym::XFitGym(QWidget* parent)
         man_dash->ui.quarterCounter->setText(QString::number(Manager::discountQuarterCounter));
         man_dash->ui.tenthCounter->setText(QString::number(Manager::discountTenthCounter));
 
+         
         man_dash->ui.coachSalCount->setText(QString::number(Coach::coachData.size() * man.coachSal));
+        double coachSal = man_dash->ui.coachSalCount->text().toDouble();
         man_dash->ui.recepSalCount->setText(QString::number( (Staff::staffData.size() - Coach::coachData.size()) * man.recepSal));
+        double recepSal = man_dash->ui.recepSalCount->text().toDouble();
         man_dash->ui.classesFeesCount->setText(QString::number(TrainingSession::sessionsCounter * man.classFees));
+        double classFees = man_dash->ui.classesFeesCount->text().toDouble();
         man_dash->ui.padelFeesCount->setText(QString::number(Padel::courtsCounter * man.courtFees));
+        double courtFees = man_dash->ui.padelFeesCount->text().toDouble();
         man_dash->ui.subFeesCount->setText(QString::number(Manager::totalSubFees));
-        man_dash->ui.ProfitCount->setText("");
+        double subFee = man_dash->ui.subFeesCount->text().toDouble();
+
+        man_dash->ui.ProfitCount->setText(QString::number(subFee + courtFees + classFees - recepSal - coachSal));
 
         qDebug() << Manager::totalSubFees;
         man_home->ui.Pages->setCurrentIndex(1);
@@ -1582,6 +1752,7 @@ XFitGym::XFitGym(QWidget* parent)
             padel->selectedSlot->setEnabled(false);
             courtSlotButtons[{padel->selectedDay, padel->selectedTime}] = padel->selectedSlot;
             padel->selectedSlot = nullptr;
+            Padel::courtsCounter++;
         }
         else {
             qDebug() << "No slot selected!";
@@ -1671,7 +1842,42 @@ XFitGym::XFitGym(QWidget* parent)
     });
 }
 XFitGym::~XFitGym()
-{}
+{
+    log = nullptr;
+    dash = nullptr;
+    Pgauge = nullptr;
+    Cgauge = nullptr;
+    home = nullptr;
+    user_Profile = nullptr;
+    notifications = nullptr;
+    feedback = nullptr;
+    classes = nullptr;
+    padel = nullptr;
+    man_home = nullptr;
+    man_dash = nullptr;
+    man_members = nullptr;
+    man_staff = nullptr;
+    man_tournaments = nullptr;
+    man_feedback = nullptr;
+    renewPage = nullptr;
+    addPage = nullptr;
+    manprofile = nullptr;
+    coachprofile = nullptr;
+    recepprofile = nullptr;
+    coach_home = nullptr;
+    coach_classes = nullptr;
+    recep_home = nullptr;
+    recep_members = nullptr;
+    recep_classes = nullptr;
+    recep_news = nullptr;
+    staff = nullptr;
+    coach = nullptr;
+
+    for (auto it = courtSlotButtons.begin(); it != courtSlotButtons.end(); ++it) {
+        delete it.value();
+    }
+    courtSlotButtons.clear();
+}
 
 void XFitGym::setScrolltoTop()
 {

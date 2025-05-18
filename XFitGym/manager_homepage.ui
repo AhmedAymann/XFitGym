@@ -379,9 +379,36 @@ background-color: transparent;
     </widget>
    </widget>
   </widget>
+  <widget class="QLabel" name="Date_time">
+   <property name="geometry">
+    <rect>
+     <x>690</x>
+     <y>20</y>
+     <width>231</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Futura</family>
+     <pointsize>13</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color:white;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
+  </widget>
   <zorder>Background</zorder>
   <zorder>Panel</zorder>
   <zorder>Pages</zorder>
+  <zorder>Date_time</zorder>
  </widget>
  <resources/>
  <connections/>

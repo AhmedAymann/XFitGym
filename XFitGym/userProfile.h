@@ -11,7 +11,4 @@ public:
     ~userProfile();
 
     Ui::userProfileClass ui;
-
-private slots:
-    void on_chooseButton_clicked();
 };

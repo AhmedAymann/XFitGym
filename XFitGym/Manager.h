@@ -15,6 +15,7 @@ public:
 
 	double coachSal = 200;
 	double recepSal = 150;
+
 	double classFees = 75;
 	double courtFees = 75;
 
@@ -34,6 +35,7 @@ public:
 	void AddCoach(Coach coach);
 	void RemoveStaff(QString coachId);
 	void AddReceptionist(Receptionist receptionist);
+
 	
 };
 

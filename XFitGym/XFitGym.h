@@ -41,7 +41,6 @@ class XFitGym : public QMainWindow
 public:
 
 vector<CourtWidgetData> allCourtButtons;
-QString currentUserID;
 Login* log;
 Dashboard* dash;
 Gauge* Pgauge;
@@ -71,17 +70,32 @@ Receptionist_classes* recep_classes;
 Receptionist_news* recep_news;
 Staff* staff;
 Coach* coach;
+set<QString> usersLoggedInToday;
 QMap<QPair<QString, QString>, QPushButton*> courtSlotButtons;
 
 
     XFitGym(QWidget *parent = nullptr);
     ~XFitGym();
 
+    void simulateDay(); 
+    void simulateHour();
     void setScrolltoTop();
+    void reorganizeGrid(QGridLayout* grid, QPushButton* addCard);
+    void generateMemberCards(QScrollArea* scrollArea, QWidget* parent);
+    void generateStaffCards(QScrollArea* scrollArea, QWidget* parent);
     void save();
     void load();
+    QDate* currentDate;
 private:
     Ui::XFitGymClass ui;
+    
+    map<QString, Customer> customers;
+    ProgramClock* programClock = nullptr;
+    Notifications* notifier = nullptr;
+    int daysSimulated = 0;
+    int simulatedHour = 0;
+    int simulatedDay = 0;
+    QString currentUserID;
 };
 
 
