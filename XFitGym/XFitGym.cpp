@@ -607,7 +607,7 @@ void XFitGym::generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
 
 }
 
-// optimiiiiiiiiiiiiiiiize daroory
+// Time 
 void XFitGym::simulateDay() {
 
     QDate currentDate = programClock->GetCurrentDate();
