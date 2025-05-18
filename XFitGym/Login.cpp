@@ -38,13 +38,13 @@ void Login::saveData()
         const QString& id = pair.first;
         const Customer& c = pair.second;
 
-        if (c.email.isEmpty()) continue;
+        if (c.getEmail().isEmpty()) continue;
         QStringList baseFields;
-        baseFields << id << c.email << c.name << c.DateOFBirth;
+        baseFields << id << c.getEmail() << c.getName() << c.getDateOfBirth();
 
         // Subscription
         if (c.sub.type != "NoSubscription") {
-            baseFields << c.sub.type << c.sub.startDate << c.sub.endDate << QString::number(c.sub.priceAfterDiscount);
+            baseFields << c.sub.type << c.sub.startDate << c.sub.endDate.toString("yyyy-MM-dd") << QString::number(c.sub.priceAfterDiscount);
         }
         else {
             baseFields << "NoSubscription";
@@ -95,13 +95,13 @@ void Login::saveData()
 }
 bool Login::CheckLogin(QString& username, QString& id) {
     auto memberIt = membersData.find(id);
-    if (memberIt != membersData.end() && memberIt->second.email == username) {
+    if (memberIt != membersData.end() && memberIt->second.getEmail() == username) {
         isMember = true;
         return true;
     }
     
     auto staffIt = Staff::staffData.find(id);
-    if (staffIt != Staff::staffData.end() && staffIt->second.email == username) {
+    if (staffIt != Staff::staffData.end() && staffIt->second.getEmail() == username) {
         isStaff = true;
         if (staffIt->second.role.toLower() == "receptionist") {
             isReceptionist = true;

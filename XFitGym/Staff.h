@@ -5,9 +5,6 @@ class Staff : public User
 {
 public:
 	QString role;
-
-	static int receptionistCounter;
-	static int coachCounter;
 	
 	static map<QString, Staff> staffData;
 	Staff();

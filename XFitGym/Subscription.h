@@ -6,9 +6,15 @@
 class Subscription
 {
 public:
+
+    static int monthlyCounter;
+    static int sixmonthlyCounter;
+    static int yearlyCounter;
+    static int yearlyVIPCounter;
+
     QString type;
     QString startDate; 
-    QString endDate;
+    QDate endDate;
     int priceAfterDiscount;
 
     Subscription();

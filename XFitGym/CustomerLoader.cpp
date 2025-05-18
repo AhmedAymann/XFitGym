@@ -50,7 +50,7 @@ map<QString,Customer> CustomerLoader::LoadCustomersFromFile(const QString& filen
 
             c.sub.type = type;
             c.sub.startDate = startDate;
-            c.sub.endDate = endDate;
+            c.sub.endDate = QDate::fromString(endDate, "yyyy-MM-dd");;
             c.sub.priceAfterDiscount = price;
         }
         else {

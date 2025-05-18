@@ -23,13 +23,13 @@ void simulateDay(XFitGym& gui) {
         //qDebug() << "Customer of id" << c.second.id << " - gui.currentUserID " << gui.currentUserID;
 
         // Mark attendance as true for the logged-in customer, false for others
-        if (c.second.id == gui.currentUserID) {
+        if (c.second.getId() == gui.currentUserID) {
             c.second.attendance.push_back(true);  // Attendance is true for logged-in user
-            qDebug() << "Attendance True for " << c.second.name;
+            qDebug() << "Attendance True for " << c.second.getName();
         }
         else {
             c.second.attendance.push_back(false);  // Attendance is false for others
-            qDebug() << "Attendance False for " << c.second.name;
+            qDebug() << "Attendance False for " << c.second.getName();
         }
 
         // Make sure attendance is updated for each customer in the vector
@@ -49,13 +49,13 @@ void simulateDay(XFitGym& gui) {
         if (daysLeft < 0) {
             if (!Notifications::notifications[c.first.toInt()].contains("Your Gym Membership Has Expired")) {
                 Notifications::notifications[c.first.toInt()].push_back("Your Gym Membership Has Expired");
-                qDebug() << "Notification for" << c.second.name << ": Your Gym Membership Has Expired";
+                qDebug() << "Notification for" << c.second.getName() << ": Your Gym Membership Has Expired";
             }
         }
         else if (daysLeft <= 10) {
             QString message = "You Have " + QString::number(daysLeft) + " Days Left in Your Subscription";
             Notifications::notifications[c.first.toInt()].push_back(message);
-            qDebug() << "Notification for" << c.second.name << ":" << message;
+            qDebug() << "Notification for" << c.second.getName() << ":" << message;
         }
     }
 
@@ -157,7 +157,7 @@ int main(int argc, char* argv[])
     QObject::connect(timer, &QTimer::timeout, [&]() {
         simulateDay(w);
         });
-    timer->start(7000); // #/1000 seconds per simulated day
+    timer->start(70000000000000000); // #/1000 seconds per simulated day
 
     return a.exec();
 }

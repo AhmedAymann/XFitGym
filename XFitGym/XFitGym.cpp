@@ -74,7 +74,7 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
     if (scrollArea->widget()) {
         QWidget* oldWidget = scrollArea->widget();
         scrollArea->takeWidget();
-        oldWidget->deleteLater();  // Destroys previous layout and all its widgets
+        oldWidget->deleteLater();
     }
 
     QWidget* scrollWidget = new QWidget();
@@ -110,7 +110,9 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
     addCard->setCursor(Qt::PointingHandCursor);
     int numMembers = Login::membersData.size();
 
-    QObject::connect(addCard, &QPushButton::clicked, parent, [=]() {
+    Manager man;
+    Receptionist recep;
+    QObject::connect(addCard, &QPushButton::clicked, parent, [=, &man, &recep]() {
         addMembers* addPage = new addMembers(parent);
 
         int screenWidth = 960;
@@ -145,7 +147,8 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
         addPage->ui.comboBox->addItem("6-Months");
         addPage->ui.comboBox->addItem("Yearly");
         addPage->ui.comboBox->addItem("Yearly VIP");
-        QObject::connect(addPage->ui.Submit, &QPushButton::clicked, parent, [=]() {
+
+        QObject::connect(addPage->ui.Submit, &QPushButton::clicked, parent, [=, &man, &recep]() {
 
             QString dob = addPage->ui.DOB->text();
             QStringList parts = dob.split('-');
@@ -165,13 +168,13 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
 
             bool used = false;
             for (auto it : Login::membersData)
-                if (addPage->ui.USERNAME->text().toLower() == it.second.email.toLower())
+                if (addPage->ui.USERNAME->text().toLower() == it.second.getEmail().toLower())
                 {
                     used = true;
                     break;
                 }
             for (auto it : Staff::staffData)
-                if (addPage->ui.USERNAME->text().toLower() == it.second.email.toLower())
+                if (addPage->ui.USERNAME->text().toLower() == it.second.getEmail().toLower())
                 {
                     used = true;
                     break;
@@ -188,18 +191,49 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
                 QTimer::singleShot(1250, addPage->ui.message, &QLabel::hide);
                 return;
             }
-            Customer c;
-            c.email = addPage->ui.USERNAME->text();
-            c.name = addPage->ui.NAME->text();
-            c.DateOFBirth = addPage->ui.DOB->text();
-            c.sub.type = addPage->ui.comboBox->currentText();
-            Login::membersData.insert({ id, c });
+            QString email = addPage->ui.USERNAME->text();
+            QString name = addPage->ui.NAME->text();
+            QString DateOFBirth = addPage->ui.DOB->text();
+            QString plan = addPage->ui.comboBox->currentText();
+            
+            Customer c(id,email,name,DateOFBirth);
+            c.sub.type = plan;
+           
+            Manager m;
+            if(Login::isReceptionist){
+                Receptionist recep;
+                recep.AddMember(c);
+            }
+            else {
+                man.AddMember(c);
+            }
+            // add 
+            if (plan.toLower() == "monthly")
+            {
+                Subscription::monthlyCounter++;
+                Manager::totalSubFees += m.monthFee;
+            }
+            else if (plan.toLower() == "6-months")
+            {
+                Subscription::sixmonthlyCounter++;
+                Manager::totalSubFees += m.sixmonthFee;
+            }
+            else if (plan.toLower() == "yearly")
+            {
+                Subscription::yearlyCounter++;
+                Manager::totalSubFees += m.yearFee;
+            }
+            else if (plan.toLower() == "yearly vip")
+            {
+                Subscription::yearlyVIPCounter++;
+                Manager::totalSubFees += m.VIPFee;
+            }
             addPage->close();
             });
         });
     int i = 0;
     for (auto user : Login::membersData) {
-        QString name = user.second.name;
+        QString name = user.second.getName();
         QString plan = user.second.sub.type;
         QString subscription;
         if(plan.toLower() == "monthly")
@@ -209,7 +243,7 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
         else if(plan.toLower() == "yearly")
             subscription = "Ends: " + QDate::currentDate().addYears(1).toString("yyyy/MM/dd");
         else if (plan.toLower() == "yearly vip")
-            subscription = "Ends: " + QDate::currentDate().addYears(1).toString("yyyy/MM/dd");
+            subscription = "Ends: " + user.second.sub.endDate.toString("yyyy/MM/dd");
 
         Cards* card = new Cards(name, plan, subscription, scrollWidget);
 
@@ -249,20 +283,22 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
         int col = i % 3;
         grid->addWidget(card, row, col);
         
-        QString Username = user.first;
-        QObject::connect(removeBtn, &QPushButton::clicked, parent, [=]() {
-            for (auto it = Login::membersData.begin(); it != Login::membersData.end(); it++) {
-                if (Username == it->first) {
-                    Login::membersData.erase(it);
-                    break;
-                }
-            }
+        QString ID = user.first;
+        QObject::connect(removeBtn, &QPushButton::clicked, parent, [=, &man, &recep]() {
+            if (Login::isReceptionist)
+                recep.RemoveMember(ID);
+            else
+                man.RemoveMember(ID);
 
             grid->removeWidget(card);
             card->deleteLater();
             reorganizeGrid(grid, addCard);
             });
-        QObject::connect(renewBtn, &QPushButton::clicked, parent, [=]() {
+        bool half = false;
+        bool quarter = false;
+        bool tenth = false;
+        double Total;
+        QObject::connect(renewBtn, &QPushButton::clicked, parent, [=, &man, &recep, &half, &quarter, &tenth, &Total]() {
             renewMembers* renewPage = new renewMembers(parent);
 
             int screenWidth = 960;
@@ -296,18 +332,30 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
                 QPushButton* button = it.key();
                 double price = it.value();
 
-                //RENEW BUTTON
-                QObject::connect(button, &QPushButton::clicked, parent, [=]() {
+                QObject::connect(button, &QPushButton::clicked, parent, [=, &half, &quarter, &tenth, &Total]() {
                     double discount = 0.0;
                     //int daysRemainingSubEnd = currentDate.daysTo(/* end date of the current subscription */);
-                    
-                    
-                    if (true) {
+                    qDebug() << quarter;
+                    if (false) {
                         discount = 0.5 * price;
+                        half = true;
+                        quarter = false;
+                        tenth = false;
                     }
-                    
+                    else if (false) {
+                        discount = 0.25 * price;
+                        half = false;
+                        quarter = true;
+                        tenth = false;
+                    }
+                    else if (false) {
+                        discount = 0.1 * price;
+                        half = false;
+                        quarter = false;
+                        tenth = true;
+                    }
                     double total = price - discount;
-
+                    Total = total;
                     renewPage->ui.subFees->setText(QString::number(price) + "$");
                     renewPage->ui.discount->setText(QString::number(discount) + "$");
                     renewPage->ui.totalFees->setText(QString::number(total) + "$");
@@ -318,6 +366,16 @@ void generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
                 if (group->checkedButton() == nullptr) {
                     return;
                 }
+                if (half) {
+                    Manager::discountHalfCounter++;
+                }
+                else if (quarter) {
+                    Manager::discountQuarterCounter++;
+                }
+                else if (tenth) {
+                    Manager::discountTenthCounter++;
+                }
+                    Manager::totalSubFees += Total;
                 renewPage->close();
                 });
             });
@@ -376,8 +434,9 @@ void generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
 )");
     addCard->setCursor(Qt::PointingHandCursor);
 
+    Manager man;
     int numStaff = Staff::staffData.size();
-    QObject::connect(addCard, &QPushButton::clicked, parent, [=,&numStaff]() {
+    QObject::connect(addCard, &QPushButton::clicked, parent, [=,&numStaff, &man]() {
         addMembers* addPage = new addMembers(parent);
         
         int screenWidth = 960;
@@ -406,12 +465,11 @@ void generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
                 num++;
                 id = QString::number(num);
             }
-
         }
         addPage->ui.ID->setText(id);
 
-        QObject::connect(addPage->ui.Submit, &QPushButton::clicked, parent, [=,&numStaff]() {
 
+        QObject::connect(addPage->ui.Submit, &QPushButton::clicked, parent, [=,&numStaff, &man, &id]() {
             QString dob = addPage->ui.DOB->text();
             QStringList parts = dob.split('-');
             int year = 0;
@@ -429,13 +487,13 @@ void generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
                 || !date.isValid() || year > QDate::currentDate().year());
             bool used = false;
             for (auto it : Login::membersData)
-                if (addPage->ui.USERNAME->text().toLower() == it.second.email.toLower() || addPage->ui.NAME->text().toLower() == it.second.name.toLower())
+                if (addPage->ui.USERNAME->text().toLower() == it.second.getEmail().toLower() || addPage->ui.NAME->text().toLower() == it.second.getName().toLower())
                 {
                     used = true;
                     break;
                 }
             for (auto it : Staff::staffData)
-                if (addPage->ui.USERNAME->text().toLower() == it.second.email.toLower() || addPage->ui.NAME->text().toLower() == it.second.name.toLower())
+                if (addPage->ui.USERNAME->text().toLower() == it.second.getEmail().toLower() || addPage->ui.NAME->text().toLower() == it.second.getName().toLower())
                 {
                     used = true;
                     break;
@@ -452,36 +510,26 @@ void generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
                 QTimer::singleShot(1250, addPage->ui.message, &QLabel::hide);
                 return;
             }
-            Staff s;
-            s.email = addPage->ui.USERNAME->text();
-            s.name = addPage->ui.NAME->text();
-            s.DateOFBirth = addPage->ui.DOB->text();
-            s.role = addPage->ui.comboBox->currentText();
-            if (s.role.toLower() == "coach") {
-                Coach c;
-                c.email = addPage->ui.USERNAME->text();
-                c.name = addPage->ui.NAME->text();
-                c.DateOFBirth = addPage->ui.DOB->text();
-                c.role = addPage->ui.comboBox->currentText();
-                Coach::coachData.insert({ id,c });
+            
+            QString email = addPage->ui.USERNAME->text();
+            QString name = addPage->ui.NAME->text();
+            QString DateOFBirth = addPage->ui.DOB->text();
+            QString role = addPage->ui.comboBox->currentText();
+            if (role.toLower() == "coach") {
+                Coach c(id, email, name, DateOFBirth, role);
+                man.AddCoach(c);
             }
-            else if (s.role.toLower() == "receptionist") {
-                Receptionist r;
-                r.email = addPage->ui.USERNAME->text();
-                r.name = addPage->ui.NAME->text();
-                r.DateOFBirth = addPage->ui.DOB->text();
-                r.role = addPage->ui.comboBox->currentText();
-                Receptionist::recepData.insert({ id,r });
+            else if (role.toLower() == "receptionist") {
+                Receptionist r(id, email, name, DateOFBirth, role);
+                man.AddReceptionist(r);
             }
-            Staff::staffData.insert({ id, s });
-
             addPage->close();
             });
         });
 
     int i = 0;
     for (auto staff : Staff::staffData) {
-        QString name = staff.second.name;
+        QString name = staff.second.getName();
         QString position = staff.second.role;
         Cards* staffCard = new Cards(name, position, "", scrollWidget);
 
@@ -506,17 +554,11 @@ void generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
         int col = i % 3;
         grid->addWidget(staffCard, row, col);
 
-        QString Username = staff.first;
-        QObject::connect(removeBtn, &QPushButton::clicked, parent, [=]() {
+        QString ID = staff.first;
+        QString role = staff.second.role;
+        QObject::connect(removeBtn, &QPushButton::clicked, parent, [=, &man]() {
 
-            for (auto it = Staff::staffData.begin(); it != Staff::staffData.end(); it++) {
-                if (Username == it->first) {
-                    Staff::staffData.erase(it);
-                    break;
-                }
-            }
-
-
+            man.RemoveStaff(ID);
             grid->removeWidget(staffCard);
             staffCard->deleteLater();
 
@@ -567,6 +609,8 @@ XFitGym::XFitGym(QWidget* parent)
     recep_members = new Receptionist_members(this);
     recep_classes = new Receptionist_classes(this);
     recep_news = new Receptionist_news(this);
+    Manager man;
+    Receptionist recep;
 
     ui.Main->addWidget(log);
     ui.Main->addWidget(home);
@@ -615,7 +659,6 @@ XFitGym::XFitGym(QWidget* parent)
             manprofile->ui.DOB->setText("2004/12/13");
             return;
         }
-        qDebug() << username << " " << id;
         if (!log->CheckLogin(username, id)) {
             if (username.isEmpty() || id.isEmpty()) {
                 log->ui.warning->setText("please fill in all the spaces");
@@ -635,8 +678,8 @@ XFitGym::XFitGym(QWidget* parent)
             ui.Main->setCurrentIndex(3);
             coach_home->ui.welcome->setText("Welcome Back, Coach");
             coachprofile->ui.ID->setText(id);
-            coachprofile->ui.Name->setText(Staff::staffData[id].name);
-            coachprofile->ui.DOB->setText(Staff::staffData[id].DateOFBirth);
+            coachprofile->ui.Name->setText(Staff::staffData[id].getName());
+            coachprofile->ui.DOB->setText(Staff::staffData[id].getDateOfBirth());
             coachprofile->ui.Role->setText(Staff::staffData[id].role);
             Login::isCoach = false;
             Login::isStaff = false;
@@ -645,8 +688,8 @@ XFitGym::XFitGym(QWidget* parent)
         else if (Login::isReceptionist) {
             ui.Main->setCurrentIndex(4);
             recepprofile->ui.ID->setText(id);
-            recepprofile->ui.Name->setText(Staff::staffData[id].name);
-            recepprofile->ui.DOB->setText(Staff::staffData[id].DateOFBirth);
+            recepprofile->ui.Name->setText(Staff::staffData[id].getName());
+            recepprofile->ui.DOB->setText(Staff::staffData[id].getDateOfBirth());
             recepprofile->ui.Role->setText(Staff::staffData[id].role);
             recep_home->ui.welcome->setText("Welcome Back, Receptionist");
             Login::isReceptionist = false;
@@ -655,10 +698,10 @@ XFitGym::XFitGym(QWidget* parent)
         }
         else
         {
-            currentUserID = Login::membersData[id].id;
-            user_Profile->ui.ID->setText(Login::membersData[id].id);
-            user_Profile->ui.Name->setText(Login::membersData[id].name);
-            user_Profile->ui.DOB->setText(Login::membersData[id].DateOFBirth);
+            currentUserID = Login::membersData[id].getId();
+            user_Profile->ui.ID->setText(Login::membersData[id].getId());
+            user_Profile->ui.Name->setText(Login::membersData[id].getName());
+            user_Profile->ui.DOB->setText(Login::membersData[id].getDateOfBirth());
             if (Login::membersData[id].sub.type.isEmpty()) {
                 Login::membersData[id].sub.type = "NoSubscription";
                 user_Profile->ui.Plan->setText("No Subscription");
@@ -668,7 +711,7 @@ XFitGym::XFitGym(QWidget* parent)
             {
                 user_Profile->ui.Plan->setText(Login::membersData[id].sub.type);
             }
-            home->ui.welcome->setText("Welcome Back, " + Login::membersData[id].name);
+            home->ui.welcome->setText("Welcome Back, " + Login::membersData[id].getName());
 
             ui.Main->setCurrentIndex(1);
 
@@ -707,31 +750,32 @@ XFitGym::XFitGym(QWidget* parent)
     dash->ui.message->setVisible(false);
 
     // user homepage control panel
-    connect(home->ui.Dashboard, &QPushButton::clicked, this, [=]() {
+    int Pvalue = 0;
+    int Cvalue = 0;
+    connect(home->ui.Dashboard, &QPushButton::clicked, this, [=, &Pvalue, &Cvalue]() {
 
-        int Pvalue = Login::membersData[user_Profile->ui.ID->text()].bookedCourt.size();
+        Pvalue += Login::membersData[user_Profile->ui.ID->text()].bookedCourt.size();
         QString Pval = QString::number(Pvalue);
         dash->ui.PCounter->setText(Pval);
         Pgauge->setValue(Pvalue);
 
         // class gauge level
-        int Cvalue = Login::membersData[user_Profile->ui.ID->text()].bookedsessions.size();
+        Cvalue += Login::membersData[user_Profile->ui.ID->text()].bookedsessions.size();
         QString Cval = QString::number(Cvalue);
         dash->ui.CCounter->setText(Cval);
         Cgauge->setValue(Cvalue);
              
-            
-            if (Login::membersData[user_Profile->ui.ID->text()].historyTrainingSessions.empty())
-            {
-                setScrolltoTop();
-                dash->ui.message->setVisible(true);
-                home->ui.Pages->setCurrentIndex(2);
-                return;
-            }
-            else {
-                dash->ui.message->setVisible(false);
-            }
-            //dynamically generating the past workouts
+        if (Login::membersData[user_Profile->ui.ID->text()].historyTrainingSessions.empty())
+        {
+            setScrolltoTop();
+            dash->ui.message->setVisible(true);
+            home->ui.Pages->setCurrentIndex(2);
+            return;
+        }
+        else {
+            dash->ui.message->setVisible(false);
+        }
+        //dynamically generating the past workouts
 
         QWidget* pastWorkouts = new QWidget;
         pastWorkouts->setStyleSheet("background-color: #1e1e1e; color: white;");
@@ -1293,11 +1337,27 @@ XFitGym::XFitGym(QWidget* parent)
         home->ui.Pages->setCurrentIndex(0);
         ui.Main->setCurrentIndex(0);
         dash->clearAttendanceGui();
-
         });
 
     // manager homepage control panel
     connect(man_home->ui.Dashboard, &QPushButton::clicked, this, [=]() {
+        man_dash->ui.sixMonthCounter->setText(QString::number(Subscription::sixmonthlyCounter));
+        man_dash->ui.MonthCounter->setText(QString::number(Subscription::monthlyCounter));
+        man_dash->ui.YearCounter->setText(QString::number(Subscription::yearlyCounter));
+        man_dash->ui.VIPCounter->setText(QString::number(Subscription::yearlyVIPCounter));
+
+        man_dash->ui.halfCounter->setText(QString::number(Manager::discountHalfCounter));
+        man_dash->ui.quarterCounter->setText(QString::number(Manager::discountQuarterCounter));
+        man_dash->ui.tenthCounter->setText(QString::number(Manager::discountTenthCounter));
+
+        man_dash->ui.coachSalCount->setText(QString::number(Coach::coachData.size() * man.coachSal));
+        man_dash->ui.recepSalCount->setText(QString::number( (Staff::staffData.size() - Coach::coachData.size()) * man.recepSal));
+        man_dash->ui.classesFeesCount->setText(QString::number(TrainingSession::sessionsCounter * man.classFees));
+        man_dash->ui.padelFeesCount->setText(QString::number(Padel::courtsCounter * man.courtFees));
+        man_dash->ui.subFeesCount->setText(QString::number(Manager::totalSubFees));
+        man_dash->ui.ProfitCount->setText("");
+
+        qDebug() << Manager::totalSubFees;
         man_home->ui.Pages->setCurrentIndex(1);
         });
     connect(man_home->ui.Staff, &QPushButton::clicked, this, [=]() {
@@ -1366,10 +1426,9 @@ XFitGym::XFitGym(QWidget* parent)
         });
     connect(man_home->ui.Members, &QPushButton::clicked, this, [=]() {
         generateMemberCards(man_members->ui.scrollArea, this);
-        qDebug() << Login::membersData.size();
         man_home->ui.Pages->setCurrentIndex(2);
     });
-        
+    
     //coach homepage control panel
     connect(coach_home->ui.MyClasses, &QPushButton::clicked, this, [=]() {
         QWidget* scrollWidget = new QWidget();
@@ -1453,20 +1512,16 @@ XFitGym::XFitGym(QWidget* parent)
 
     //receptionist homepage control panel
     connect(recep_home->ui.Members, &QPushButton::clicked, this, [=]() {
+        Login::isReceptionist = true;
         generateMemberCards(recep_members->ui.scrollArea, this);
-        qDebug() << Login::membersData.size();
         recep_home->ui.Pages->setCurrentIndex(2);
         });
     connect(recep_home->ui.Classes, &QPushButton::clicked, this, [=]() {
-
+        
         recep_classes->ui.coachNames->clear();
         recep_classes->ui.coachNames->addItem("Choose coach");
-        for(auto coach : Coach::coachData)
-        {
-            recep_classes->ui.coachNames->addItem(coach.second.name);
-        }
+
         //recep_classes->ui.dateTime->setMinimumDate(QDate::currentDate());
-        //recep_classes->ui.dateTime->setMaximumDate(QDate::currentDate().addDays(30));
         recep_classes->ui.className->setMaxLength(20);
         recep_classes->ui.classCapacity->setValidator(new QIntValidator(0, 999, this));
         recep_home->ui.Pages->setCurrentIndex(3);
@@ -1484,7 +1539,7 @@ XFitGym::XFitGym(QWidget* parent)
         setScrolltoTop();
         recep_home->ui.Pages->setCurrentIndex(0);
         ui.Main->setCurrentIndex(0);
-
+        Login::isReceptionist = false;
 
         });
 
@@ -1581,7 +1636,7 @@ XFitGym::XFitGym(QWidget* parent)
 
 
         });
-    connect(recep_classes->ui.confirm, &QPushButton::clicked, this, [=]() {
+    connect(recep_classes->ui.confirm, &QPushButton::clicked, this, [=, &recep]() {
 
         if (recep_classes->ui.coachNames->currentIndex() == 0 || recep_classes->ui.className->text().isEmpty() || recep_classes->ui.classCapacity->text().isEmpty()) {
             return;
@@ -1594,11 +1649,9 @@ XFitGym::XFitGym(QWidget* parent)
         QString classTime = recep_classes->ui.dateTime->time().toString("hh:mm AP");
         int classID =  2001 + Classes::tempallsessions.size();
         int classSize = 0;
+        TrainingSession tr(classID, className, classCapacity, classSize, coachName, classDate, classTime);
 
-
-        TrainingSession tr(classID, className, classCapacity, classSize,coachName, classDate, classTime);
-        Classes::tempallsessions[classID] = tr;
-        Classes::allsessions[classID] = tr;
+        recep.CreateClass(classID, tr);
 
         recep_classes->ui.coachNames->setCurrentIndex(0);
         recep_classes->ui.classCapacity->clear();
@@ -1606,19 +1659,17 @@ XFitGym::XFitGym(QWidget* parent)
         recep_classes->ui.dateTime->setDateTime(recep_classes->ui.dateTime->minimumDateTime());
 
         });
-    connect(recep_news->ui.submit, &QPushButton::clicked, this, [=]() {
+    connect(recep_news->ui.submit, &QPushButton::clicked, this, [=, &recep]() {
         QString news = recep_news->ui.News->toPlainText();
         QString image = recep_news->relativePath;
 
-        Padel::news.push({ news,image });
+        recep.AddNews(news, image);
 
         recep_news->ui.News->clear();
         recep_news->ui.image->clear();
 
     });
-
 }
-
 XFitGym::~XFitGym()
 {}
 

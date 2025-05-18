@@ -42,10 +42,6 @@ void Staff::LoadStaffData()
             Coach c(id,username,name,dob,role);
             Coach::coachData.insert({ id,c });
         }
-        else if (role.toLower() == "receptionist") {
-            Receptionist r(id,username,name,dob,role,"");
-            Receptionist::recepData.insert({ id, r });
-        }
         Staff s(id, username,name, dob, role);
         staffData.insert({ id,s });
     }
@@ -62,8 +58,8 @@ void Staff::SaveStaffData()
     QTextStream out(&file);
 
     for (auto s : staffData) {
-        if (s.second.email.isEmpty()) continue;
-        out << s.first << "," << s.second.email << "," << s.second.name << "," << s.second.DateOFBirth << "," << s.second.role << '\n';
+        if (s.second.getEmail().isEmpty()) continue;
+        out << s.first << "," << s.second.getEmail() << "," << s.second.getName() << "," << s.second.getDateOfBirth() << "," << s.second.role << '\n';
     }
 
     file.close();

@@ -24,7 +24,7 @@ int Notifications::CheckSubscriptionDeadline(const Subscription& sub, const QDat
     
 
     // Parse endDate from QString to QDate
-    QDate endDate = QDate::fromString(sub.endDate, "yyyy-MM-dd");
+    QDate endDate = sub.endDate;
 
     
      if (!endDate.isValid()) {

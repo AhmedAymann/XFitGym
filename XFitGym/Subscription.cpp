@@ -6,32 +6,26 @@
 Subscription::Subscription() {
    
 }
-
 Subscription::Subscription(QString type) {
     this->type = type;
 }
-
 
 void Subscription::SetStartDate()
 {
     QDate currentDate = QDate::currentDate();
     startDate = currentDate.toString("yyyy-MM-dd");
 }
-
 void Subscription::SetEndDate(int durationDays)
 {
     QDate currentDate = QDate::currentDate();
-    endDate = currentDate.addDays(durationDays).toString("yyyy-MM-dd");
+    endDate.addDays(durationDays).toString("yyyy-MM-dd");
 }
-
-
 int Subscription::CalculatePrice(int priceBeforeDiscount, const QString& currentDate)
 {
     QDate start = QDate::fromString(startDate, "yyyy-MM-dd");
-    QDate end = QDate::fromString(endDate, "yyyy-MM-dd");
     QDate current = QDate::fromString(currentDate, "yyyy-MM-dd");
 
-    int totalDays = start.daysTo(end);
+    int totalDays = start.daysTo(endDate);
     int daysPassed = start.daysTo(current);
 
     double progress = (double)daysPassed / totalDays;
@@ -44,3 +38,7 @@ int Subscription::CalculatePrice(int priceBeforeDiscount, const QString& current
         return priceBeforeDiscount;
 }
 
+int Subscription::monthlyCounter = 0;
+int Subscription::sixmonthlyCounter = 0;
+int Subscription::yearlyCounter = 0;
+int Subscription::yearlyVIPCounter = 0;

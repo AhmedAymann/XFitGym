@@ -14,3 +14,5 @@ TrainingSession::TrainingSession(int id, QString name, int capacity, int size, Q
 	this->date = date;
 	this->time = time;
 }
+
+int TrainingSession::sessionsCounter = 0;

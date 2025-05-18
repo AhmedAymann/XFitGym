@@ -7,6 +7,8 @@ using namespace std;
 class TrainingSession
 {
 public:
+	static int sessionsCounter;
+
 	QString name;
 	int capacity;
 	int size;

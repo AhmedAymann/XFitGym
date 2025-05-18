@@ -20,5 +20,4 @@ public:
     void savesession();
     void loadsession();
 
-
 };

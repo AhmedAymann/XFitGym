@@ -8,33 +8,32 @@
 class Manager : public Staff
 {
 public:
-	
-	static int monthlyCounter ;
-	static int sixmonthlyCounter ;
-	static int yearlyCounter ;
-	static int yearlyVIPCounter ;
+	static int discountHalfCounter;
+	static int discountQuarterCounter;
+	static int discountTenthCounter;
+	static double totalSubFees;
 
-	
+	double coachSal = 200;
+	double recepSal = 150;
+	double classFees = 75;
+	double courtFees = 75;
 
-	static int sessionsCounter;
-	static int courtsCounter;
+	double monthFee = 300;
+	double sixmonthFee = 1200;
+	double yearFee = 2200;
+	double VIPFee = 4000;
 
-	
 
+
+	Manager();
 	Manager(QString id, QString email, QString name, QString DateOFBirth, QString role);
 
 	void AddMember(Customer customer);
-	void RemoveMember(int userID);
-	void RenewSubscription(int userID, int Startdate);
-	void UpdateSubscription(int userId);
-	void CancelSubscription(int userId);
-
+	void RemoveMember(QString userID);
+	void RenewSubscription(QString userID, int Startdate, QString plan);
 	void AddCoach(Coach coach);
-	void RemoveCoach(int coachId);
-
+	void RemoveStaff(QString coachId);
 	void AddReceptionist(Receptionist receptionist);
-	void RemoveReceptionist(int receptionistId);
-
 	
 };
 
