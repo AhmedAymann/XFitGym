@@ -22,10 +22,3 @@ struct CourtWidgetData {
 #endif // COURTWIDGETDATA_H
 
 
-
-
-
-
-//put the training session passed in the history stack 
-// remove the passed training session from the bookedsessions queue 
-// remove passes trainingsession from the Sessions txt file (from the vector its stored in)

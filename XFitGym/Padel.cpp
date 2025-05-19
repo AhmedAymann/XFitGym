@@ -51,6 +51,7 @@ void Padel::savecompetitors()
 
     file.close();
 }
+
 void Padel::loadnews()
 {
     QFile file("News.txt");
@@ -105,3 +106,4 @@ void Padel::savenews()
 }
 
 int Padel::courtsCounter = 0;
+

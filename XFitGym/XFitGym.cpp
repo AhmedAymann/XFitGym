@@ -617,15 +617,17 @@ void XFitGym::simulateDay() {
     for (auto& c : Login::membersData) {
         int daysLeft = notifier->CheckSubscriptionDeadline(c.second.sub, currentDate);
         if (daysLeft < 0) {
+
+            if (daysLeft == -100) continue;
             if (!Notifications::notifications[c.first.toInt()].contains("Your Gym Membership Has Expired")) {
                 Notifications::notifications[c.first.toInt()].push_back("Your Gym Membership Has Expired");
-                qDebug() << "Notification for" << c.second.getName() << ": Your Gym Membership Has Expired";
+                //qDebug() << "Notification for" << c.second.getName() << ": Your Gym Membership Has Expired";
             }
         }
         else if (daysLeft <= 10) {
             QString message = "You Have " + QString::number(daysLeft) + " Days Left in Your Subscription";
             Notifications::notifications[c.first.toInt()].push_back(message);
-            qDebug() << "Notification for" << c.second.getName() << ":" << message;
+            //qDebug() << "Notification for" << c.second.getName() << ":" << message;
         }
     }
 
@@ -700,6 +702,7 @@ void XFitGym::simulateHour() {
     recep_home->ui.Date_time->setText(simDate.toString("yyyy-MM-dd") + "  " + hourText);
     man_home->ui.Date_time->setText(simDate.toString("yyyy-MM-dd") + "  " + hourText);
     coach_home->ui.Date_time->setText(simDate.toString("yyyy-MM-dd") + "  " + hourText);
+
 
     simulatedHour++;
     if (simulatedHour >= 24) {
@@ -1441,6 +1444,7 @@ XFitGym::XFitGym(QWidget* parent)
             );
         }
 
+        allCourtButtons.push_back({ a.first,a.second,cancelCourt });
 
         cancelCourt->adjustSize();
         QTimer::singleShot(0, [=]() {
@@ -1468,7 +1472,7 @@ XFitGym::XFitGym(QWidget* parent)
                 });
 
 
-        allCourtButtons.push_back({ a.first,a.second,cancelCourt});
+
     }
 
     Courts->setLayout(layoutCourt);
