@@ -69,7 +69,7 @@ void XFitGym::reorganizeGrid(QGridLayout* grid, QPushButton* addCard) {
     int addCol = cards.size() % 3;
     grid->addWidget(addCard, addRow, addCol);
 }
-// El Timeeeee YA AYMAAAAN
+
 void XFitGym::generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
 
     if (scrollArea->widget()) {
@@ -375,8 +375,10 @@ void XFitGym::generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
 
                 if (user.second.sub.type == "NoSubscription")
                 {
-                    qDebug() << Subscription::notSubscribed;
+                    
+                    user.second.sub.type = *Plan;
                     user.second.sub.SetStartDate(*currentDate);
+
                     if (Plan->toLower() == "monthly") {
                         user.second.sub.endDate = currentDate->addMonths(1);
                     }
@@ -391,18 +393,28 @@ void XFitGym::generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
                     }
                     user.second.sub.priceAfterDiscount = *Total;
                 }
-                Subscription sub;
-                sub.confirmRenew(user.second.sub.endDate, *Plan, user.second.sub.type, *currentDate);
-                qDebug() << user.second.sub.type;
 
-                qDebug() << user.second.sub.endDate;
+                else 
+                {
+                    if(Login::isReceptionist)
+                    {
+                        Receptionist recep;
+                        recep.RenewSubscription(user.second.sub.endDate, *Plan, user.second.sub.type, *currentDate);
+                    }
+                    else
+                    {
+                        Manager man;
+                        man.RenewSubscription(user.second.sub.endDate, *Plan, user.second.sub.type, *currentDate);
+                    }
+                }
+                
+
                 Manager::totalSubFees += *Total;
 
                 renewPage->close();
                 Subscription::tenth = false;
                 Subscription::quarter = false;
                 Subscription::half = false;
-                Subscription::notSubscribed = false;
                 });
 
             });
@@ -616,10 +628,12 @@ void XFitGym::simulateDay() {
     // Subscription Deadline Check for all customers
     for (auto& c : Login::membersData) {
         int daysLeft = notifier->CheckSubscriptionDeadline(c.second.sub, currentDate);
-        if (daysLeft < 0) {
+        if (daysLeft <= 0) {
             if (!Notifications::notifications[c.first.toInt()].contains("Your Gym Membership Has Expired")) {
                 Notifications::notifications[c.first.toInt()].push_back("Your Gym Membership Has Expired");
                 qDebug() << "Notification for" << c.second.getName() << ": Your Gym Membership Has Expired";
+                Login::membersData[log->ui.ID->text()].sub.type = "NoSubscription";
+               
             }
         }
         else if (daysLeft <= 10) {
@@ -633,9 +647,6 @@ void XFitGym::simulateDay() {
     for (auto it = Classes::allsessions.begin(); it != Classes::allsessions.end(); ) {
         // satr el minus
         int daysLeftSessions = currentDate.daysTo(it->second.date);
-        if (it->second.id == 200) {
-            qDebug() << "daysLeftSessions " << "For Class: " << it->second.id << "is: " << daysLeftSessions;
-        }
         if (daysLeftSessions < 0) {
             it = Classes::allsessions.erase(it);  // safe erase
         }
@@ -650,9 +661,9 @@ void XFitGym::simulateDay() {
         if (sz == 0) continue;
 
         for (int i = 0; i < sz; i++) {
-            int daysLeftHistoryCourts = currentDate.daysTo(Login::membersData[c.first].bookedsessions.front().date);
+            int daysLeftHistorySessions = currentDate.daysTo(Login::membersData[c.first].bookedsessions.front().date);
             TrainingSession tp = Login::membersData[c.first].bookedsessions.front();
-            if (daysLeftHistoryCourts < 0) {
+            if (daysLeftHistorySessions < 0) {
                 Login::membersData[c.first].historyTrainingSessions.push(tp);
                 Login::membersData[c.first].bookedsessions.pop();
             }
@@ -676,9 +687,6 @@ void XFitGym::simulateDay() {
         dash->setAttendance(daysSimulated, Login::membersData[currentUserID].attendance);
     }
 
-    for (auto it : usersLoggedInToday) {
-        qDebug() << it << "   ";
-    }
     programClock->Tick();
     daysSimulated++;
     usersLoggedInToday.clear();
@@ -694,12 +702,65 @@ void XFitGym::simulateHour() {
     QString ampm = (simulatedHour < 12) ? "AM" : "PM";
     QString hourText = QString("%1:00 %2").arg(hourDisplay, 2, 10, QChar('0')).arg(ampm);
 
+    int hour = hourDisplay;
+    if (ampm == "PM" && hour != 12) hour += 12;
+    if (ampm == "AM" && hour == 12) hour = 0;
+
+    timeText = new QTime(hour, 0); // This is equivalent to QTime(hour, 0)
+
+
+
+
+    for (auto& a : Login::membersData)
+    {
+        for (auto& b : a.second.bookedCourt)
+        {
+            QString day = b.first.toString("ddd");
+            QString time = b.second;
+
+            if (day == *dayName) {
+                int currentTime = timeText->hour();
+                QString hourStr = time.split(":").first();
+                int hour = hourStr.toInt() + 12;
+                if (hour == 24)
+                    hour = hourStr.toInt();
+                int leftTime = hour - currentTime;
+                qDebug() << "Current -> " << leftTime;
+
+
+                if (leftTime <= 0) {
+                    Login::membersData[user_Profile->ui.ID->text()].CancelPaddleCourt(b.first, time);
+                    courtSlotButtons[{day, time}]->setStyleSheet("background-color: green;border: 1px solid gray;");
+                    courtSlotButtons[{day, time}]->setEnabled(true);
+                    padel->selectedSlot = nullptr;
+                }
+                else if (leftTime <= 3)
+                {
+                    QPushButton* cancelCourt = cancelCourtButtons.value({ b.first, time }, nullptr);
+                    if (cancelCourt) {
+                        cancelCourt->setEnabled(false);
+                        cancelCourt->setStyleSheet(" QPushButton { background-color: grey; border: 1px solid grey; }");
+                    }
+                }
+            }
+        }
+
+    }
+
+
+
+
     QDate simDate = programClock->GetCurrentDate().addDays(simulatedDay);
     currentDate = new QDate(simDate);
-    home->ui.Date_time->setText(simDate.toString("yyyy-MM-dd") + "  " + hourText);
-    recep_home->ui.Date_time->setText(simDate.toString("yyyy-MM-dd") + "  " + hourText);
-    man_home->ui.Date_time->setText(simDate.toString("yyyy-MM-dd") + "  " + hourText);
-    coach_home->ui.Date_time->setText(simDate.toString("yyyy-MM-dd") + "  " + hourText);
+
+    dayName = new QString(simDate.toString("ddd")); // full day name
+    QString dateText = simDate.toString("yyyy-MM-dd");
+    QString fullText = dateText + " (" + *dayName + ")  " + hourText;
+
+    home->ui.Date_time->setText(fullText);
+    recep_home->ui.Date_time->setText(fullText);
+    man_home->ui.Date_time->setText(fullText);
+    coach_home->ui.Date_time->setText(fullText);
 
     simulatedHour++;
     if (simulatedHour >= 24) {
@@ -707,7 +768,6 @@ void XFitGym::simulateHour() {
         simulateDay();
     }
 }
-
 XFitGym::XFitGym(QWidget* parent)
     : QMainWindow(parent)
 {
@@ -749,10 +809,7 @@ XFitGym::XFitGym(QWidget* parent)
 
     QTimer* timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &XFitGym::simulateHour);
-    timer->start(1000);  // 1 simulated hour = 0.5 real seconds
-
-
-
+    timer->start(5000);  // 1 simulated hour = 0.5 real seconds
 
     ui.Main->addWidget(log);
     ui.Main->addWidget(home);
@@ -1147,7 +1204,7 @@ XFitGym::XFitGym(QWidget* parent)
         home->ui.Pages->setCurrentIndex(6);
         });
     QStringList days = { "Sat", "Sun", "Mon", "Tue", "Wed","Thu" , "Fri" };
-    QStringList times = { "12:00", "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00" };
+    QStringList times = { "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM" };
     connect(home->ui.Courts, &QPushButton::clicked, this, [=]() {
         setScrolltoTop();
         qDebug() << "Padel Courts";
@@ -1262,8 +1319,8 @@ XFitGym::XFitGym(QWidget* parent)
         });
     connect(home->ui.Profile, &QPushButton::clicked, this, [=]() {
         setScrolltoTop();
-        queue<TrainingSession>bookedsession = Login::membersData[user_Profile->ui.ID->text()].bookedsessions;
         vector <pair<QDate, QString>> bookedCourts = Login::membersData[user_Profile->ui.ID->text()].bookedCourt;
+        queue<TrainingSession>bookedsession = Login::membersData[user_Profile->ui.ID->text()].bookedsessions;
 
 
     //change true with (class.empty && courts.empty) .. w e3mel condition di lw7dha w di lw7dha
@@ -1441,6 +1498,7 @@ XFitGym::XFitGym(QWidget* parent)
             );
         }
 
+        cancelCourtButtons[{a.first, a.second}] = cancelCourt;
 
         cancelCourt->adjustSize();
         QTimer::singleShot(0, [=]() {
@@ -1468,7 +1526,36 @@ XFitGym::XFitGym(QWidget* parent)
                 });
 
 
-        allCourtButtons.push_back({ a.first,a.second,cancelCourt});
+        for (auto& a : Login::membersData)
+        {
+            for (auto& b : a.second.bookedCourt)
+            {
+                QString day = b.first.toString("ddd");
+                QString time = b.second;
+
+                if (day == *dayName) {
+                    int currentTime = timeText->hour();
+                    QString hourStr = time.split(":").first();
+                    int hour = hourStr.toInt() + 12;
+                    if (hour == 24)
+                        hour = hourStr.toInt();
+                    int leftTime = hour - currentTime;
+
+                    if (leftTime <= 0) {
+                        Login::membersData[user_Profile->ui.ID->text()].CancelPaddleCourt(b.first, time);
+                        courtSlotButtons[{day, time}]->setStyleSheet("background-color: green;border: 1px solid gray;");
+                        courtSlotButtons[{day, time}]->setEnabled(true);
+                        padel->selectedSlot = nullptr;
+                    }
+                    else if (leftTime <= 3)
+                    {
+                        cancelCourt->setEnabled(false);
+                        cancelCourt->setStyleSheet(" QPushButton { background-color: grey; border: 1px solid grey; }");
+                    }
+                }
+            }
+
+        }
     }
 
     Courts->setLayout(layoutCourt);
@@ -1679,7 +1766,10 @@ XFitGym::XFitGym(QWidget* parent)
         
         recep_classes->ui.coachNames->clear();
         recep_classes->ui.coachNames->addItem("Choose coach");
-
+        for (auto coach : Coach::coachData)
+        {
+            recep_classes->ui.coachNames->addItem(coach.second.getName());
+        }
         //recep_classes->ui.dateTime->setMinimumDate(QDate::currentDate());
         recep_classes->ui.className->setMaxLength(20);
         recep_classes->ui.classCapacity->setValidator(new QIntValidator(0, 999, this));

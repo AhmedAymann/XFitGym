@@ -70,12 +70,16 @@ Receptionist_classes* recep_classes;
 Receptionist_news* recep_news;
 Staff* staff;
 Coach* coach;
+QString* dayName;
+QTime* timeText;
 set<QString> usersLoggedInToday;
 QMap<QPair<QString, QString>, QPushButton*> courtSlotButtons;
+QMap<QPair<QDate, QString>, QPushButton*> cancelCourtButtons;
 
 
     XFitGym(QWidget *parent = nullptr);
     ~XFitGym();
+
 
     void simulateDay(); 
     void simulateHour();

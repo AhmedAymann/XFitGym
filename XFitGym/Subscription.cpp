@@ -14,7 +14,6 @@ Subscription::Subscription(QString type) {
 bool Subscription::half = false;
 bool Subscription::quarter = false;
 bool Subscription::tenth = false;
-bool Subscription::notSubscribed = false;
 
 void Subscription::SetStartDate(QDate currentDate)
 {
@@ -86,28 +85,6 @@ double Subscription::CalculatePrice(double priceBeforeDiscount, QDate currentDat
     }
     else
         return 0;
-}
-void Subscription::confirmRenew(QDate& end, QString newType, QString& oldType, QDate start) {
-
-    if (newType.toLower() == "monthly") {
-        end = end.addMonths(1);
-        Subscription::monthlyCounter++;
-    }
-    else if (newType.toLower() == "6-months") {
-        end = end.addMonths(6);
-        Subscription::sixmonthlyCounter++;
-    }
-    else if (newType.toLower() == "yearly") {
-        end = end.addYears(1);
-        Subscription::yearlyCounter++;
-    }
-    else if (newType.toLower() == "yearly vip") {
-        end = end.addYears(1);
-        Subscription::yearlyVIPCounter++;
-    }
-    else
-        notSubscribed = true;
-    oldType = newType;
 }
 
 int Subscription::monthlyCounter = 0;

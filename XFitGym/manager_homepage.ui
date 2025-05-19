@@ -382,9 +382,9 @@ background-color: transparent;
   <widget class="QLabel" name="Date_time">
    <property name="geometry">
     <rect>
-     <x>690</x>
+     <x>640</x>
      <y>20</y>
-     <width>231</width>
+     <width>281</width>
      <height>16</height>
     </rect>
    </property>

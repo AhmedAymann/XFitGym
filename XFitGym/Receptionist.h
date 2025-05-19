@@ -12,9 +12,10 @@ public:
 	Receptionist();
 	Receptionist(QString id, QString email, QString name, QString DateOFBirth,QString role);
 
+
 	void AddMember(Customer customer);
 	void RemoveMember(QString userID);
-	void RenewSubscription(int userID, int Startdate);
+	void RenewSubscription(QDate& end, QString newType, QString& oldType, QDate start);
 	void CreateClass(int ID, TrainingSession session);
 	void AddNews(QString newsText,QString photo);
 };

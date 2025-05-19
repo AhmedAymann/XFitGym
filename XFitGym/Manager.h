@@ -31,7 +31,7 @@ public:
 
 	void AddMember(Customer customer);
 	void RemoveMember(QString userID);
-	void RenewSubscription(QString userID, int Startdate, QString plan);
+	void RenewSubscription(QDate& end, QString newType, QString& oldType, QDate start);
 	void AddCoach(Coach coach);
 	void RemoveStaff(QString coachId);
 	void AddReceptionist(Receptionist receptionist);

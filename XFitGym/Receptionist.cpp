@@ -25,9 +25,25 @@ void Receptionist::RemoveMember(QString userID)
         }
     }
 }
-void Receptionist::RenewSubscription(int userID, int Startdate)
+void Receptionist::RenewSubscription(QDate& end, QString newType, QString& oldType, QDate start)
 {
-
+    if (newType.toLower() == "monthly") {
+    end = end.addMonths(1);
+    Subscription::monthlyCounter++;
+}
+    else if (newType.toLower() == "6-months") {
+        end = end.addMonths(6);
+        Subscription::sixmonthlyCounter++;
+    }
+    else if (newType.toLower() == "yearly") {
+        end = end.addYears(1);
+        Subscription::yearlyCounter++;
+    }
+    else if (newType.toLower() == "yearly vip") {
+        end = end.addYears(1);
+        Subscription::yearlyVIPCounter++;
+    }
+    oldType = newType;
 }
 void Receptionist::CreateClass(int ID, TrainingSession session)
 {
