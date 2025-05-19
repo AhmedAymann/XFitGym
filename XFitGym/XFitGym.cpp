@@ -954,23 +954,23 @@ XFitGym::XFitGym(QWidget* parent)
     // user homepage control panel
     int* Pvalue = new int(0);
     int* Cvalue = new int(0);
+    int currentCourtSize = Login::membersData[user_Profile->ui.ID->text()].bookedCourt.size();
+    if (currentCourtSize > *Pvalue)
+        *Pvalue = currentCourtSize;
+    QString Pval = QString::number(*Pvalue);
+    dash->ui.PCounter->setText(Pval);
+    Pgauge->setValue(*Pvalue);
+
+    int currentSessionSize = Login::membersData[user_Profile->ui.ID->text()].bookedsessions.size();
+    if (currentSessionSize > *Cvalue)
+        *Cvalue = currentSessionSize;
+
+    QString Cval = QString::number(*Cvalue);
+    dash->ui.CCounter->setText(Cval);
+    Cgauge->setValue(*Cvalue);
+
     connect(home->ui.Dashboard, &QPushButton::clicked, this, [=]() {
 
-        int currentCourtSize = Login::membersData[user_Profile->ui.ID->text()].bookedCourt.size();
-        if (currentCourtSize > *Pvalue)
-            *Pvalue = currentCourtSize;
-
-        QString Pval = QString::number(*Pvalue);
-        dash->ui.PCounter->setText(Pval);
-        Pgauge->setValue(*Pvalue);
-
-        int currentSessionSize = Login::membersData[user_Profile->ui.ID->text()].bookedsessions.size();
-        if (currentSessionSize > *Cvalue)
-            *Cvalue = currentSessionSize;
-
-        QString Cval = QString::number(*Cvalue);
-        dash->ui.CCounter->setText(Cval);
-        Cgauge->setValue(*Cvalue);
 
         if (Login::membersData[user_Profile->ui.ID->text()].historyTrainingSessions.empty())
         {
@@ -1017,7 +1017,7 @@ XFitGym::XFitGym(QWidget* parent)
                 QLabel* coach = new QLabel(trTop.coachname, workouts);
                 coach->setStyleSheet("color: white;font-family: 'DM Serif Display'; font-size: 10pt; background: transparent;");
                 coach->adjustSize();
-                coach->move(15, className->y() + className->height() + 5);  // just below class name
+                coach->move(15, className->y() + className->height() + 5);
 
 
 
@@ -1028,7 +1028,7 @@ XFitGym::XFitGym(QWidget* parent)
                 date->adjustSize();
 
             QTimer::singleShot(0, [=]() {
-                int w = workouts->width(); ////// MIGHT THROW AN EXCEPTION
+                int w = workouts->width();
                 int h = workouts->height();
                 date->move((w - date->width()) / 2 + 35, coach->y());
                 });
