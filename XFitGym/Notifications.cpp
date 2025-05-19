@@ -19,7 +19,7 @@ int Notifications::CheckSubscriptionDeadline(const Subscription& sub, const QDat
 {
     // If there's no subscription -> skip check
     if (sub.type == "NoSubscription") {
-        return -3;
+        return -100;
     }
     
 
@@ -110,3 +110,8 @@ void Notifications::loadNotifications()
     tempNotifications = notifications;
     file.close();
 }
+
+
+
+//1003, Your gym membership has expired
+// id , Notification

@@ -29,9 +29,6 @@
     <QtUic Include="XFitGym.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtMoc Include="XFitGym.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <ClCompile Include="XFitGym.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -261,6 +258,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="Receptionist_news.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="XFitGym.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
