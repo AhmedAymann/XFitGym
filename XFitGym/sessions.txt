@@ -5,12 +5,3 @@
 2004,Pilates,10,0,Mona,2025-01-13,09:00
 2005,Indoor Cycling,1,0,Omar,2025-01-14,17:00
 2006,Yoga Basics,14,0,Mona,2025-01-16,10:00
-2007,Cardio Blast,16,0,Bigramy,2025-01-18,18:30
-2008,Pilates,17,0,Mona,2025-01-20,09:00
-2009,Indoor Cycling,13,0,Omar,2025-01-21,17:00
-2010,Yoga Basics,11,0,Mona,2025-01-23,10:00
-2011,Cardio Blast,20,0,Bigramy,2025-01-25,18:30
-2012,Pilates,9,0,Mona,2025-01-27,09:00
-2013,Indoor Cycling,19,0,Omar,2025-01-28,17:00
-2014,Yoga Basics,8,0,Mona,2025-01-30,10:00
-2015,Cardio Blast,15,0,Bigramy,2025-02-01,18:30

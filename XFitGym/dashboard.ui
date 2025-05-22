@@ -56,7 +56,7 @@ color: white;
 </string>
     </property>
     <property name="text">
-     <string>Padel Course Booked</string>
+     <string>Padel Courts Booked</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignmentFlag::AlignCenter</set>

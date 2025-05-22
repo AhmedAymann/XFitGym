@@ -22,7 +22,7 @@ bool Login::isStaff;
 bool Login::isCoach;
 bool Login::isReceptionist;
 
-map<QString, Customer> Login::membersData= CustomerLoader::LoadCustomersFromFile("CustomerData.txt");
+map<QString, Customer> Login::membersData = CustomerLoader::LoadCustomersFromFile("CustomerData.txt");
 void Login::saveData()
 {
     QFile file("CustomerData.txt");
@@ -85,7 +85,6 @@ void Login::saveData()
 
             trainingPart = trainingEntries.join(';');
         }
-        //
         // Final line
         QString fullLine = basePart + "|" + courtPart + "|" + trainingPart;
         out << fullLine << "\n";

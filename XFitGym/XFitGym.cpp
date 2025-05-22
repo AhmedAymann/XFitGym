@@ -43,7 +43,7 @@ using namespace std;
 // 4 -> News                          *
 //*************************************
 
-// nzbot 7war el ids fi al a5er
+
 void XFitGym::reorganizeGrid(QGridLayout* grid, QPushButton* addCard) {
     grid->removeWidget(addCard);
 
@@ -250,6 +250,7 @@ void XFitGym::generateMemberCards(QScrollArea* scrollArea, QWidget* parent) {
         QString name = user.second.getName();
         QString plan = user.second.sub.type;
         QString subscription;
+        if (user.first == "1111") continue;
         if(plan.toLower() == "monthly")
             subscription = "Ends: " + user.second.sub.endDate.toString("yyyy/MM/dd");
         else if(plan.toLower() == "6-months")
@@ -619,7 +620,7 @@ void XFitGym::generateStaffCards(QScrollArea* scrollArea, QWidget* parent) {
 
 }
 
-// optimiiiiiiiiiiiiiiiize daroory
+//TIme
 void XFitGym::simulateDay() {
 
     QDate currentDate = programClock->GetCurrentDate();
@@ -809,7 +810,7 @@ XFitGym::XFitGym(QWidget* parent)
 
     QTimer* timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &XFitGym::simulateHour);
-    timer->start(5000);  // 1 simulated hour = 0.5 real seconds
+    timer->start(3000);  // 1 simulated hour = 5 real seconds
 
     ui.Main->addWidget(log);
     ui.Main->addWidget(home);
@@ -1171,7 +1172,13 @@ XFitGym::XFitGym(QWidget* parent)
                 }
                 if (check.size() != size) 
                 {
-                    Classes::allsessions[a.first].WaitlistIds.pop_back();
+                    if (Login::membersData[user_Profile->ui.ID->text()].sub.type.toLower() == "yearly vip") {
+                        Classes::allsessions[a.first].WaitlistIds.pop_front();
+                    }
+                    else
+                    {
+                        Classes::allsessions[a.first].WaitlistIds.pop_back();
+                    }
                 }
 
                 });
@@ -1189,6 +1196,7 @@ XFitGym::XFitGym(QWidget* parent)
                 }
                 if (checkin.size() != size)
                 {
+                    TrainingSession::sessionsCounter--;
                     Login::membersData[user_Profile->ui.ID->text()].CancelTrainingSession(a.first);
                 }
 
